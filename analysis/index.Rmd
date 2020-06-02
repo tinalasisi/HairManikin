@@ -8,4 +8,4 @@ editor_options:
   chunk_output_type: console
 ---
 
-Welcome to my research website.
+Results for the analysis of the manikin data can be found [here](ManikinData.html) and for the thermocouple data [here](ThermoCoupleData.html).
