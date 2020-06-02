@@ -1,0 +1,195 @@
+---
+title: "Manikin Data"
+author: "Tina Lasisi"
+date: "2020-06-01"
+output: 
+  workflowr::wflow_html:
+    toc: true
+    theme: cosmo
+editor_options:
+  chunk_output_type: console
+---
+
+
+Here we present results from data collected in a number of environmental conditions on the Newton thermal manikin with three wigs of human hair fibers with varying degrees of hair curl, labeled "Low Curvature" (straight hair), "Mid Curvature" (wavy or lightly curled hair), and "High Curvature" (tightly coiled hair). 
+
+```{r include=FALSE}
+
+library(tidyverse)
+library(here)
+here::here()
+
+# import manikin data
+ManikinData <- read_csv(here("data/tidy/Complete_ManikinData.csv"))
+
+#reordering trials based on factor level
+ManikinData$Trial <- factor(ManikinData$Trial,levels = c("1","2","3" ))
+ManikinData$Radiation <- factor(ManikinData$Radiation, levels = c("Off", "On"), labels = c("Radiation Off", "Radiation On"))
+ManikinData$Windspeed <- factor(ManikinData$Windspeed, levels = c("0.3","1","2.5" ), labels = c("0.3 m/s","1.0 m/s","2.5 m/s" ))
+ManikinData$Wig <- factor(ManikinData$Wig,levels = c("HighCurv", "MidCurv", "LowCurv", "NoWig"), labels = c("High Curvature", "Mid Curvature", "Low Curvature", "Nude"))
+
+
+# import solar influx data
+SolarInfluxData <- read_csv(here("data/tidy/SolarInfluxData.csv"))
+
+#reordering trials based on factor level
+SolarInfluxData$Trial <- factor(SolarInfluxData$Trial,levels = c("1","2","3" ))
+SolarInfluxData$Radiation <- factor(SolarInfluxData$Radiation, levels = c("Off", "On"), labels = c("Radiation Off", "Radiation On"))
+SolarInfluxData$Windspeed <- factor(SolarInfluxData$Windspeed, levels = c("0.3","1","2.5" ), labels = c("0.3 m/s","1.0 m/s","2.5 m/s" ))
+SolarInfluxData$Wig <- factor(SolarInfluxData$Wig, levels = c("HighCurv", "MidCurv", "LowCurv", "NoWig"), labels = c("High Curvature", "Mid Curvature", "Low Curvature", "Nude"))
+
+# import heat loss data (evaporative)
+
+EvaporativeData <- read_csv(here("data/tidy/EvaporativeData.csv"))
+
+#reordering trials based on factor level
+EvaporativeData$Trial <- factor(EvaporativeData$Trial,levels = c("1","2","3" ))
+EvaporativeData$Windspeed <- factor(EvaporativeData$Windspeed, levels = c("0.3","1","2.5" ), labels = c("0.3 m/s","1.0 m/s","2.5 m/s" ))
+EvaporativeData$Wig <- factor(EvaporativeData$Wig,levels = c("HighCurv", "MidCurv", "LowCurv", "Nude"), labels = c("High Curvature", "Mid Curvature", "Low Curvature", "Nude"))
+
+# importing evaporative solar influx data
+EvaporativeSolarInfluxData <- read_csv(here("data/tidy/EvaporativeSolarInfluxData.csv"))
+
+#reordering trials based on factor level
+EvaporativeSolarInfluxData$Trial <- factor(EvaporativeSolarInfluxData$Trial,levels = c("1","2","3" ))
+EvaporativeSolarInfluxData$Windspeed <- factor(EvaporativeSolarInfluxData$Windspeed, levels = c("0.3","1","2.5" ), labels = c("0.3 m/s","1.0 m/s","2.5 m/s" ))
+EvaporativeSolarInfluxData$Wig <- factor(EvaporativeSolarInfluxData$Wig, c("HighCurv", "MidCurv", "LowCurv", "Nude"), labels = c("High Curvature", "Mid Curvature", "Low Curvature", "Nude"))
+
+
+```
+
+## Dry heat loss
+
+We ran three trials with each of the three wigs as well as with no covering on the manikin's scalp. We collected the manikin data in each trial with and without simulated solar radiation, and with three windspeeds (0.3m/s, 1.0m/s, and 2.5m/s). 
+
+### Dry heat loss with and without radiation
+
+```{r dry_plots, echo=FALSE}
+
+#fulldata with facetgrid
+ggplot(ManikinData, 
+       aes(x = Wig, 
+           y = HeatLoss, 
+           fill = Trial)) + 
+  geom_col(position= position_dodge(width = 0.5)) +
+  coord_flip() +
+  theme_bw() +
+  facet_grid(rows = vars(ManikinData$Windspeed), cols = vars(ManikinData$Radiation),  scales = "fixed") +
+  labs(title = "Comparing dry heat loss with and without radiation \nfor 3 levels of hair curl\n over 3 trials at 3 wind speeds", y = "Heat Loss in W/m2") +
+  theme(plot.title = element_text(hjust = 0.5),
+        # panel.grid = element_blank(),
+        axis.title.y = element_blank()) +
+  scale_fill_brewer(type = "qual", palette = 'Dark2',  name = "Trial" )
+ #scale_fill_discrete(name="Trial", palette('Blues'))
+
+
+
+```
+
+
+
+### Dry solar influx
+
+These are calculated from the above dry radiation measurements as the net difference in heat loss with and without radiation
+
+```{r dry_solar_plots, echo=FALSE}
+
+#fulldata with facetgrid
+ggplot(SolarInfluxData, 
+       aes(x = Wig, 
+           y = SolarInflux, 
+           fill = Trial)) + 
+  geom_col(position = position_dodge(width = 0.5)) +
+  coord_flip() +
+  theme_bw() +
+  facet_grid(rows = vars(SolarInfluxData$Windspeed),  scales = "fixed") +
+  labs(title ="Dry Solar Heat Gain for 3 levels of hair curl\n over 3 trials at 3 wind speeds", x = "Wig used on manikin", y = "Solar Influx in W/m2") +
+  theme(plot.title = element_text(hjust = 0.5),
+        axis.title.y = element_blank()) +
+  scale_fill_brewer(type = "qual", palette = 'Dark2',  name = "Trial" )
+```
+
+
+## Evaporative heat loss
+
+We repeated the experiments above while wetting the manikin's scalp before each trial to simulate evaporative heat loss experienced due to sweating.
+
+### Evaporative heat loss with and without radiation
+
+```{r evaporative_plots, echo=FALSE}
+
+#fulldata with facetgrid
+ggplot(EvaporativeData, 
+       aes(x = Wig, 
+           y = HeatLoss, 
+           fill = Trial)) + 
+  geom_col(position= position_dodge(width = 0.5)) +
+  coord_flip() +
+  theme_bw() +
+  facet_grid(rows = vars(EvaporativeData$Windspeed), cols = vars(EvaporativeData$Radiation),  scales = "fixed") +
+  labs(title = "Comparing evaporative heat loss with and without radiation \nfor 3 levels of hair curl\n over 3 trials at 3 wind speeds", y = "Heat Loss in W/m2") +
+  theme(plot.title = element_text(hjust = 0.5),
+        # panel.grid = element_blank(),
+        axis.title.y = element_blank()) +
+  scale_fill_brewer(type = "qual", palette = 'Dark2',  name = "Trial" )
+
+```
+
+### Evaporative solar influx
+
+```{r evaporative_solar_plots, echo=FALSE}
+
+#fulldata with facetgrid
+ggplot(EvaporativeSolarInfluxData, 
+       aes(x = Wig, 
+           y = SolarInflux, 
+           fill = Trial)) + 
+  geom_col(position = position_dodge(width = 0.5)) +
+  coord_flip() +
+  theme_bw() +
+  facet_grid(rows = vars(EvaporativeSolarInfluxData$Windspeed),  scales = "fixed") +
+  labs(title ="Evaporative Solar Heat Gain for 3 levels of hair curl\n over 3 trials at 3 wind speeds", x = "Wig used on manikin", y = "EvaporativeSolar Influx in W/m2") +
+  theme(plot.title = element_text(hjust = 0.5),
+        axis.title.y = element_blank()) +
+  scale_fill_brewer(type = "qual", palette = 'Dark2',  name = "Trial" )
+
+```
+
+
+## Net effect of evaporation
+
+Based on the median solar influx for each condition (hair x wind speed), we found the following net effect of evaporation.
+
+```{r net_effect, echo=FALSE}
+
+df1 <- SolarInfluxData %>% 
+  select(-c(HeatLossOff, HeatLossOn, Radiation))
+
+df2 <- EvaporativeSolarInfluxData %>% 
+  select(-c(HeatLossOff, HeatLossOn)) %>% 
+  rename(EvapSolarInflux = SolarInflux)
+
+NetDf <- full_join(df1, df2) %>% 
+  group_by(Wig, Windspeed) %>% 
+  summarise(medianSolarInflux = median(SolarInflux), medianEvapSolarInflux = median(EvapSolarInflux)) %>% 
+  mutate(medianNetEvapEffect = medianEvapSolarInflux - medianSolarInflux) %>% 
+  select(-c(medianSolarInflux, medianEvapSolarInflux))
+
+
+
+ggplot(NetDf, 
+       aes(x = Wig, 
+           y = medianNetEvapEffect, 
+           fill = Windspeed)) + 
+  geom_col(position = position_dodge(width = 0.5)) +
+  coord_flip() +
+  theme_bw() +
+  facet_grid(rows = vars(NetDf$Windspeed),  scales = "fixed") +
+  labs(title ="Net Evaporative Solar Heat Gain \nfor 3 levels of hair curl\n at 3 wind speeds", x = "Wig used on manikin", y = "Net Evaporative Influx in W/m2 \nbased on median across trials") +
+  theme(plot.title = element_text(hjust = 0.5),
+        axis.title.y = element_blank()) +
+  scale_fill_brewer(type = "qual", palette = 'Dark2',  name = "Windspeed" )
+
+```
+
+As expected, in most cases, the addition of an evaporative factor decreased the net solar influx (or heat gain). Surprisingly, the added cooling effect of evaporation decreases as hair curl increases.

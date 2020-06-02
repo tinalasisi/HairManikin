@@ -1,0 +1,43 @@
+---
+title: "Thermocouple Data"
+author: "Tina Lasisi"
+date: "2020-06-01"
+output: 
+  workflowr::wflow_html:
+    toc: true
+    theme: cosmo
+editor_options:
+  chunk_output_type: console
+---
+
+In addition to the thermal manikin data, we collected scalp temperature data for each of the trials.
+
+```{r thermo_data, echo=TRUE}
+
+library(tidyverse)
+library(here)
+library(tibbletime)
+library(lubridate)
+
+ThermoCleanMaster <- read_csv("data/tidy/ThermoCleanMaster.csv", 
+    col_types = cols(Date = col_date(format = "%m/%d/%y"), 
+        Time = col_time(format = "%H:%M:%S")))
+
+int1 <- interval(ymd("2018-10-23"), ymd_h("2018-10-25 23"))
+int2 <- interval(ymd("2018-10-26"), ymd_hm("2018-10-29 11:56"))
+int3 <- interval(ymd_hm("2018-10-29 11:57"), ymd("2018-10-31"))
+
+ThermoData <- as_tbl_time(ThermoCleanMaster, index = Date) %>%
+  select(-Sheets.Name) %>%
+  mutate(Wig = replace(Wig, Wig == "NoWig", "Nude"),
+         Datetime = ymd_hms(with(ThermoCleanMaster, ymd(Date) + hms(Time))),
+         Trial = case_when(
+           Datetime %within% int1 ~ 1,
+           Datetime %within% int2 ~ 2,
+           Datetime %within% int3 ~ 3)
+         ) 
+  
+  
+
+```
+
