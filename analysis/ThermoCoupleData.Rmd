@@ -12,12 +12,12 @@ editor_options:
 
 In addition to the thermal manikin data, we collected scalp temperature data for each of the trials.
 
-```{r thermo_data, echo=TRUE}
-
+```{r thermo_data, echo=FALSE, results='asis'}
 library(tidyverse)
 library(here)
 library(tibbletime)
 library(lubridate)
+library(anomalize)
 
 ThermoCleanMaster <- read_csv("data/tidy/ThermoCleanMaster.csv", 
     col_types = cols(Date = col_date(format = "%m/%d/%y"), 
@@ -35,9 +35,91 @@ ThermoData <- as_tbl_time(ThermoCleanMaster, index = Date) %>%
            Datetime %within% int1 ~ 1,
            Datetime %within% int2 ~ 2,
            Datetime %within% int3 ~ 3)
-         ) 
-  
-  
+         ) %>% 
+  drop_na() %>% 
+  group_by(Wig, Radiation, WindSpeed, Trial)
+
+ThermoData_anomalized <- ThermoData %>% 
+  select(-Date, -Time) %>% 
+  ungroup() %>% 
+  arrange(Datetime) %>% 
+  as_tbl_time(index = Datetime) %>% 
+  time_decompose(1, method = "stl", frequency = 300, trend = 1200, merge = TRUE) %>% 
+  anomalize(remainder, method = "iqr") %>% 
+  clean_anomalies() %>% 
+  time_recompose() 
+
+ThermoData_anomalized %>% 
+  filter(Wig == "Nude", Trial == 1) %>% 
+  # plot_anomalies(time_recomposed= TRUE, ncol = 3, alpha_dots = 0.25)
+  plot_anomaly_decomposition()
+```
+
+
+```{r thermo_data, echo=FALSE, results='asis'}
+Sum_Thermo <- ThermoData %>% 
+  select(-c(Date, Datetime, Time)) %>% 
+  group_by(Wig, Radiation, WindSpeed, Trial) %>% 
+  summarise_all(funs(mean, median, min, max))
+
+knitr::kable(Sum_Thermo, format = "markdown")
+
+```
+
+## Scalp temperature variation between conditions
+
+```{r}
+library(ggstatsplot)
+# libraries
+set.seed(123)
+library(tidyverse)
+
+
+p_list <- Sum_Thermo %>%
+  dplyr::select(-c(ends_with("mean"), ends_with("max"), ends_with("min"))) %>% 
+  dplyr::gather(ends_with("median"), key = "location", value = "temp_mean") %>% 
+  dplyr::filter(WindSpeed == 0.3) %>% 
+  dplyr::group_by(.data = ., "Radiation") %>% 
+  dplyr::group_map(
+    .f = ~ ggstatsplot::ggbetweenstats(
+    data = .,
+    x = "Wig",
+    y = "temp_mean",
+    messages = FALSE
+  ))
+
+gapminder::gapminder %>%
+  dplyr::filter(.data = ., year %in% c(1967, 1987, 2007), continent != "Oceania") %>%
+  ggstatsplot::grouped_ggbetweenstats(
+    # arguments relevant for ggstatsplot::ggbetweenstats
+    data = .,
+    x = continent,
+    y = lifeExp,
+    grouping.var = year,
+    xlab = "Continent",
+    ylab = "Life expectancy",
+    pairwise.comparisons = TRUE, # display results from pairwise comparisons
+    pairwise.display = "significant", # display only significant pairwise comparisons
+    p.adjust.method = "fdr", # adjust p-values for multiple tests using this method
+    ggtheme = ggthemes::theme_tufte(),
+    package = "ggsci",
+    palette = "default_jco",
+    outlier.tagging = TRUE,
+    ggstatsplot.layer = FALSE,
+    outlier.label = country,
+    title.prefix = "Year",
+    messages = FALSE,
+    # arguments relevant for ggstatsplot::combine_plots
+    title.text = "Changes in life expectancy across continents (1967-2007)"
+  )
+
+# combining plots
+cowplot::plot_grid(
+  plotlist = p_list,
+  labels = rlang::set_names(levels(as.factor(ThermoData$Radiation)))
+)
+
+
 
 ```
 
