@@ -12,7 +12,7 @@ editor_options:
 
 In addition to the thermal manikin data, we collected scalp temperature data for each of the trials.
 
-```{r thermo_data, echo=FALSE, results='asis'}
+```{r thermo_data, include=FALSE, results='asis'}
 library(tidyverse)
 library(here)
 library(tibbletime)
@@ -23,103 +23,118 @@ ThermoCleanMaster <- read_csv("data/tidy/ThermoCleanMaster.csv",
     col_types = cols(Date = col_date(format = "%m/%d/%y"), 
         Time = col_time(format = "%H:%M:%S")))
 
-int1 <- interval(ymd("2018-10-23"), ymd_h("2018-10-25 23"))
+int1 <- interval(ymd("2018-10-23"), ymd_h("2018-10-25 22"))
 int2 <- interval(ymd("2018-10-26"), ymd_hm("2018-10-29 11:56"))
 int3 <- interval(ymd_hm("2018-10-29 11:57"), ymd("2018-10-31"))
+rem_int1 <- interval(ymd_hm("2018-10-23 17:12"), ymd_hm("2018-10-23 21:13"))
+rem_int2 <- interval(ymd_hm("2018-10-24 10:59"), ymd_hm("2018-10-24 12:40"))
+start_time <- ymd_hm("2018-10-23 13:41")
+end_time <- ymd_hm("2018-10-31 16:37")
+
 
 ThermoData <- as_tbl_time(ThermoCleanMaster, index = Date) %>%
   select(-Sheets.Name) %>%
-  mutate(Wig = replace(Wig, Wig == "NoWig", "Nude"),
+  mutate(Wig = as_factor(replace(Wig, Wig == "NoWig", "Nude")),
          Datetime = ymd_hms(with(ThermoCleanMaster, ymd(Date) + hms(Time))),
-         Trial = case_when(
+         Trial = as_factor(case_when(
            Datetime %within% int1 ~ 1,
            Datetime %within% int2 ~ 2,
-           Datetime %within% int3 ~ 3)
-         ) %>% 
+           Datetime %within% int3 ~ 3)),
+         WindSpeed = as_factor(WindSpeed),
+         Radiation = as_factor(Radiation)) %>% 
   drop_na() %>% 
+  filter(!Datetime %within% rem_int1 & !Datetime %within% rem_int2 & Datetime > start_time & Datetime < end_time) %>% 
   group_by(Wig, Radiation, WindSpeed, Trial)
 
-ThermoData_anomalized <- ThermoData %>% 
-  select(-Date, -Time) %>% 
-  ungroup() %>% 
+ThermoData_long <- ThermoData %>% 
+  gather("1", "2", "3", "4", key = "Thermocouple", value = "temp", factor_key = TRUE) %>% 
+  select(Datetime, Trial, Wig, Thermocouple, temp, Radiation, WindSpeed, Trial, -Date, -Time) %>% 
   arrange(Datetime) %>% 
-  as_tbl_time(index = Datetime) %>% 
-  time_decompose(1, method = "stl", frequency = 300, trend = 1200, merge = TRUE) %>% 
-  anomalize(remainder, method = "iqr") %>% 
-  clean_anomalies() %>% 
-  time_recompose() 
-
-ThermoData_anomalized %>% 
-  filter(Wig == "Nude", Trial == 1) %>% 
-  # plot_anomalies(time_recomposed= TRUE, ncol = 3, alpha_dots = 0.25)
-  plot_anomaly_decomposition()
-```
-
-
-```{r thermo_data, echo=FALSE, results='asis'}
-Sum_Thermo <- ThermoData %>% 
-  select(-c(Date, Datetime, Time)) %>% 
-  group_by(Wig, Radiation, WindSpeed, Trial) %>% 
-  summarise_all(funs(mean, median, min, max))
-
-knitr::kable(Sum_Thermo, format = "markdown")
+  group_by(Wig, Radiation, WindSpeed, Thermocouple)
 
 ```
 
 ## Scalp temperature variation between conditions
 
-```{r}
-library(ggstatsplot)
-# libraries
-set.seed(123)
-library(tidyverse)
+```{r thermo_plots, echo=FALSE, fig.height=18, fig.width=12, results='asis'}
+
+line_func <- function(df){
+  
+  windlist <- unique(levels(df$WindSpeed))
+  
+  for (wind in windlist){
+    
+    plot <- ThermoData_long %>%
+      filter(WindSpeed == wind) %>% 
+      ggplot(
+             aes(x=Datetime, y=temp, group=as.factor(Thermocouple), color=Thermocouple)) +
+      geom_line() +
+      facet_wrap(Wig ~ Radiation + Trial, nrow = 4, scales = "free_x") +
+      theme_bw() +
+      ylim(25, 50) +
+      labs(title = paste0("Thermocouple data for ", wind, " m/s windspeed"))
+    print(plot)
+    }
+}
 
 
-p_list <- Sum_Thermo %>%
-  dplyr::select(-c(ends_with("mean"), ends_with("max"), ends_with("min"))) %>% 
-  dplyr::gather(ends_with("median"), key = "location", value = "temp_mean") %>% 
-  dplyr::filter(WindSpeed == 0.3) %>% 
-  dplyr::group_by(.data = ., "Radiation") %>% 
-  dplyr::group_map(
-    .f = ~ ggstatsplot::ggbetweenstats(
-    data = .,
-    x = "Wig",
-    y = "temp_mean",
-    messages = FALSE
-  ))
-
-gapminder::gapminder %>%
-  dplyr::filter(.data = ., year %in% c(1967, 1987, 2007), continent != "Oceania") %>%
-  ggstatsplot::grouped_ggbetweenstats(
-    # arguments relevant for ggstatsplot::ggbetweenstats
-    data = .,
-    x = continent,
-    y = lifeExp,
-    grouping.var = year,
-    xlab = "Continent",
-    ylab = "Life expectancy",
-    pairwise.comparisons = TRUE, # display results from pairwise comparisons
-    pairwise.display = "significant", # display only significant pairwise comparisons
-    p.adjust.method = "fdr", # adjust p-values for multiple tests using this method
-    ggtheme = ggthemes::theme_tufte(),
-    package = "ggsci",
-    palette = "default_jco",
-    outlier.tagging = TRUE,
-    ggstatsplot.layer = FALSE,
-    outlier.label = country,
-    title.prefix = "Year",
-    messages = FALSE,
-    # arguments relevant for ggstatsplot::combine_plots
-    title.text = "Changes in life expectancy across continents (1967-2007)"
-  )
-
-# combining plots
-cowplot::plot_grid(
-  plotlist = p_list,
-  labels = rlang::set_names(levels(as.factor(ThermoData$Radiation)))
-)
-
+line_func(ThermoData_long)
 
 
 ```
+
+## Trimmed Data
+
+Below the data are trimmed to include only the last 10 minutes of each test.
+
+```{r echo=FALSE, fig.height=18, fig.width=12}
+trim <- ThermoData_long %>% 
+  group_by(Thermocouple, Wig, Radiation, WindSpeed, Trial) %>%
+  summarize(end = last(Datetime),
+            start = end - dminutes(10)) %>% 
+  drop_na()
+
+# The last 10 minutes of each condition
+joint <- ThermoData_long %>% 
+  ungroup() %>% 
+  inner_join (trim) %>% 
+  drop_na()
+
+ThermoData_trimmed <- joint %>% 
+  mutate(interval = 
+            interval(start = start,
+                     end = end)) %>% 
+  dplyr::filter(Datetime %within% interval) %>% 
+  select(-c(start, end, interval))
+
+# line_func(ThermoData_trimmed)
+
+```
+
+
+## Summary Data
+
+The thermocouple number refers to the location on the manikin's head from forehead (1) to nape (4). Due to glitches, the data is not consistently available for all conditions.
+
+```{r thermo_sumdata, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
+Sum_Thermo <- ThermoData_trimmed %>%
+  group_by(Thermocouple, Wig, Radiation, WindSpeed) %>%
+  summarize(mean = mean(temp),
+            median = median(temp))
+  
+Sum_Thermo %>% 
+  ggplot(aes(x=as.factor(Wig), y=mean, group=as.factor(Thermocouple), color=Thermocouple)) +
+  geom_line() +
+      geom_point() +
+  facet_grid(rows = vars(WindSpeed), cols = vars(Radiation)) +
+  theme_bw() +
+  ylim(25, 50) +
+  labs(title = paste0("Thermocouple data for different windspeeds"))
+
+# knitr::kable(Sum_Thermo, format = "markdown")
+
+```
+
+
+
 
