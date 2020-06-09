@@ -1,6 +1,6 @@
 # HairManikin
 
-The research website for the project can be found [here]: https://tinalasisi.github.io/HairManikin/
+The research website for the project can be found [here] (https://tinalasisi.github.io/HairManikin/)
 
 
 A [workflowr][] project.
