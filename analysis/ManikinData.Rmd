@@ -1,7 +1,7 @@
 ---
 title: "Manikin Data"
 author: "Tina Lasisi"
-date: "Sys.time"
+date: "`Sys.time`"
 output: 
   workflowr::wflow_html:
     toc: true
