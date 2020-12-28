@@ -71,7 +71,7 @@ line_func <- function(df){
       geom_line() +
       facet_wrap(Wig ~ Radiation + Trial, nrow = 4, scales = "free_x") +
       theme_bw() +
-      ylim(25, 50) +
+      ylim(25, 70) +
       labs(title = paste0("Thermocouple data for ", wind, " m/s windspeed"))
     print(plot)
     }
@@ -91,7 +91,8 @@ Below the data are trimmed to include only the last 10 minutes of each test.
 trim <- ThermoData_long %>% 
   group_by(Thermocouple, Wig, Radiation, WindSpeed, Trial) %>%
   summarize(end = last(Datetime),
-            start = end - dminutes(10)) %>% 
+            start = end - minutes(10)) %>% 
+  mutate(exp_duration = as.duration(interval(start = start, end = end))) %>% 
   drop_na()
 
 # The last 10 minutes of each condition
@@ -101,13 +102,31 @@ joint <- ThermoData_long %>%
   drop_na()
 
 ThermoData_trimmed <- joint %>% 
+  group_by(Thermocouple, Wig, Radiation, WindSpeed, Trial) %>% 
   mutate(interval = 
             interval(start = start,
                      end = end)) %>% 
   dplyr::filter(Datetime %within% interval) %>% 
-  select(-c(start, end, interval))
+  mutate(timer = 
+           as.duration(Datetime - start)) %>% 
+  # select(-c(start, end, interval)) %>% 
+  filter(Trial == 1)
 
-# line_func(ThermoData_trimmed)
+windlist <- unique(levels(ThermoData_trimmed$WindSpeed))
+  
+  for (wind in windlist){
+    
+    plot <- ThermoData_trimmed %>%
+      filter(WindSpeed == wind) %>% 
+      ggplot(
+             aes(x=timer, y=temp, group=as.factor(Wig), color=Wig)) +
+      geom_line() +
+      facet_wrap(Thermocouple ~ Radiation, nrow = 4, scales = "free_x") +
+      theme_bw() +
+      ylim(25, 55) +
+      labs(title = paste0("Thermocouple data for ", wind, " m/s windspeed"))
+    print(plot)
+    }
 
 ```
 
