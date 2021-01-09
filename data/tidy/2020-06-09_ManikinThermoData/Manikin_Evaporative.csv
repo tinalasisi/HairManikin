@@ -1,0 +1,73 @@
+Wig,Radiation,Windspeed,Trial,HeatLoss
+Nude,Off,0.3 m/s,1,152.1
+Nude,Off,0.3 m/s,2,152.1
+Nude,Off,0.3 m/s,3,152.1
+Nude,On,0.3 m/s,1,88
+Nude,On,0.3 m/s,2,88
+Nude,On,0.3 m/s,3,88
+Nude,Off,1.0 m/s,1,254.5
+Nude,Off,1.0 m/s,2,254.5
+Nude,Off,1.0 m/s,3,254.5
+Nude,On,1.0 m/s,1,227
+Nude,On,1.0 m/s,2,227
+Nude,On,1.0 m/s,3,227
+Nude,Off,2.5 m/s,1,284.6
+Nude,Off,2.5 m/s,2,284.6
+Nude,Off,2.5 m/s,3,284.6
+Nude,On,2.5 m/s,1,284.8
+Nude,On,2.5 m/s,2,284.8
+Nude,On,2.5 m/s,3,284.8
+Low Curvature,Off,0.3 m/s,1,71.1
+Low Curvature,Off,0.3 m/s,2,63.8
+Low Curvature,Off,0.3 m/s,3,67.45
+Low Curvature,On,0.3 m/s,1,30
+Low Curvature,On,0.3 m/s,2,27.6
+Low Curvature,On,0.3 m/s,3,28.8
+Low Curvature,Off,1.0 m/s,1,103.1
+Low Curvature,Off,1.0 m/s,2,102.8
+Low Curvature,Off,1.0 m/s,3,102.95
+Low Curvature,On,1.0 m/s,1,73.3
+Low Curvature,On,1.0 m/s,2,80.9
+Low Curvature,On,1.0 m/s,3,77.1
+Low Curvature,Off,2.5 m/s,1,149.4
+Low Curvature,Off,2.5 m/s,2,163.5
+Low Curvature,Off,2.5 m/s,3,156.45
+Low Curvature,On,2.5 m/s,1,137.5
+Low Curvature,On,2.5 m/s,2,137.4
+Low Curvature,On,2.5 m/s,3,137.45
+Mid Curvature,Off,0.3 m/s,1,60.4
+Mid Curvature,Off,0.3 m/s,2,54.6
+Mid Curvature,Off,0.3 m/s,3,57.5
+Mid Curvature,On,0.3 m/s,1,26.6
+Mid Curvature,On,0.3 m/s,2,21.7
+Mid Curvature,On,0.3 m/s,3,24.15
+Mid Curvature,Off,1.0 m/s,1,90.4
+Mid Curvature,Off,1.0 m/s,2,89.8
+Mid Curvature,Off,1.0 m/s,3,90.1
+Mid Curvature,On,1.0 m/s,1,64
+Mid Curvature,On,1.0 m/s,2,68
+Mid Curvature,On,1.0 m/s,3,66
+Mid Curvature,Off,2.5 m/s,1,138.1
+Mid Curvature,Off,2.5 m/s,2,141.7
+Mid Curvature,Off,2.5 m/s,3,139.9
+Mid Curvature,On,2.5 m/s,1,133.1
+Mid Curvature,On,2.5 m/s,2,129.8
+Mid Curvature,On,2.5 m/s,3,131.45
+High Curvature,Off,0.3 m/s,1,60.4
+High Curvature,Off,0.3 m/s,2,56.2
+High Curvature,Off,0.3 m/s,3,58.3
+High Curvature,On,0.3 m/s,1,16.3
+High Curvature,On,0.3 m/s,2,16.5
+High Curvature,On,0.3 m/s,3,16.4
+High Curvature,Off,1.0 m/s,1,79.8
+High Curvature,Off,1.0 m/s,2,75.5
+High Curvature,Off,1.0 m/s,3,77.65
+High Curvature,On,1.0 m/s,1,55.6
+High Curvature,On,1.0 m/s,2,53
+High Curvature,On,1.0 m/s,3,54.3
+High Curvature,Off,2.5 m/s,1,128.5
+High Curvature,Off,2.5 m/s,2,113.7
+High Curvature,Off,2.5 m/s,3,121.1
+High Curvature,On,2.5 m/s,1,149
+High Curvature,On,2.5 m/s,2,109.7
+High Curvature,On,2.5 m/s,3,110

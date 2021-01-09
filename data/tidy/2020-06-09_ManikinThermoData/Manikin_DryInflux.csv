@@ -1,0 +1,37 @@
+Wig,Radiation,Windspeed,HeatLossOff,HeatLossOn,Trial,SolarInflux
+High Curvature,Radiation Off,0.3 m/s,98.1,84.6,1,13.5
+High Curvature,Radiation Off,1.0 m/s,94.6,75.5,1,19.1
+High Curvature,Radiation Off,2.5 m/s,169.9,160,1,9.9
+Low Curvature,Radiation Off,0.3 m/s,87.2,24.6,1,62.6
+Low Curvature,Radiation Off,1.0 m/s,95.7,31.5,1,64.2
+Low Curvature,Radiation Off,2.5 m/s,158.7,114.6,1,44.1
+Mid Curvature,Radiation Off,0.3 m/s,77.1,40.7,1,36.4
+Mid Curvature,Radiation Off,1.0 m/s,91.5,54.7,1,36.8
+Mid Curvature,Radiation Off,2.5 m/s,160.3,126.2,1,34.1
+Nude,Radiation Off,0.3 m/s,325.2,150,1,175.2
+Nude,Radiation Off,1.0 m/s,250.5,74.5,1,176
+Nude,Radiation Off,2.5 m/s,435.6,282.7,1,152.9
+High Curvature,Radiation Off,0.3 m/s,114.9,91.1,2,23.8
+High Curvature,Radiation Off,1.0 m/s,94.3,76.5,2,17.8
+High Curvature,Radiation Off,2.5 m/s,164.9,153.4,2,11.5
+Low Curvature,Radiation Off,0.3 m/s,88,21.7,2,66.3
+Low Curvature,Radiation Off,1.0 m/s,92.1,27,2,65.1
+Low Curvature,Radiation Off,2.5 m/s,145.3,99.1,2,46.2
+Mid Curvature,Radiation Off,0.3 m/s,86.4,44.4,2,42
+Mid Curvature,Radiation Off,1.0 m/s,87.1,48.3,2,38.8
+Mid Curvature,Radiation Off,2.5 m/s,151,119.1,2,31.9
+Nude,Radiation Off,0.3 m/s,329,160.8,2,168.2
+Nude,Radiation Off,1.0 m/s,246.4,84.1,2,162.3
+Nude,Radiation Off,2.5 m/s,449.5,280.3,2,169.2
+High Curvature,Radiation Off,0.3 m/s,112.9,93.4,3,19.5
+High Curvature,Radiation Off,1.0 m/s,88.9,73.3,3,15.6
+High Curvature,Radiation Off,2.5 m/s,163.4,153,3,10.4
+Low Curvature,Radiation Off,0.3 m/s,87.1,26.8,3,60.3
+Low Curvature,Radiation Off,1.0 m/s,93,26.2,3,66.8
+Low Curvature,Radiation Off,2.5 m/s,144.4,102.2,3,42.2
+Mid Curvature,Radiation Off,0.3 m/s,84.9,40.8,3,44.1
+Mid Curvature,Radiation Off,1.0 m/s,85.4,52.4,3,33
+Mid Curvature,Radiation Off,2.5 m/s,145.7,123.9,3,21.8
+Nude,Radiation Off,0.3 m/s,328.7,152.6,3,176.1
+Nude,Radiation Off,1.0 m/s,247.4,76.3,3,171.1
+Nude,Radiation Off,2.5 m/s,431.6,273.2,3,158.4
