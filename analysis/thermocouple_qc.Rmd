@@ -5,6 +5,7 @@ date: "`r format(Sys.time(), '%B %d, %Y')`"
 output:
   workflowr::wflow_html:
     toc: yes
+    toc_float: true
     number_sections: yes
 editor_options:
   chunk_output_type: console
@@ -21,7 +22,6 @@ library(kableExtra)
 library(fs)
 library(janitor)
 library(fuzzyjoin)
-library(anomalize)
 
 
 F = rprojroot::is_rstudio_project$make_fix_file()
@@ -98,7 +98,6 @@ head(ExperimentLog)
 We then clean the dataframe for the log and remove the intervals where the wind speed is 0.3m/s and the room condition is noted as "regular". This is because after the first trial, we noticed that, at this wind speed, the manikin would overheat (and we were unable to get measurements) when we turned the radiation on and used the "low curvature" (aka. straight) wig. Because of this, we re-ran all the 0.3m/s experiments for all wigs with those conditions. The conditions are noted as "cold" which meant 4 degrees Celsius (rather than 10) and we also adjusted the manikin body temperature (but I need to check the data on this).
 
 ```{r clean_log, echo=TRUE}
-# Also need to remove all intervals where the wind speed is 0.3 and the Room Condition is regular
 
 # change columns to datetime and create intervals for each trial
 DateTimeLog <- ExperimentLog %>% 
@@ -112,6 +111,8 @@ DateTimeLog <- ExperimentLog %>%
          RoomConditions = as_factor(RoomConditions)
   ) %>% 
   select(Wig, Radiation, WindSpeed, Trial_Duration, Trial_Interval, RoomConditions, Trial, DateTime_start, DateTime_end)
+
+# Also need to remove all intervals where the wind speed is 0.3 and the Room Condition is regular. But for this initial visualization I'm leaving everything in. 
 
 # %>% 
   # filter(!(WindSpeed == "0.3" & RoomConditions == "regular"))
@@ -178,6 +179,8 @@ head(merge_df_long)
 # Visualize each experimental condition
 
 ## All data
+The plots show clearly that some of the thermocouples went haywire, registering tempertures in the 900s and above.
+
 ```{r plt_thermo_sep, echo=FALSE, fig.height=18, fig.width=12}
 
 df <- merge_df_long
@@ -212,6 +215,9 @@ for (wig in wiglist){
 
 
 ## Extreme temperatures removed
+Even with those extremes removed, it seems that there may be some issues in which durations precisely should be used for the thermocouple readings. 
+
+The last 10 minutes of the trial may be bleeding into the next trial, or there may be some other reason for some of the more drastic demarcations within experiments.
 
 ```{r plt_thermo_sep_filt, echo=FALSE, fig.height=18, fig.width=12}
 
