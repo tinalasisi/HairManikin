@@ -515,16 +515,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiHairManikintreeada77f2fc3f57eee49fcc35ba0460f6f63017bd0targetblankada77f2a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/tinalasisi/HairManikin/tree/ada77f2fc3f57eee49fcc35ba0460f6f63017bd0" target="_blank">ada77f2</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiHairManikintree3085832255963d1c0dd75ed77471d218830c44a0targetblank3085832a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/tinalasisi/HairManikin/tree/3085832255963d1c0dd75ed77471d218830c44a0" target="_blank">3085832</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiHairManikintreeada77f2fc3f57eee49fcc35ba0460f6f63017bd0targetblankada77f2a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiHairManikintree3085832255963d1c0dd75ed77471d218830c44a0targetblank3085832a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/tinalasisi/HairManikin/tree/ada77f2fc3f57eee49fcc35ba0460f6f63017bd0" target="_blank">ada77f2</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/tinalasisi/HairManikin/tree/3085832255963d1c0dd75ed77471d218830c44a0" target="_blank">3085832</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -575,6 +575,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/tinalasisi/HairManikin/blob/3085832255963d1c0dd75ed77471d218830c44a0/analysis/thermocouple_qc.Rmd" target="_blank">3085832</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-01-08
+</td>
+<td>
+Updating thermocouple_qc analysis
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/tinalasisi/HairManikin/e03417e66d0a508a9c5374b505e87008f37217c5/docs/thermocouple_qc.html" target="_blank">e03417e</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-01-08
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -657,9 +691,7 @@ head(ExperimentLog)</code></pre>
 <div id="clean-data" class="section level1">
 <h1><span class="header-section-number">3</span> Clean data</h1>
 <p>We then clean the dataframe for the log and remove the intervals where the wind speed is 0.3m/s and the room condition is noted as “regular”. This is because after the first trial, we noticed that, at this wind speed, the manikin would overheat (and we were unable to get measurements) when we turned the radiation on and used the “low curvature” (aka. straight) wig. Because of this, we re-ran all the 0.3m/s experiments for all wigs with those conditions. The conditions are noted as “cold” which meant 4 degrees Celsius (rather than 10) and we also adjusted the manikin body temperature (but I need to check the data on this).</p>
-<pre class="r"><code># Also need to remove all intervals where the wind speed is 0.3 and the Room Condition is regular
-
-# change columns to datetime and create intervals for each trial
+<pre class="r"><code># change columns to datetime and create intervals for each trial
 DateTimeLog &lt;- ExperimentLog %&gt;% 
   mutate(DateTime_start = as_datetime(date(Date) + hms(TimeStarted)),
          DateTime_end = as_datetime(date(Date) + hms(TimeEnded)),
@@ -671,6 +703,8 @@ DateTimeLog &lt;- ExperimentLog %&gt;%
          RoomConditions = as_factor(RoomConditions)
   ) %&gt;% 
   select(Wig, Radiation, WindSpeed, Trial_Duration, Trial_Interval, RoomConditions, Trial, DateTime_start, DateTime_end)
+
+# Also need to remove all intervals where the wind speed is 0.3 and the Room Condition is regular. But for this initial visualization I&#39;m leaving everything in. 
 
 # %&gt;% 
   # filter(!(WindSpeed == &quot;0.3&quot; &amp; RoomConditions == &quot;regular&quot;))
@@ -3023,11 +3057,924 @@ head(merge_df_long)</code></pre>
 <h1><span class="header-section-number">5</span> Visualize each experimental condition</h1>
 <div id="all-data" class="section level2">
 <h2><span class="header-section-number">5.1</span> All data</h2>
-<p><img src="figure/thermocouple_qc.Rmd/plt_thermo_sep-1.png" width="100%" style="display: block; margin: auto;" /><img src="figure/thermocouple_qc.Rmd/plt_thermo_sep-2.png" width="100%" style="display: block; margin: auto;" /><img src="figure/thermocouple_qc.Rmd/plt_thermo_sep-3.png" width="100%" style="display: block; margin: auto;" /><img src="figure/thermocouple_qc.Rmd/plt_thermo_sep-4.png" width="100%" style="display: block; margin: auto;" /><img src="figure/thermocouple_qc.Rmd/plt_thermo_sep-5.png" width="100%" style="display: block; margin: auto;" /><img src="figure/thermocouple_qc.Rmd/plt_thermo_sep-6.png" width="100%" style="display: block; margin: auto;" /><img src="figure/thermocouple_qc.Rmd/plt_thermo_sep-7.png" width="100%" style="display: block; margin: auto;" /><img src="figure/thermocouple_qc.Rmd/plt_thermo_sep-8.png" width="100%" style="display: block; margin: auto;" /><img src="figure/thermocouple_qc.Rmd/plt_thermo_sep-9.png" width="100%" style="display: block; margin: auto;" /><img src="figure/thermocouple_qc.Rmd/plt_thermo_sep-10.png" width="100%" style="display: block; margin: auto;" /><img src="figure/thermocouple_qc.Rmd/plt_thermo_sep-11.png" width="100%" style="display: block; margin: auto;" /><img src="figure/thermocouple_qc.Rmd/plt_thermo_sep-12.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>The plots show clearly that some of the thermocouples went haywire, registering tempertures in the 900s and above.</p>
+<p><img src="figure/thermocouple_qc.Rmd/plt_thermo_sep-1.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt_thermo_sep-1">
+Past versions of plt_thermo_sep-1.png
+</button>
+</p>
+<div id="fig-plt_thermo_sep-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tinalasisi/HairManikin/blob/e03417e66d0a508a9c5374b505e87008f37217c5/docs/figure/thermocouple_qc.Rmd/plt_thermo_sep-1.png" target="_blank">e03417e</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-01-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/thermocouple_qc.Rmd/plt_thermo_sep-2.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt_thermo_sep-2">
+Past versions of plt_thermo_sep-2.png
+</button>
+</p>
+<div id="fig-plt_thermo_sep-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tinalasisi/HairManikin/blob/e03417e66d0a508a9c5374b505e87008f37217c5/docs/figure/thermocouple_qc.Rmd/plt_thermo_sep-2.png" target="_blank">e03417e</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-01-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/thermocouple_qc.Rmd/plt_thermo_sep-3.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt_thermo_sep-3">
+Past versions of plt_thermo_sep-3.png
+</button>
+</p>
+<div id="fig-plt_thermo_sep-3" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tinalasisi/HairManikin/blob/e03417e66d0a508a9c5374b505e87008f37217c5/docs/figure/thermocouple_qc.Rmd/plt_thermo_sep-3.png" target="_blank">e03417e</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-01-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/thermocouple_qc.Rmd/plt_thermo_sep-4.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt_thermo_sep-4">
+Past versions of plt_thermo_sep-4.png
+</button>
+</p>
+<div id="fig-plt_thermo_sep-4" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tinalasisi/HairManikin/blob/e03417e66d0a508a9c5374b505e87008f37217c5/docs/figure/thermocouple_qc.Rmd/plt_thermo_sep-4.png" target="_blank">e03417e</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-01-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/thermocouple_qc.Rmd/plt_thermo_sep-5.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt_thermo_sep-5">
+Past versions of plt_thermo_sep-5.png
+</button>
+</p>
+<div id="fig-plt_thermo_sep-5" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tinalasisi/HairManikin/blob/e03417e66d0a508a9c5374b505e87008f37217c5/docs/figure/thermocouple_qc.Rmd/plt_thermo_sep-5.png" target="_blank">e03417e</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-01-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/thermocouple_qc.Rmd/plt_thermo_sep-6.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt_thermo_sep-6">
+Past versions of plt_thermo_sep-6.png
+</button>
+</p>
+<div id="fig-plt_thermo_sep-6" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tinalasisi/HairManikin/blob/e03417e66d0a508a9c5374b505e87008f37217c5/docs/figure/thermocouple_qc.Rmd/plt_thermo_sep-6.png" target="_blank">e03417e</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-01-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/thermocouple_qc.Rmd/plt_thermo_sep-7.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt_thermo_sep-7">
+Past versions of plt_thermo_sep-7.png
+</button>
+</p>
+<div id="fig-plt_thermo_sep-7" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tinalasisi/HairManikin/blob/e03417e66d0a508a9c5374b505e87008f37217c5/docs/figure/thermocouple_qc.Rmd/plt_thermo_sep-7.png" target="_blank">e03417e</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-01-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/thermocouple_qc.Rmd/plt_thermo_sep-8.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt_thermo_sep-8">
+Past versions of plt_thermo_sep-8.png
+</button>
+</p>
+<div id="fig-plt_thermo_sep-8" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tinalasisi/HairManikin/blob/e03417e66d0a508a9c5374b505e87008f37217c5/docs/figure/thermocouple_qc.Rmd/plt_thermo_sep-8.png" target="_blank">e03417e</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-01-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/thermocouple_qc.Rmd/plt_thermo_sep-9.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt_thermo_sep-9">
+Past versions of plt_thermo_sep-9.png
+</button>
+</p>
+<div id="fig-plt_thermo_sep-9" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tinalasisi/HairManikin/blob/e03417e66d0a508a9c5374b505e87008f37217c5/docs/figure/thermocouple_qc.Rmd/plt_thermo_sep-9.png" target="_blank">e03417e</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-01-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/thermocouple_qc.Rmd/plt_thermo_sep-10.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt_thermo_sep-10">
+Past versions of plt_thermo_sep-10.png
+</button>
+</p>
+<div id="fig-plt_thermo_sep-10" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tinalasisi/HairManikin/blob/e03417e66d0a508a9c5374b505e87008f37217c5/docs/figure/thermocouple_qc.Rmd/plt_thermo_sep-10.png" target="_blank">e03417e</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-01-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/thermocouple_qc.Rmd/plt_thermo_sep-11.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt_thermo_sep-11">
+Past versions of plt_thermo_sep-11.png
+</button>
+</p>
+<div id="fig-plt_thermo_sep-11" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tinalasisi/HairManikin/blob/e03417e66d0a508a9c5374b505e87008f37217c5/docs/figure/thermocouple_qc.Rmd/plt_thermo_sep-11.png" target="_blank">e03417e</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-01-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/thermocouple_qc.Rmd/plt_thermo_sep-12.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt_thermo_sep-12">
+Past versions of plt_thermo_sep-12.png
+</button>
+</p>
+<div id="fig-plt_thermo_sep-12" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tinalasisi/HairManikin/blob/e03417e66d0a508a9c5374b505e87008f37217c5/docs/figure/thermocouple_qc.Rmd/plt_thermo_sep-12.png" target="_blank">e03417e</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-01-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="extreme-temperatures-removed" class="section level2">
 <h2><span class="header-section-number">5.2</span> Extreme temperatures removed</h2>
-<p><img src="figure/thermocouple_qc.Rmd/plt_thermo_sep_filt-1.png" width="100%" style="display: block; margin: auto;" /><img src="figure/thermocouple_qc.Rmd/plt_thermo_sep_filt-2.png" width="100%" style="display: block; margin: auto;" /><img src="figure/thermocouple_qc.Rmd/plt_thermo_sep_filt-3.png" width="100%" style="display: block; margin: auto;" /><img src="figure/thermocouple_qc.Rmd/plt_thermo_sep_filt-4.png" width="100%" style="display: block; margin: auto;" /><img src="figure/thermocouple_qc.Rmd/plt_thermo_sep_filt-5.png" width="100%" style="display: block; margin: auto;" /><img src="figure/thermocouple_qc.Rmd/plt_thermo_sep_filt-6.png" width="100%" style="display: block; margin: auto;" /><img src="figure/thermocouple_qc.Rmd/plt_thermo_sep_filt-7.png" width="100%" style="display: block; margin: auto;" /><img src="figure/thermocouple_qc.Rmd/plt_thermo_sep_filt-8.png" width="100%" style="display: block; margin: auto;" /><img src="figure/thermocouple_qc.Rmd/plt_thermo_sep_filt-9.png" width="100%" style="display: block; margin: auto;" /><img src="figure/thermocouple_qc.Rmd/plt_thermo_sep_filt-10.png" width="100%" style="display: block; margin: auto;" /><img src="figure/thermocouple_qc.Rmd/plt_thermo_sep_filt-11.png" width="100%" style="display: block; margin: auto;" /><img src="figure/thermocouple_qc.Rmd/plt_thermo_sep_filt-12.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>Even with those extremes removed, it seems that there may be some issues in which durations precisely should be used for the thermocouple readings.</p>
+<p>The last 10 minutes of the trial may be bleeding into the next trial, or there may be some other reason for some of the more drastic demarcations within experiments.</p>
+<p><img src="figure/thermocouple_qc.Rmd/plt_thermo_sep_filt-1.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt_thermo_sep_filt-1">
+Past versions of plt_thermo_sep_filt-1.png
+</button>
+</p>
+<div id="fig-plt_thermo_sep_filt-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tinalasisi/HairManikin/blob/e03417e66d0a508a9c5374b505e87008f37217c5/docs/figure/thermocouple_qc.Rmd/plt_thermo_sep_filt-1.png" target="_blank">e03417e</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-01-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/thermocouple_qc.Rmd/plt_thermo_sep_filt-2.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt_thermo_sep_filt-2">
+Past versions of plt_thermo_sep_filt-2.png
+</button>
+</p>
+<div id="fig-plt_thermo_sep_filt-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tinalasisi/HairManikin/blob/e03417e66d0a508a9c5374b505e87008f37217c5/docs/figure/thermocouple_qc.Rmd/plt_thermo_sep_filt-2.png" target="_blank">e03417e</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-01-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/thermocouple_qc.Rmd/plt_thermo_sep_filt-3.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt_thermo_sep_filt-3">
+Past versions of plt_thermo_sep_filt-3.png
+</button>
+</p>
+<div id="fig-plt_thermo_sep_filt-3" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tinalasisi/HairManikin/blob/e03417e66d0a508a9c5374b505e87008f37217c5/docs/figure/thermocouple_qc.Rmd/plt_thermo_sep_filt-3.png" target="_blank">e03417e</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-01-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/thermocouple_qc.Rmd/plt_thermo_sep_filt-4.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt_thermo_sep_filt-4">
+Past versions of plt_thermo_sep_filt-4.png
+</button>
+</p>
+<div id="fig-plt_thermo_sep_filt-4" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tinalasisi/HairManikin/blob/e03417e66d0a508a9c5374b505e87008f37217c5/docs/figure/thermocouple_qc.Rmd/plt_thermo_sep_filt-4.png" target="_blank">e03417e</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-01-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/thermocouple_qc.Rmd/plt_thermo_sep_filt-5.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt_thermo_sep_filt-5">
+Past versions of plt_thermo_sep_filt-5.png
+</button>
+</p>
+<div id="fig-plt_thermo_sep_filt-5" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tinalasisi/HairManikin/blob/e03417e66d0a508a9c5374b505e87008f37217c5/docs/figure/thermocouple_qc.Rmd/plt_thermo_sep_filt-5.png" target="_blank">e03417e</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-01-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/thermocouple_qc.Rmd/plt_thermo_sep_filt-6.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt_thermo_sep_filt-6">
+Past versions of plt_thermo_sep_filt-6.png
+</button>
+</p>
+<div id="fig-plt_thermo_sep_filt-6" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tinalasisi/HairManikin/blob/e03417e66d0a508a9c5374b505e87008f37217c5/docs/figure/thermocouple_qc.Rmd/plt_thermo_sep_filt-6.png" target="_blank">e03417e</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-01-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/thermocouple_qc.Rmd/plt_thermo_sep_filt-7.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt_thermo_sep_filt-7">
+Past versions of plt_thermo_sep_filt-7.png
+</button>
+</p>
+<div id="fig-plt_thermo_sep_filt-7" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tinalasisi/HairManikin/blob/e03417e66d0a508a9c5374b505e87008f37217c5/docs/figure/thermocouple_qc.Rmd/plt_thermo_sep_filt-7.png" target="_blank">e03417e</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-01-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/thermocouple_qc.Rmd/plt_thermo_sep_filt-8.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt_thermo_sep_filt-8">
+Past versions of plt_thermo_sep_filt-8.png
+</button>
+</p>
+<div id="fig-plt_thermo_sep_filt-8" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tinalasisi/HairManikin/blob/e03417e66d0a508a9c5374b505e87008f37217c5/docs/figure/thermocouple_qc.Rmd/plt_thermo_sep_filt-8.png" target="_blank">e03417e</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-01-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/thermocouple_qc.Rmd/plt_thermo_sep_filt-9.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt_thermo_sep_filt-9">
+Past versions of plt_thermo_sep_filt-9.png
+</button>
+</p>
+<div id="fig-plt_thermo_sep_filt-9" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tinalasisi/HairManikin/blob/e03417e66d0a508a9c5374b505e87008f37217c5/docs/figure/thermocouple_qc.Rmd/plt_thermo_sep_filt-9.png" target="_blank">e03417e</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-01-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/thermocouple_qc.Rmd/plt_thermo_sep_filt-10.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt_thermo_sep_filt-10">
+Past versions of plt_thermo_sep_filt-10.png
+</button>
+</p>
+<div id="fig-plt_thermo_sep_filt-10" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tinalasisi/HairManikin/blob/e03417e66d0a508a9c5374b505e87008f37217c5/docs/figure/thermocouple_qc.Rmd/plt_thermo_sep_filt-10.png" target="_blank">e03417e</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-01-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/thermocouple_qc.Rmd/plt_thermo_sep_filt-11.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt_thermo_sep_filt-11">
+Past versions of plt_thermo_sep_filt-11.png
+</button>
+</p>
+<div id="fig-plt_thermo_sep_filt-11" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tinalasisi/HairManikin/blob/e03417e66d0a508a9c5374b505e87008f37217c5/docs/figure/thermocouple_qc.Rmd/plt_thermo_sep_filt-11.png" target="_blank">e03417e</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-01-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/thermocouple_qc.Rmd/plt_thermo_sep_filt-12.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt_thermo_sep_filt-12">
+Past versions of plt_thermo_sep_filt-12.png
+</button>
+</p>
+<div id="fig-plt_thermo_sep_filt-12" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tinalasisi/HairManikin/blob/e03417e66d0a508a9c5374b505e87008f37217c5/docs/figure/thermocouple_qc.Rmd/plt_thermo_sep_filt-12.png" target="_blank">e03417e</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-01-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -3050,11 +3997,10 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
- [1] anomalize_0.2.2   fuzzyjoin_0.1.6   janitor_2.1.0     fs_1.5.0         
- [5] kableExtra_1.3.1  lubridate_1.7.9.2 tibbletime_0.1.6  knitr_1.30       
- [9] forcats_0.5.0     stringr_1.4.0     dplyr_1.0.2       purrr_0.3.4      
-[13] readr_1.4.0       tidyr_1.1.2       tibble_3.0.4      ggplot2_3.3.2    
-[17] tidyverse_1.3.0  
+ [1] fuzzyjoin_0.1.6   janitor_2.1.0     fs_1.5.0          kableExtra_1.3.1 
+ [5] lubridate_1.7.9.2 tibbletime_0.1.6  knitr_1.30        forcats_0.5.0    
+ [9] stringr_1.4.0     dplyr_1.0.2       purrr_0.3.4       readr_1.4.0      
+[13] tidyr_1.1.2       tibble_3.0.4      ggplot2_3.3.2     tidyverse_1.3.0  
 
 loaded via a namespace (and not attached):
  [1] Rcpp_1.0.5        utf8_1.1.4        assertthat_0.2.1  rprojroot_2.0.2  
