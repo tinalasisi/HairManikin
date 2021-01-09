@@ -1,7 +1,7 @@
 ---
 title: "Thermocouple Data"
 author: "Tina Lasisi"
-date: "2020-06-01"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
 output: 
   workflowr::wflow_html:
     toc: true
@@ -12,146 +12,279 @@ editor_options:
 
 In addition to the thermal manikin data, we collected scalp temperature data for each of the trials.
 
-```{r thermo_data, include=FALSE, results='asis'}
+```{r thermo_data, include=FALSE}
 library(tidyverse)
 library(here)
 library(tibbletime)
 library(lubridate)
 library(anomalize)
-
-ThermoCleanMaster <- read_csv("data/tidy/ThermoCleanMaster.csv", 
-    col_types = cols(Date = col_date(format = "%m/%d/%y"), 
-        Time = col_time(format = "%H:%M:%S")))
-
-int1 <- interval(ymd("2018-10-23"), ymd_h("2018-10-25 22"))
-int2 <- interval(ymd("2018-10-26"), ymd_hm("2018-10-29 11:56"))
-int3 <- interval(ymd_hm("2018-10-29 11:57"), ymd("2018-10-31"))
-rem_int1 <- interval(ymd_hm("2018-10-23 17:12"), ymd_hm("2018-10-23 21:13"))
-rem_int2 <- interval(ymd_hm("2018-10-24 10:59"), ymd_hm("2018-10-24 12:40"))
-start_time <- ymd_hm("2018-10-23 13:41")
-end_time <- ymd_hm("2018-10-31 16:37")
+library(kableExtra)
 
 
-ThermoData <- as_tbl_time(ThermoCleanMaster, index = Date) %>%
+# Import thermocouple data and format for date and time
+ThermoCleanMaster <- as_tibble(
+  read_csv("data/tidy/ThermoCleanMaster.csv", 
+    col_types = cols(
+      Date = col_date(format = "%m/%d/%y"),
+      Time = col_time(format = "%H:%M:%S")))
+  ) %>% 
+  mutate(DateTime = as_datetime(date(Date) + hms(Time)))
+
+# Import the log with each experiment time and conditions
+ExperimentLog <- as_tibble(
+  read_csv("data/tidy/ExperimentLog.csv", 
+    col_types = cols(
+      Date = col_date(format = "%m/%d/%y"),
+      TimeStarted = col_time(format = "%H:%M:%S"),
+      TimeEnded = col_time(format = "%H:%M:%S")))
+  )
+
+# Also need to remove all intervals where the wind speed is 0.3 and the Room Condition is regular
+
+# change columns to datetime and create intervals for each trial
+DateTimeLog <- ExperimentLog %>% 
+  mutate(DateTime_start = as_datetime(date(Date) + hms(TimeStarted)),
+         DateTime_end = as_datetime(date(Date) + hms(TimeEnded)),
+         Trial_Interval = interval(DateTime_start, DateTime_end),
+         Trial_Duration = dseconds(int_length(Trial_Interval)),
+         WindSpeed = as_factor(Windspeed)
+  ) %>% 
+  select(Wig, Radiation, WindSpeed, Trial_Duration, Trial_Interval, (everything())) %>% 
+  filter(!(WindSpeed == "0.3" & RoomConditions == "regular"))
+
+head(DateTimeLog)
+
+ThermoData <- as_tbl_time(ThermoCleanMaster, index = DateTime) %>%
   select(-Sheets.Name) %>%
   mutate(Wig = as_factor(replace(Wig, Wig == "NoWig", "Nude")),
-         Datetime = ymd_hms(with(ThermoCleanMaster, ymd(Date) + hms(Time))),
-         Trial = as_factor(case_when(
-           Datetime %within% int1 ~ 1,
-           Datetime %within% int2 ~ 2,
-           Datetime %within% int3 ~ 3)),
          WindSpeed = as_factor(WindSpeed),
          Radiation = as_factor(Radiation)) %>% 
   drop_na() %>% 
-  filter(!Datetime %within% rem_int1 & !Datetime %within% rem_int2 & Datetime > start_time & Datetime < end_time) %>% 
-  group_by(Wig, Radiation, WindSpeed, Trial)
+  group_by(Wig, Radiation, WindSpeed) %>% 
+  select(-c(Date, Time))
 
-ThermoData_long <- ThermoData %>% 
-  gather("1", "2", "3", "4", key = "Thermocouple", value = "temp", factor_key = TRUE) %>% 
-  select(Datetime, Trial, Wig, Thermocouple, temp, Radiation, WindSpeed, Trial, -Date, -Time) %>% 
-  arrange(Datetime) %>% 
-  group_by(Wig, Radiation, WindSpeed, Thermocouple)
+head(ThermoData)
+
 
 ```
 
-## Scalp temperature variation between conditions
+## Log of all experiments
 
-```{r thermo_plots, echo=FALSE, fig.height=18, fig.width=12, results='asis'}
+Here thermocouple data collected under "regular" temperature conditions (10C) for the 0.3 windspeed is removed.
 
-line_func <- function(df){
+```{r tbl_log, include=TRUE, results='asis'}
+
+kable(DateTimeLog) %>% 
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+    fixed_thead = T)
+
+```
+
+Because the duration of the trials was variable, we will have to normalize the duration of the trials for comparison. 
+
+```{r tbl_log_min, include=TRUE, results='asis'}
+
+DateTimeLog %>% 
+  slice(which.min(Trial_Duration)) %>% 
+  kable() %>% 
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+    fixed_thead = T)
+
+```
+
+
+```{r thermo_data_all, include=FALSE}
+# Join dataframes and filter rows that do not belong within the interval of their experimental trial
+ThermoData_combined <- left_join(DateTimeLog, ThermoData, by = c("Wig", "WindSpeed", "Radiation")) %>% 
+  filter(DateTime %within% Trial_Interval)
+
+df_thermo_long <- ThermoData_combined %>% 
+  pivot_longer(cols = "1":"5", names_to = "thermo_id", values_to = "temp")
+
+head(df_thermo_long)
+```
+
+
+```{r thermo_data_trim, include=FALSE}
+# This is for reducing the start time to the standardized length based on the minimum 
+
+trim_DateTimeLog <- DateTimeLog %>% 
+  mutate(DateTime_start = DateTime_end - dminutes(40),
+         Trial_Interval = interval(DateTime_start, DateTime_end),
+         Trial_Duration = dseconds(int_length(Trial_Interval))
+  )
+
+trim_combo_ThermoData <- left_join(trim_DateTimeLog, ThermoData, by = c("Wig", "WindSpeed", "Radiation")) %>% 
+  filter(DateTime %within% Trial_Interval) %>% 
+  mutate(seconds_interval = interval(DateTime_start, DateTime),
+         seconds_duration = dseconds(int_length(seconds_interval)))
+
+df_trim_thermo_long <- trim_combo_ThermoData %>% 
+  pivot_longer(cols = "1":"5", names_to = "thermo_id", values_to = "temp")
+
+
+```
+
+Number of data points per experimental condition
+
+```{r}
+
+df_trim_thermo_long %>% 
+  group_by(Wig, WindSpeed, Radiation, thermo_id) %>% 
+  tally() %>% 
+  kable() %>% 
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+    fixed_thead = T)
+
+```
+
+
+# Scalp temperature variation between conditions
+
+## Free y-axis
+
+```{r func_plt_thermo, echo=FALSE, fig.height=18, fig.width=12,}
+line_func <- function(df, Trial){
   
   windlist <- unique(levels(df$WindSpeed))
   
   for (wind in windlist){
     
-    plot <- ThermoData_long %>%
+    plot <- df_trim_thermo_long %>%
       filter(WindSpeed == wind) %>% 
       ggplot(
-             aes(x=Datetime, y=temp, group=as.factor(Thermocouple), color=Thermocouple)) +
+             aes(x=seconds_duration, y=temp, group=as.factor(Wig), color=Wig)) +
+      geom_point()+
       geom_line() +
-      facet_wrap(Wig ~ Radiation + Trial, nrow = 4, scales = "free_x") +
-      theme_bw() +
-      ylim(25, 70) +
-      labs(title = paste0("Thermocouple data for ", wind, " m/s windspeed"))
+      facet_wrap(thermo_id ~ Radiation, scales = "free_x", ncol = 2) +
+      theme_bw()+
+      ggtitle(paste0("Thermocouple data for ", wind, " m/s windspeed","for Trial ", Trial)) +
+      theme(plot.title = element_text(hjust = 0.5))
     print(plot)
     }
 }
+```
 
 
-line_func(ThermoData_long)
-
+```{r plt_thermo, echo=FALSE, fig.height=18, fig.width=12}
+line_func(df_trim_thermo_long, "1")
+line_func(df_trim_thermo_long, "2")
+line_func(df_trim_thermo_long, "3")
 
 ```
 
-## Trimmed Data
+## Y-axis limited to 70 degrees
+
+```{r func_plt_thermo_lim, echo=FALSE, fig.height=18, fig.width=12,}
+line_func_lim <- function(df, Trial){
+  
+  windlist <- unique(levels(df$WindSpeed))
+  
+  for (wind in windlist){
+    
+    plot <- df_trim_thermo_long %>%
+      filter(WindSpeed == wind) %>% 
+      ggplot(
+             aes(x=seconds_duration, y=temp, group=as.factor(Wig), color=Wig)) +
+      geom_line() +
+      ylim(25, 70) +
+      facet_wrap(thermo_id ~ Radiation, scales = "free_x", ncol = 2) +
+      theme_bw()+
+      ggtitle(paste0("Thermocouple data for ", wind, " m/s windspeed","for Trial ", Trial)) +
+      theme(plot.title = element_text(hjust = 0.5))
+    print(plot)
+    }
+} 
+```
+
+
+```{r plt_thermo_lim, echo=FALSE, fig.height=18, fig.width=12}
+line_func_lim(df_trim_thermo_long, "1")
+line_func_lim(df_trim_thermo_long, "2")
+line_func_lim(df_trim_thermo_long, "3")
+
+```
+
+# Last 10 minutes
 
 Below the data are trimmed to include only the last 10 minutes of each test.
 
 ```{r echo=FALSE, fig.height=18, fig.width=12}
-trim <- ThermoData_long %>% 
-  group_by(Thermocouple, Wig, Radiation, WindSpeed, Trial) %>%
-  summarize(end = last(Datetime),
-            start = end - minutes(10)) %>% 
-  mutate(exp_duration = as.duration(interval(start = start, end = end))) %>% 
-  drop_na()
+df_trim10 <- df_trim_thermo_long %>% 
+  group_by(thermo_id, Wig, Radiation, WindSpeed, Trial) %>% 
+  mutate(DateTime_start = DateTime_end - dminutes(10),
+         Trial_Interval = interval(DateTime_start, DateTime_end),
+         Trial_Duration = dseconds(int_length(Trial_Interval))
+  ) %>% 
+  filter(DateTime %within% Trial_Interval)
+```
 
-# The last 10 minutes of each condition
-joint <- ThermoData_long %>% 
-  ungroup() %>% 
-  inner_join (trim) %>% 
-  drop_na()
+Number of data points per experimental condition
 
-ThermoData_trimmed <- joint %>% 
-  group_by(Thermocouple, Wig, Radiation, WindSpeed, Trial) %>% 
-  mutate(interval = 
-            interval(start = start,
-                     end = end)) %>% 
-  dplyr::filter(Datetime %within% interval) %>% 
-  mutate(timer = 
-           as.duration(Datetime - start)) %>% 
-  # select(-c(start, end, interval)) %>% 
-  filter(Trial == 1)
-
-windlist <- unique(levels(ThermoData_trimmed$WindSpeed))
-  
-  for (wind in windlist){
-    
-    plot <- ThermoData_trimmed %>%
-      filter(WindSpeed == wind) %>% 
-      ggplot(
-             aes(x=timer, y=temp, group=as.factor(Wig), color=Wig)) +
-      geom_line() +
-      facet_wrap(Thermocouple ~ Radiation, nrow = 4, scales = "free_x") +
-      theme_bw() +
-      ylim(25, 55) +
-      labs(title = paste0("Thermocouple data for ", wind, " m/s windspeed"))
-    print(plot)
-    }
+```{r echo=FALSE, fig.height=18, fig.width=12}
+df_trim10 %>% 
+  group_by(Wig, WindSpeed, Radiation, thermo_id) %>% 
+  tally() %>% 
+  kable() %>% 
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+    fixed_thead = T)
 
 ```
 
+## Free y-axis
+```{r plt_thermo_10m, echo=FALSE, fig.height=18, fig.width=12}
+line_func(df_trim10, "1")
+line_func(df_trim10, "2")
+line_func(df_trim10, "3")
 
-## Summary Data
+```
+
+## Y-axis limited at 70 degrees
+```{r plt_thermo_lim_10m, echo=FALSE, fig.height=18, fig.width=12}
+line_func_lim(df_trim10, "1")
+line_func_lim(df_trim10, "2")
+line_func_lim(df_trim10, "3")
+
+```
+
+# Summary Data
 
 The thermocouple number refers to the location on the manikin's head from forehead (1) to nape (4). Due to glitches, the data is not consistently available for all conditions.
 
 ```{r thermo_sumdata, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
-Sum_Thermo <- ThermoData_trimmed %>%
-  group_by(Thermocouple, Wig, Radiation, WindSpeed) %>%
+Sum_Thermo <- df_trim10 %>%
+  drop_na() %>% 
+  group_by(thermo_id, Wig, Radiation, WindSpeed) %>%
   summarize(mean = mean(temp),
             median = median(temp))
-  
+
+kable(Sum_Thermo) %>% 
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+    fixed_thead = T)
+
+```
+
+
+```{r plt_thermo_sumdata, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
 Sum_Thermo %>% 
-  ggplot(aes(x=as.factor(Wig), y=mean, group=as.factor(Thermocouple), color=Thermocouple)) +
+  ggplot(aes(x=as.numeric(WindSpeed), y=mean, group=as.factor(Wig), color=Wig)) +
   geom_line() +
       geom_point() +
-  facet_grid(rows = vars(WindSpeed), cols = vars(Radiation)) +
+  facet_grid(rows = vars(thermo_id), cols = vars(Radiation)) +
   theme_bw() +
-  ylim(25, 50) +
-  labs(title = paste0("Thermocouple data for different windspeeds"))
+  ylim(25, 70) +
+  labs(title = "Temperature data per thermocouple\n for each wig at 3 wind speeds")
 
-# knitr::kable(Sum_Thermo, format = "markdown")
-
+df_trim_thermo_long %>% 
+  kable() %>% 
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+    fixed_thead = T)
 ```
 
 

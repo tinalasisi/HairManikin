@@ -11,8 +11,8 @@ navbar:
     href: license.html
   - text: Manikin
     href: ManikinData.html
-  - text: ThermoData
-    href: ThermoCoupleData.html
+  - text: Thermocouple QC
+    href: thermocouple_qc.html
 output:
   workflowr::wflow_html:
     toc: yes

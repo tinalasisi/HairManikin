@@ -1,11 +1,11 @@
 ---
 title: "Manikin Data"
 author: "Tina Lasisi"
-date: "`Sys.time`"
-output: 
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output:
   workflowr::wflow_html:
-    toc: true
-    theme: cosmo
+    toc: yes
+    number_sections: yes
 editor_options:
   chunk_output_type: console
 ---

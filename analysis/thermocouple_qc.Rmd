@@ -1,0 +1,249 @@
+---
+title: "Thermocouple data import and quality contro."
+author: "Tina Lasisi"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output:
+  workflowr::wflow_html:
+    toc: yes
+    number_sections: yes
+editor_options:
+  chunk_output_type: console
+---
+
+
+```{r setup, message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
+
+library(tidyverse)
+library(knitr)
+library(tibbletime)
+library(lubridate)
+library(kableExtra)
+library(fs)
+library(janitor)
+library(fuzzyjoin)
+library(anomalize)
+
+
+F = rprojroot::is_rstudio_project$make_fix_file()
+
+knitr::opts_chunk$set(echo = FALSE, include = TRUE, eval = TRUE, warning = FALSE, message = FALSE, fig.retina = 2, fig.width = 8, fig.height = 4, out.width = "100%")
+
+```
+
+```{r functions, include=FALSE}
+
+# This chunk contains any functions we may want to use later on in the document.
+
+plot_path = F("output/")
+
+pltsave_func <- function(plot, plot_path, width, height){
+  ggsave(
+      filename = paste0(deparse(substitute(plot)), ".png"),
+      plot = plot, 
+      path = plot_path,
+      width = width,
+      height = height)
+  plot(plot)
+}
+
+```
+
+# Import data
+
+First, we import the data directly from the raw thermocouple files. 
+
+```{r read_dfs, echo=TRUE}
+
+file_paths <- fs::dir_ls(F("data/raw/ManikinData_Oct2018/ThermoLog/RawThermoFiles/RawThermo_csv/"))
+
+
+raw_dfs <- file_paths %>% 
+  map_dfr(
+    read_csv,
+    skip = 22,
+    na = c("", "NA", "#NA", "#N/A", "Under", "O/C")
+  ) %>% 
+  mutate(Date = dmy(Date)) %>%
+  clean_names() %>% 
+  rename_at(.vars = vars(ends_with("_c")),
+            .funs = funs(sub("[_]c$", "", .))) %>% 
+  select(date:ch5, -type) %>% 
+  mutate(DateTime = as_datetime(date(date) + hms(time)))
+  
+head(raw_dfs)
+
+
+```
+
+# Import Experiment Log 
+Then, we import the log with the times and dates for each experiment (with conditions used).
+
+```{r import_log, echo=TRUE}
+
+# Import the log with each experiment time and conditions
+ExperimentLog <- as_tibble(
+  read_csv(F("data/tidy/ExperimentLog.csv"), 
+    col_types = cols(
+      Date = col_date(format = "%m/%d/%y"),
+      TimeStarted = col_time(format = "%H:%M:%S"),
+      TimeEnded = col_time(format = "%H:%M:%S")))
+  )
+
+
+head(ExperimentLog)
+```
+
+# Clean data 
+
+We then clean the dataframe for the log and remove the intervals where the wind speed is 0.3m/s and the room condition is noted as "regular". This is because after the first trial, we noticed that, at this wind speed, the manikin would overheat (and we were unable to get measurements) when we turned the radiation on and used the "low curvature" (aka. straight) wig. Because of this, we re-ran all the 0.3m/s experiments for all wigs with those conditions. The conditions are noted as "cold" which meant 4 degrees Celsius (rather than 10) and we also adjusted the manikin body temperature (but I need to check the data on this).
+
+```{r clean_log, echo=TRUE}
+# Also need to remove all intervals where the wind speed is 0.3 and the Room Condition is regular
+
+# change columns to datetime and create intervals for each trial
+DateTimeLog <- ExperimentLog %>% 
+  mutate(DateTime_start = as_datetime(date(Date) + hms(TimeStarted)),
+         DateTime_end = as_datetime(date(Date) + hms(TimeEnded)),
+         Trial_Interval = interval(DateTime_start, DateTime_end),
+         Trial_Duration = dseconds(int_length(Trial_Interval)),
+         WindSpeed = as_factor(Windspeed),
+         Wig = as_factor(Wig),
+         Radiation = as_factor(Radiation),
+         RoomConditions = as_factor(RoomConditions)
+  ) %>% 
+  select(Wig, Radiation, WindSpeed, Trial_Duration, Trial_Interval, RoomConditions, Trial, DateTime_start, DateTime_end)
+
+# %>% 
+  # filter(!(WindSpeed == "0.3" & RoomConditions == "regular"))
+
+head(DateTimeLog)
+```
+
+## Table with log
+
+```{r tbl_log, include=TRUE, results='asis'}
+
+kable(DateTimeLog) %>% 
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+    fixed_thead = T) %>% 
+  scroll_box(width = "600px", height = "500px")
+
+```
+
+Because the duration of the trials was variable, we will have to normalize the duration of the trials for comparison. 
+
+```{r tbl_log_min, include=TRUE, results='asis'}
+
+DateTimeLog %>% 
+  slice(which.min(Trial_Duration)) %>% 
+  kable() %>% 
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+    fixed_thead = T)
+
+```
+
+# Merge data
+
+We can then merge the raw thermocouple data with the log data to create a dataframe where the experimental conditions are associated with the readings.
+
+```{r merge_df, echo=TRUE}
+
+ThermoData <- as_tbl_time(raw_dfs, index = DateTime)
+
+# head(ThermoData)
+
+merge_df <- fuzzy_left_join(
+  DateTimeLog, ThermoData,
+  by = c(
+    "DateTime_start" = "DateTime",
+    "DateTime_end" = "DateTime"
+  ),
+  match_fun = list(`<=`, `>=`)
+) %>% 
+  mutate(seconds_interval = interval(DateTime_start, DateTime),
+         seconds_duration = dseconds(int_length(seconds_interval)))
+
+
+head(merge_df)
+
+merge_df_long <- merge_df %>% 
+  pivot_longer(cols = ch1:ch5, names_to = 'thermo_id', values_to = "temp")
+
+head(merge_df_long)
+
+```
+
+# Visualize each experimental condition
+
+## All data
+```{r plt_thermo_sep, echo=FALSE, fig.height=18, fig.width=12}
+
+df <- merge_df_long
+  
+wiglist <- unique(levels(df$Wig))
+windlist <- unique(levels(df$WindSpeed))
+  
+for (wig in wiglist){
+  for (wind in windlist){
+  
+  plot <- df %>%
+    filter(WindSpeed == wind & Wig == wig) %>% 
+    ggplot(
+           aes(
+             x=seconds_duration, 
+             y=temp, 
+             group=as.factor(thermo_id), 
+             color=thermo_id)) +
+    geom_point()+
+    geom_line() +
+    facet_grid(Trial + RoomConditions ~ Radiation, scales = "free") +
+    theme_bw()+
+    ggtitle(paste0(
+      "Thermocouple data for ", wind, " m/s windspeed\n", "for ", wig)
+      ) +
+    theme(plot.title = element_text(hjust = 0.5))
+  print(plot)
+  }
+}
+  
+```
+
+
+## Extreme temperatures removed
+
+```{r plt_thermo_sep_filt, echo=FALSE, fig.height=18, fig.width=12}
+
+df <- df %>% 
+  filter(temp < quantile(df$temp, 0.95, na.rm = TRUE))
+  
+wiglist <- unique(levels(df$Wig))
+windlist <- unique(levels(df$WindSpeed))
+  
+for (wig in wiglist){
+  for (wind in windlist){
+  
+  plot <- df %>%
+    filter(WindSpeed == wind & Wig == wig) %>% 
+    ggplot(
+           aes(
+             x=seconds_duration, 
+             y=temp, 
+             group=as.factor(thermo_id), 
+             color=thermo_id)) +
+    geom_point()+
+    geom_line() +
+    facet_grid(Trial + RoomConditions ~ Radiation, scales = "free") +
+    theme_bw()+
+    ggtitle(paste0(
+      "Thermocouple data for ", wind, " m/s windspeed\n", "for ", wig)
+      ) +
+    theme(plot.title = element_text(hjust = 0.5))
+  print(plot)
+  }
+}
+  
+```
+
+

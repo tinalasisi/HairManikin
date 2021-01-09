@@ -8,4 +8,4 @@ editor_options:
   chunk_output_type: console
 ---
 
-Results for the analysis of the manikin data can be found [here](ManikinData.html) and for the thermocouple data [here](ThermoCoupleData.html).
+Results for the analysis of the manikin data can be found [here](ManikinData.html) and for the thermocouple data [here](thermocouple_qc.html).
