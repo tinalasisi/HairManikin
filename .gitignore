@@ -3,6 +3,8 @@
 .RData
 .Ruserdata
 
+data/*
+
 *.xls
 *.xlsm
 *.xlsx
