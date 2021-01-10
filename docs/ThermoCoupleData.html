@@ -11,7 +11,7 @@
 
 <meta name="author" content="Tina Lasisi" />
 
-<meta name="date" content="2021-01-08" />
+<meta name="date" content="2021-01-10" />
 
 <title>Thermocouple Data</title>
 
@@ -27,10 +27,10 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<link href="site_libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
-<script src="site_libs/anchor-sections-1.0/anchor-sections.js"></script>
 <script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
 <link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 
 <link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
 <!-- Add a small amount of space between sections. -->
@@ -93,6 +93,7 @@ h6 {
   text-align: left;
 }
 </style>
+
 
 
 
@@ -366,7 +367,7 @@ div.tocify {
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html">HairManikin</a>
+      <a class="navbar-brand" href="index.html">Hair Manikin Experiments</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
@@ -385,9 +386,18 @@ div.tocify {
 <li>
   <a href="thermocouple_qc.html">Thermocouple QC</a>
 </li>
+<li>
+  <a href="experimental_log.html">Experimental Log</a>
+</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/tinalasisi/HairManikin">
+    <span class="fas fa-github"></span>
+     
+    Source code
+  </a>
+</li>
       </ul>
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
@@ -399,7 +409,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Thermocouple Data</h1>
 <h4 class="author">Tina Lasisi</h4>
-<h4 class="date">January 08, 2021</h4>
+<h4 class="date">January 10, 2021</h4>
 
 </div>
 
@@ -424,7 +434,7 @@ div.tocify {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2021-01-08
+<strong>Last updated:</strong> 2021-01-10
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -515,16 +525,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiHairManikintreeada77f2fc3f57eee49fcc35ba0460f6f63017bd0targetblankada77f2a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/tinalasisi/HairManikin/tree/ada77f2fc3f57eee49fcc35ba0460f6f63017bd0" target="_blank">ada77f2</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiHairManikintreefb82745da68ca4a45005673e716c22bad478c3d5targetblankfb82745a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/tinalasisi/HairManikin/tree/fb82745da68ca4a45005673e716c22bad478c3d5" target="_blank">fb82745</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiHairManikintreeada77f2fc3f57eee49fcc35ba0460f6f63017bd0targetblankada77f2a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiHairManikintreefb82745da68ca4a45005673e716c22bad478c3d5targetblankfb82745a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/tinalasisi/HairManikin/tree/ada77f2fc3f57eee49fcc35ba0460f6f63017bd0" target="_blank">ada77f2</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/tinalasisi/HairManikin/tree/fb82745da68ca4a45005673e716c22bad478c3d5" target="_blank">fb82745</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -533,10 +543,40 @@ Note that you need to be careful to ensure that all relevant files for the analy
 Ignored files:
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
+    Ignored:    data/raw/2020_EvaporativeDataRaw.xlsx
+    Ignored:    data/raw/Havenith_2021_Manikin_Dry_Wet_Summary/
+    Ignored:    data/raw/ManikinData_March2018/Processed/
+    Ignored:    data/raw/ManikinData_Oct2018/ExperimentLog_complete.xlsx
+    Ignored:    data/raw/ManikinData_Oct2018/ManikinMasterFile.xlsx
+    Ignored:    data/raw/ManikinData_Oct2018/MiscellaneousFiles/STEP 1  V7.3 NEWTON insulation calculation STEP 1 - Sept 2013 Thermdaq 8.xls
+    Ignored:    data/raw/ManikinData_Oct2018/MiscellaneousFiles/STEP 2 V1.9 Newton template insulation and vapour resistance - November 2015.xlsm
+    Ignored:    data/raw/ManikinData_Oct2018/Round1/ConvertedFiles/
+    Ignored:    data/raw/ManikinData_Oct2018/Round1/NoWig_RadOff_wind0_3 (run with new conditions).xls
+    Ignored:    data/raw/ManikinData_Oct2018/Round1/NoWig_RadOn_wind0_3 (run with new conditions).xls
+    Ignored:    data/raw/ManikinData_Oct2018/Round1/STEP 1  V7.3 NEWTON insulation calculation STEP 1 - Sept 2013 Thermdaq 8.xls
+    Ignored:    data/raw/ManikinData_Oct2018/Round1/STEP 2 V1.9 Newton template insulation and vapour resistance - November 2015.xlsm
+    Ignored:    data/raw/ManikinData_Oct2018/Round1/no wig no radiation lowest wind.xlsm
+    Ignored:    data/raw/ManikinData_Oct2018/Round1/no wig rad on lowest wind.xlsm
+    Ignored:    data/raw/ManikinData_Oct2018/Round2/STEP1/
+    Ignored:    data/raw/ManikinData_Oct2018/ThermoLog/2021-James_email/
+    Ignored:    data/raw/ManikinData_Oct2018/ThermoLog/RawThermoFiles/ThermoCleanMaster.xlsx
+    Ignored:    data/raw/ManikinData_Oct2018/ThermoLog/RawThermoFiles/ThermocoupleLog_Oct23.xlsx
+    Ignored:    data/raw/ManikinData_Oct2018/ThermoLog/RawThermoFiles/ThermocoupleLog_Oct23Evening.xlsx
+    Ignored:    data/raw/ManikinData_Oct2018/ThermoLog/RawThermoFiles/ThermocoupleLog_Oct24.xlsx
+    Ignored:    data/raw/ManikinData_Oct2018/ThermoLog/RawThermoFiles/ThermocoupleLog_Oct25.xlsx
+    Ignored:    data/raw/ManikinData_Oct2018/ThermoLog/RawThermoFiles/ThermocoupleLog_Oct26.xlsx
+    Ignored:    data/raw/ManikinData_Oct2018/ThermoLog/RawThermoFiles/ThermocoupleLog_Oct28.xlsx
+    Ignored:    data/raw/ManikinData_Oct2018/ThermoLog/RawThermoFiles/ThermocoupleLog_Oct29.xlsx
+    Ignored:    data/raw/ManikinData_Oct2018/ThermoLog/RawThermoFiles/ThermocoupleLog_Oct30.xlsx
+    Ignored:    data/raw/ManikinData_Oct2018/ThermoLog/extracted/
 
 Untracked files:
-    Untracked:  data/raw/
-    Untracked:  data/tidy/
+    Untracked:  data/raw/ManikinData_Oct2018/ThermoLog/RawThermoFiles/ThermoCleanMaster.csv
+    Untracked:  data/tidy/archive/
+    Untracked:  data/tidy/revised_experiment_log.csv
+    Untracked:  data/tidy/thermo_data_long.csv
+    Untracked:  data/tidy/thermo_data_long_minus_outliers.csv
+    Untracked:  data/tidy/thermo_data_wide.csv
 
 </code></pre>
 <p>
@@ -575,6 +615,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/tinalasisi/HairManikin/blob/fb82745da68ca4a45005673e716c22bad478c3d5/analysis/ThermoCoupleData.Rmd" target="_blank">fb82745</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-01-10
+</td>
+<td>
+New experimental log and revised thermocouple QC
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/tinalasisi/HairManikin/e03417e66d0a508a9c5374b505e87008f37217c5/docs/ThermoCoupleData.html" target="_blank">e03417e</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-01-08
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -5199,23 +5273,699 @@ On
 <h1>Scalp temperature variation between conditions</h1>
 <div id="free-y-axis" class="section level2">
 <h2>Free y-axis</h2>
-<p><img src="figure/ThermoCoupleData.Rmd/plt_thermo-1.png" width="1152" style="display: block; margin: auto;" /><img src="figure/ThermoCoupleData.Rmd/plt_thermo-2.png" width="1152" style="display: block; margin: auto;" /><img src="figure/ThermoCoupleData.Rmd/plt_thermo-3.png" width="1152" style="display: block; margin: auto;" /><img src="figure/ThermoCoupleData.Rmd/plt_thermo-4.png" width="1152" style="display: block; margin: auto;" /><img src="figure/ThermoCoupleData.Rmd/plt_thermo-5.png" width="1152" style="display: block; margin: auto;" /><img src="figure/ThermoCoupleData.Rmd/plt_thermo-6.png" width="1152" style="display: block; margin: auto;" /><img src="figure/ThermoCoupleData.Rmd/plt_thermo-7.png" width="1152" style="display: block; margin: auto;" /><img src="figure/ThermoCoupleData.Rmd/plt_thermo-8.png" width="1152" style="display: block; margin: auto;" /><img src="figure/ThermoCoupleData.Rmd/plt_thermo-9.png" width="1152" style="display: block; margin: auto;" /></p>
+<p><img src="figure/ThermoCoupleData.Rmd/plt_thermo-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt_thermo-1">
+Past versions of plt_thermo-1.png
+</button>
+</p>
+<div id="fig-plt_thermo-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tinalasisi/HairManikin/blob/e03417e66d0a508a9c5374b505e87008f37217c5/docs/figure/ThermoCoupleData.Rmd/plt_thermo-1.png" target="_blank">e03417e</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-01-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/ThermoCoupleData.Rmd/plt_thermo-2.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt_thermo-2">
+Past versions of plt_thermo-2.png
+</button>
+</p>
+<div id="fig-plt_thermo-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tinalasisi/HairManikin/blob/e03417e66d0a508a9c5374b505e87008f37217c5/docs/figure/ThermoCoupleData.Rmd/plt_thermo-2.png" target="_blank">e03417e</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-01-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/ThermoCoupleData.Rmd/plt_thermo-3.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt_thermo-3">
+Past versions of plt_thermo-3.png
+</button>
+</p>
+<div id="fig-plt_thermo-3" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tinalasisi/HairManikin/blob/e03417e66d0a508a9c5374b505e87008f37217c5/docs/figure/ThermoCoupleData.Rmd/plt_thermo-3.png" target="_blank">e03417e</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-01-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/ThermoCoupleData.Rmd/plt_thermo-4.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt_thermo-4">
+Past versions of plt_thermo-4.png
+</button>
+</p>
+<div id="fig-plt_thermo-4" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tinalasisi/HairManikin/blob/e03417e66d0a508a9c5374b505e87008f37217c5/docs/figure/ThermoCoupleData.Rmd/plt_thermo-4.png" target="_blank">e03417e</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-01-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/ThermoCoupleData.Rmd/plt_thermo-5.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt_thermo-5">
+Past versions of plt_thermo-5.png
+</button>
+</p>
+<div id="fig-plt_thermo-5" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tinalasisi/HairManikin/blob/e03417e66d0a508a9c5374b505e87008f37217c5/docs/figure/ThermoCoupleData.Rmd/plt_thermo-5.png" target="_blank">e03417e</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-01-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/ThermoCoupleData.Rmd/plt_thermo-6.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt_thermo-6">
+Past versions of plt_thermo-6.png
+</button>
+</p>
+<div id="fig-plt_thermo-6" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tinalasisi/HairManikin/blob/e03417e66d0a508a9c5374b505e87008f37217c5/docs/figure/ThermoCoupleData.Rmd/plt_thermo-6.png" target="_blank">e03417e</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-01-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/ThermoCoupleData.Rmd/plt_thermo-7.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt_thermo-7">
+Past versions of plt_thermo-7.png
+</button>
+</p>
+<div id="fig-plt_thermo-7" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tinalasisi/HairManikin/blob/e03417e66d0a508a9c5374b505e87008f37217c5/docs/figure/ThermoCoupleData.Rmd/plt_thermo-7.png" target="_blank">e03417e</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-01-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/ThermoCoupleData.Rmd/plt_thermo-8.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt_thermo-8">
+Past versions of plt_thermo-8.png
+</button>
+</p>
+<div id="fig-plt_thermo-8" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tinalasisi/HairManikin/blob/e03417e66d0a508a9c5374b505e87008f37217c5/docs/figure/ThermoCoupleData.Rmd/plt_thermo-8.png" target="_blank">e03417e</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-01-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/ThermoCoupleData.Rmd/plt_thermo-9.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt_thermo-9">
+Past versions of plt_thermo-9.png
+</button>
+</p>
+<div id="fig-plt_thermo-9" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tinalasisi/HairManikin/blob/e03417e66d0a508a9c5374b505e87008f37217c5/docs/figure/ThermoCoupleData.Rmd/plt_thermo-9.png" target="_blank">e03417e</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-01-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="y-axis-limited-to-70-degrees" class="section level2">
 <h2>Y-axis limited to 70 degrees</h2>
 <p><img src="figure/ThermoCoupleData.Rmd/plt_thermo_lim-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt_thermo_lim-1">
+Past versions of plt_thermo_lim-1.png
+</button>
+</p>
+<div id="fig-plt_thermo_lim-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tinalasisi/HairManikin/blob/e03417e66d0a508a9c5374b505e87008f37217c5/docs/figure/ThermoCoupleData.Rmd/plt_thermo_lim-1.png" target="_blank">e03417e</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-01-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>Warning: Removed 78 row(s) containing missing values (geom_path).</code></pre>
 <p><img src="figure/ThermoCoupleData.Rmd/plt_thermo_lim-2.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt_thermo_lim-2">
+Past versions of plt_thermo_lim-2.png
+</button>
+</p>
+<div id="fig-plt_thermo_lim-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tinalasisi/HairManikin/blob/e03417e66d0a508a9c5374b505e87008f37217c5/docs/figure/ThermoCoupleData.Rmd/plt_thermo_lim-2.png" target="_blank">e03417e</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-01-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>Warning: Removed 17 row(s) containing missing values (geom_path).</code></pre>
-<p><img src="figure/ThermoCoupleData.Rmd/plt_thermo_lim-3.png" width="1152" style="display: block; margin: auto;" /><img src="figure/ThermoCoupleData.Rmd/plt_thermo_lim-4.png" width="1152" style="display: block; margin: auto;" /></p>
+<p><img src="figure/ThermoCoupleData.Rmd/plt_thermo_lim-3.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt_thermo_lim-3">
+Past versions of plt_thermo_lim-3.png
+</button>
+</p>
+<div id="fig-plt_thermo_lim-3" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tinalasisi/HairManikin/blob/e03417e66d0a508a9c5374b505e87008f37217c5/docs/figure/ThermoCoupleData.Rmd/plt_thermo_lim-3.png" target="_blank">e03417e</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-01-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/ThermoCoupleData.Rmd/plt_thermo_lim-4.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt_thermo_lim-4">
+Past versions of plt_thermo_lim-4.png
+</button>
+</p>
+<div id="fig-plt_thermo_lim-4" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tinalasisi/HairManikin/blob/e03417e66d0a508a9c5374b505e87008f37217c5/docs/figure/ThermoCoupleData.Rmd/plt_thermo_lim-4.png" target="_blank">e03417e</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-01-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>Warning: Removed 78 row(s) containing missing values (geom_path).</code></pre>
 <p><img src="figure/ThermoCoupleData.Rmd/plt_thermo_lim-5.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt_thermo_lim-5">
+Past versions of plt_thermo_lim-5.png
+</button>
+</p>
+<div id="fig-plt_thermo_lim-5" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tinalasisi/HairManikin/blob/e03417e66d0a508a9c5374b505e87008f37217c5/docs/figure/ThermoCoupleData.Rmd/plt_thermo_lim-5.png" target="_blank">e03417e</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-01-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>Warning: Removed 17 row(s) containing missing values (geom_path).</code></pre>
-<p><img src="figure/ThermoCoupleData.Rmd/plt_thermo_lim-6.png" width="1152" style="display: block; margin: auto;" /><img src="figure/ThermoCoupleData.Rmd/plt_thermo_lim-7.png" width="1152" style="display: block; margin: auto;" /></p>
+<p><img src="figure/ThermoCoupleData.Rmd/plt_thermo_lim-6.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt_thermo_lim-6">
+Past versions of plt_thermo_lim-6.png
+</button>
+</p>
+<div id="fig-plt_thermo_lim-6" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tinalasisi/HairManikin/blob/e03417e66d0a508a9c5374b505e87008f37217c5/docs/figure/ThermoCoupleData.Rmd/plt_thermo_lim-6.png" target="_blank">e03417e</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-01-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/ThermoCoupleData.Rmd/plt_thermo_lim-7.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt_thermo_lim-7">
+Past versions of plt_thermo_lim-7.png
+</button>
+</p>
+<div id="fig-plt_thermo_lim-7" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tinalasisi/HairManikin/blob/e03417e66d0a508a9c5374b505e87008f37217c5/docs/figure/ThermoCoupleData.Rmd/plt_thermo_lim-7.png" target="_blank">e03417e</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-01-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>Warning: Removed 78 row(s) containing missing values (geom_path).</code></pre>
 <p><img src="figure/ThermoCoupleData.Rmd/plt_thermo_lim-8.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt_thermo_lim-8">
+Past versions of plt_thermo_lim-8.png
+</button>
+</p>
+<div id="fig-plt_thermo_lim-8" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tinalasisi/HairManikin/blob/e03417e66d0a508a9c5374b505e87008f37217c5/docs/figure/ThermoCoupleData.Rmd/plt_thermo_lim-8.png" target="_blank">e03417e</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-01-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>Warning: Removed 17 row(s) containing missing values (geom_path).</code></pre>
 <p><img src="figure/ThermoCoupleData.Rmd/plt_thermo_lim-9.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt_thermo_lim-9">
+Past versions of plt_thermo_lim-9.png
+</button>
+</p>
+<div id="fig-plt_thermo_lim-9" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tinalasisi/HairManikin/blob/e03417e66d0a508a9c5374b505e87008f37217c5/docs/figure/ThermoCoupleData.Rmd/plt_thermo_lim-9.png" target="_blank">e03417e</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-01-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 </div>
 <div id="last-10-minutes" class="section level1">
@@ -6522,23 +7272,699 @@ On
 </table>
 <div id="free-y-axis-1" class="section level2">
 <h2>Free y-axis</h2>
-<p><img src="figure/ThermoCoupleData.Rmd/plt_thermo_10m-1.png" width="1152" style="display: block; margin: auto;" /><img src="figure/ThermoCoupleData.Rmd/plt_thermo_10m-2.png" width="1152" style="display: block; margin: auto;" /><img src="figure/ThermoCoupleData.Rmd/plt_thermo_10m-3.png" width="1152" style="display: block; margin: auto;" /><img src="figure/ThermoCoupleData.Rmd/plt_thermo_10m-4.png" width="1152" style="display: block; margin: auto;" /><img src="figure/ThermoCoupleData.Rmd/plt_thermo_10m-5.png" width="1152" style="display: block; margin: auto;" /><img src="figure/ThermoCoupleData.Rmd/plt_thermo_10m-6.png" width="1152" style="display: block; margin: auto;" /><img src="figure/ThermoCoupleData.Rmd/plt_thermo_10m-7.png" width="1152" style="display: block; margin: auto;" /><img src="figure/ThermoCoupleData.Rmd/plt_thermo_10m-8.png" width="1152" style="display: block; margin: auto;" /><img src="figure/ThermoCoupleData.Rmd/plt_thermo_10m-9.png" width="1152" style="display: block; margin: auto;" /></p>
+<p><img src="figure/ThermoCoupleData.Rmd/plt_thermo_10m-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt_thermo_10m-1">
+Past versions of plt_thermo_10m-1.png
+</button>
+</p>
+<div id="fig-plt_thermo_10m-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tinalasisi/HairManikin/blob/e03417e66d0a508a9c5374b505e87008f37217c5/docs/figure/ThermoCoupleData.Rmd/plt_thermo_10m-1.png" target="_blank">e03417e</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-01-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/ThermoCoupleData.Rmd/plt_thermo_10m-2.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt_thermo_10m-2">
+Past versions of plt_thermo_10m-2.png
+</button>
+</p>
+<div id="fig-plt_thermo_10m-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tinalasisi/HairManikin/blob/e03417e66d0a508a9c5374b505e87008f37217c5/docs/figure/ThermoCoupleData.Rmd/plt_thermo_10m-2.png" target="_blank">e03417e</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-01-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/ThermoCoupleData.Rmd/plt_thermo_10m-3.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt_thermo_10m-3">
+Past versions of plt_thermo_10m-3.png
+</button>
+</p>
+<div id="fig-plt_thermo_10m-3" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tinalasisi/HairManikin/blob/e03417e66d0a508a9c5374b505e87008f37217c5/docs/figure/ThermoCoupleData.Rmd/plt_thermo_10m-3.png" target="_blank">e03417e</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-01-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/ThermoCoupleData.Rmd/plt_thermo_10m-4.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt_thermo_10m-4">
+Past versions of plt_thermo_10m-4.png
+</button>
+</p>
+<div id="fig-plt_thermo_10m-4" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tinalasisi/HairManikin/blob/e03417e66d0a508a9c5374b505e87008f37217c5/docs/figure/ThermoCoupleData.Rmd/plt_thermo_10m-4.png" target="_blank">e03417e</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-01-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/ThermoCoupleData.Rmd/plt_thermo_10m-5.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt_thermo_10m-5">
+Past versions of plt_thermo_10m-5.png
+</button>
+</p>
+<div id="fig-plt_thermo_10m-5" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tinalasisi/HairManikin/blob/e03417e66d0a508a9c5374b505e87008f37217c5/docs/figure/ThermoCoupleData.Rmd/plt_thermo_10m-5.png" target="_blank">e03417e</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-01-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/ThermoCoupleData.Rmd/plt_thermo_10m-6.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt_thermo_10m-6">
+Past versions of plt_thermo_10m-6.png
+</button>
+</p>
+<div id="fig-plt_thermo_10m-6" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tinalasisi/HairManikin/blob/e03417e66d0a508a9c5374b505e87008f37217c5/docs/figure/ThermoCoupleData.Rmd/plt_thermo_10m-6.png" target="_blank">e03417e</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-01-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/ThermoCoupleData.Rmd/plt_thermo_10m-7.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt_thermo_10m-7">
+Past versions of plt_thermo_10m-7.png
+</button>
+</p>
+<div id="fig-plt_thermo_10m-7" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tinalasisi/HairManikin/blob/e03417e66d0a508a9c5374b505e87008f37217c5/docs/figure/ThermoCoupleData.Rmd/plt_thermo_10m-7.png" target="_blank">e03417e</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-01-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/ThermoCoupleData.Rmd/plt_thermo_10m-8.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt_thermo_10m-8">
+Past versions of plt_thermo_10m-8.png
+</button>
+</p>
+<div id="fig-plt_thermo_10m-8" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tinalasisi/HairManikin/blob/e03417e66d0a508a9c5374b505e87008f37217c5/docs/figure/ThermoCoupleData.Rmd/plt_thermo_10m-8.png" target="_blank">e03417e</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-01-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/ThermoCoupleData.Rmd/plt_thermo_10m-9.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt_thermo_10m-9">
+Past versions of plt_thermo_10m-9.png
+</button>
+</p>
+<div id="fig-plt_thermo_10m-9" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tinalasisi/HairManikin/blob/e03417e66d0a508a9c5374b505e87008f37217c5/docs/figure/ThermoCoupleData.Rmd/plt_thermo_10m-9.png" target="_blank">e03417e</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-01-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="y-axis-limited-at-70-degrees" class="section level2">
 <h2>Y-axis limited at 70 degrees</h2>
 <p><img src="figure/ThermoCoupleData.Rmd/plt_thermo_lim_10m-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt_thermo_lim_10m-1">
+Past versions of plt_thermo_lim_10m-1.png
+</button>
+</p>
+<div id="fig-plt_thermo_lim_10m-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tinalasisi/HairManikin/blob/e03417e66d0a508a9c5374b505e87008f37217c5/docs/figure/ThermoCoupleData.Rmd/plt_thermo_lim_10m-1.png" target="_blank">e03417e</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-01-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>Warning: Removed 78 row(s) containing missing values (geom_path).</code></pre>
 <p><img src="figure/ThermoCoupleData.Rmd/plt_thermo_lim_10m-2.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt_thermo_lim_10m-2">
+Past versions of plt_thermo_lim_10m-2.png
+</button>
+</p>
+<div id="fig-plt_thermo_lim_10m-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tinalasisi/HairManikin/blob/e03417e66d0a508a9c5374b505e87008f37217c5/docs/figure/ThermoCoupleData.Rmd/plt_thermo_lim_10m-2.png" target="_blank">e03417e</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-01-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>Warning: Removed 17 row(s) containing missing values (geom_path).</code></pre>
-<p><img src="figure/ThermoCoupleData.Rmd/plt_thermo_lim_10m-3.png" width="1152" style="display: block; margin: auto;" /><img src="figure/ThermoCoupleData.Rmd/plt_thermo_lim_10m-4.png" width="1152" style="display: block; margin: auto;" /></p>
+<p><img src="figure/ThermoCoupleData.Rmd/plt_thermo_lim_10m-3.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt_thermo_lim_10m-3">
+Past versions of plt_thermo_lim_10m-3.png
+</button>
+</p>
+<div id="fig-plt_thermo_lim_10m-3" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tinalasisi/HairManikin/blob/e03417e66d0a508a9c5374b505e87008f37217c5/docs/figure/ThermoCoupleData.Rmd/plt_thermo_lim_10m-3.png" target="_blank">e03417e</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-01-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/ThermoCoupleData.Rmd/plt_thermo_lim_10m-4.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt_thermo_lim_10m-4">
+Past versions of plt_thermo_lim_10m-4.png
+</button>
+</p>
+<div id="fig-plt_thermo_lim_10m-4" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tinalasisi/HairManikin/blob/e03417e66d0a508a9c5374b505e87008f37217c5/docs/figure/ThermoCoupleData.Rmd/plt_thermo_lim_10m-4.png" target="_blank">e03417e</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-01-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>Warning: Removed 78 row(s) containing missing values (geom_path).</code></pre>
 <p><img src="figure/ThermoCoupleData.Rmd/plt_thermo_lim_10m-5.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt_thermo_lim_10m-5">
+Past versions of plt_thermo_lim_10m-5.png
+</button>
+</p>
+<div id="fig-plt_thermo_lim_10m-5" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tinalasisi/HairManikin/blob/e03417e66d0a508a9c5374b505e87008f37217c5/docs/figure/ThermoCoupleData.Rmd/plt_thermo_lim_10m-5.png" target="_blank">e03417e</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-01-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>Warning: Removed 17 row(s) containing missing values (geom_path).</code></pre>
-<p><img src="figure/ThermoCoupleData.Rmd/plt_thermo_lim_10m-6.png" width="1152" style="display: block; margin: auto;" /><img src="figure/ThermoCoupleData.Rmd/plt_thermo_lim_10m-7.png" width="1152" style="display: block; margin: auto;" /></p>
+<p><img src="figure/ThermoCoupleData.Rmd/plt_thermo_lim_10m-6.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt_thermo_lim_10m-6">
+Past versions of plt_thermo_lim_10m-6.png
+</button>
+</p>
+<div id="fig-plt_thermo_lim_10m-6" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tinalasisi/HairManikin/blob/e03417e66d0a508a9c5374b505e87008f37217c5/docs/figure/ThermoCoupleData.Rmd/plt_thermo_lim_10m-6.png" target="_blank">e03417e</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-01-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/ThermoCoupleData.Rmd/plt_thermo_lim_10m-7.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt_thermo_lim_10m-7">
+Past versions of plt_thermo_lim_10m-7.png
+</button>
+</p>
+<div id="fig-plt_thermo_lim_10m-7" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tinalasisi/HairManikin/blob/e03417e66d0a508a9c5374b505e87008f37217c5/docs/figure/ThermoCoupleData.Rmd/plt_thermo_lim_10m-7.png" target="_blank">e03417e</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-01-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>Warning: Removed 78 row(s) containing missing values (geom_path).</code></pre>
 <p><img src="figure/ThermoCoupleData.Rmd/plt_thermo_lim_10m-8.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt_thermo_lim_10m-8">
+Past versions of plt_thermo_lim_10m-8.png
+</button>
+</p>
+<div id="fig-plt_thermo_lim_10m-8" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tinalasisi/HairManikin/blob/e03417e66d0a508a9c5374b505e87008f37217c5/docs/figure/ThermoCoupleData.Rmd/plt_thermo_lim_10m-8.png" target="_blank">e03417e</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-01-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>Warning: Removed 17 row(s) containing missing values (geom_path).</code></pre>
 <p><img src="figure/ThermoCoupleData.Rmd/plt_thermo_lim_10m-9.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt_thermo_lim_10m-9">
+Past versions of plt_thermo_lim_10m-9.png
+</button>
+</p>
+<div id="fig-plt_thermo_lim_10m-9" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tinalasisi/HairManikin/blob/e03417e66d0a508a9c5374b505e87008f37217c5/docs/figure/ThermoCoupleData.Rmd/plt_thermo_lim_10m-9.png" target="_blank">e03417e</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-01-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 </div>
 <div id="summary-data" class="section level1">
@@ -8070,7 +9496,44 @@ On
 </tr>
 </tbody>
 </table>
-<img src="figure/ThermoCoupleData.Rmd/plt_thermo_sumdata-1.png" width="672" style="display: block; margin: auto;" />
+<p><img src="figure/ThermoCoupleData.Rmd/plt_thermo_sumdata-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt_thermo_sumdata-1">
+Past versions of plt_thermo_sumdata-1.png
+</button>
+</p>
+<div id="fig-plt_thermo_sumdata-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/tinalasisi/HairManikin/blob/e03417e66d0a508a9c5374b505e87008f37217c5/docs/figure/ThermoCoupleData.Rmd/plt_thermo_sumdata-1.png" target="_blank">e03417e</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-01-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -247566,9 +249029,9 @@ loaded via a namespace (and not attached):
  [5] utf8_1.1.4        R6_2.5.0          cellranger_1.1.0  backports_1.2.0  
  [9] reprex_0.3.0      evaluate_0.14     highr_0.8         httr_1.4.2       
 [13] pillar_1.4.6      rlang_0.4.8       readxl_1.3.1      rstudioapi_0.13  
-[17] whisker_0.4       rmarkdown_2.5     labeling_0.4.2    webshot_0.5.2    
+[17] whisker_0.4       rmarkdown_2.6     labeling_0.4.2    webshot_0.5.2    
 [21] munsell_0.5.0     broom_0.7.2       compiler_3.6.3    httpuv_1.5.4     
-[25] modelr_0.1.8      xfun_0.19         pkgconfig_2.0.3   htmltools_0.5.0  
+[25] modelr_0.1.8      xfun_0.20         pkgconfig_2.0.3   htmltools_0.5.0  
 [29] tidyselect_1.1.0  workflowr_1.6.2   fansi_0.4.1       viridisLite_0.3.0
 [33] crayon_1.3.4      dbplyr_2.0.0      withr_2.3.0       later_1.1.0.1    
 [37] grid_3.6.3        jsonlite_1.7.1    gtable_0.3.0      lifecycle_0.2.0  
