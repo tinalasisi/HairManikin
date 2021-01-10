@@ -20,7 +20,7 @@ library(here)
 here::here()
 
 # import manikin data
-ManikinData <- read_csv(here("data/tidy/Complete_ManikinData.csv"))
+ManikinData <- read_csv(here("data/tidy/archive/Complete_ManikinData.csv"))
 
 #reordering trials based on factor level
 ManikinData$Trial <- factor(ManikinData$Trial,levels = c("1","2","3" ))
@@ -30,7 +30,7 @@ ManikinData$Wig <- factor(ManikinData$Wig,levels = c("HighCurv", "MidCurv", "Low
 
 
 # import solar influx data
-SolarInfluxData <- read_csv(here("data/tidy/SolarInfluxData.csv"))
+SolarInfluxData <- read_csv(here("data/tidy/archive/SolarInfluxData.csv"))
 
 #reordering trials based on factor level
 SolarInfluxData$Trial <- factor(SolarInfluxData$Trial,levels = c("1","2","3" ))
@@ -40,7 +40,7 @@ SolarInfluxData$Wig <- factor(SolarInfluxData$Wig, levels = c("HighCurv", "MidCu
 
 # import heat loss data (evaporative)
 
-EvaporativeData <- read_csv(here("data/tidy/EvaporativeData.csv"))
+EvaporativeData <- read_csv(here("data/tidy/archive/EvaporativeData.csv"))
 
 #reordering trials based on factor level
 EvaporativeData$Trial <- factor(EvaporativeData$Trial,levels = c("1","2","3" ))
@@ -48,7 +48,7 @@ EvaporativeData$Windspeed <- factor(EvaporativeData$Windspeed, levels = c("0.3",
 EvaporativeData$Wig <- factor(EvaporativeData$Wig,levels = c("HighCurv", "MidCurv", "LowCurv", "Nude"), labels = c("High Curvature", "Mid Curvature", "Low Curvature", "Nude"))
 
 # importing evaporative solar influx data
-EvaporativeSolarInfluxData <- read_csv(here("data/tidy/EvaporativeSolarInfluxData.csv"))
+EvaporativeSolarInfluxData <- read_csv(here("data/tidy/archive/EvaporativeSolarInfluxData.csv"))
 
 #reordering trials based on factor level
 EvaporativeSolarInfluxData$Trial <- factor(EvaporativeSolarInfluxData$Trial,levels = c("1","2","3" ))

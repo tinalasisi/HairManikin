@@ -1,7 +1,7 @@
-name: "HairManikin"
+name: "Hair Manikin Experiments"
 output_dir: ../docs
 navbar:
-  title: "HairManikin"
+  title: "Hair Manikin Experiments"
   left:
   - text: Home
     href: index.html
@@ -13,6 +13,12 @@ navbar:
     href: ManikinData.html
   - text: Thermocouple QC
     href: thermocouple_qc.html
+  - text: Experimental Log
+    href: experimental_log.html
+  right:
+  - icon: fa-github
+    text: Source code
+    href: https://github.com/tinalasisi/HairManikin
 output:
   workflowr::wflow_html:
     toc: yes

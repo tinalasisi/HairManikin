@@ -1,0 +1,126 @@
+---
+title: "Experimental Log"
+author: "Tina Lasisi"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output:
+  workflowr::wflow_html:
+    toc: yes
+    toc_float: true
+    number_sections: yes
+editor_options:
+  chunk_output_type: console
+---
+
+
+```{r setup, message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
+
+library(tidyverse)
+library(knitr)
+library(tibbletime)
+library(lubridate)
+library(kableExtra)
+library(fs)
+library(janitor)
+library(fuzzyjoin)
+
+
+F = rprojroot::is_rstudio_project$make_fix_file()
+
+knitr::opts_chunk$set(echo = FALSE, include = TRUE, eval = TRUE, warning = FALSE, message = FALSE, fig.retina = 2, fig.width = 8, fig.height = 4, out.width = "100%")
+
+```
+
+Here, we parse the raw manikin files to extract the start/end times of each experiment as well as other metadata (ambient temperature, relative humidity, etc.).
+
+# Import raw manikin data
+
+First, we import the data directly from the raw manikin files, separately for each trial. 
+
+```{r read_dfs, echo=TRUE}
+dir_trial_paths <- fs::dir_ls(F("data/raw/ManikinData_Oct2018/"), recurse = FALSE, type = "directory", regexp = "Round")
+
+
+file_paths <- fs::dir_ls(dir_trial_paths, type = "file", glob = "*.csv")
+
+file_paths <- file_paths[grep("Rad", file_paths)]
+
+datalist = list()
+
+for (i in file_paths){
+  raw_df <- i %>% 
+  read_csv(skip = 3, col_names = FALSE)
+
+  # use indices to find date and time - these refer to the start
+  date <- dmy(raw_df[1,2])
+  time <- hms(raw_df[1,3])
+  
+  # create datetime for the start
+  DateTime_start <- as_datetime(date(date) + hms(time))
+  
+  # import the main body of the manikin data without headers and rename columns
+  # this section could be exported in the future and I will use it for extracting the passive temperature data
+  raw_df2 <- i %>% 
+    read_csv(skip = 19, col_names = FALSE) %>% 
+    select(1:4, 16, 71, 74) %>% 
+    `colnames<-`(c("seconds_duration", "time", "face_temp", "head_temp", "shoulders_temp", "avg_amb_temp", "amb_rh"))
+  
+  mean_face_temp <- mean(raw_df2$face_temp)
+  mean_head_temp <- mean(raw_df2$head_temp)
+  mean_shoulders_temp <- mean(raw_df2$shoulders_temp)
+  mean_amb_temp <- mean(raw_df2$avg_amb_temp)
+  mean_rh <- mean(raw_df2$amb_rh)
+  
+  # find the last time
+  last_time <- last(raw_df2$time)
+  
+  # create datetime for the end
+  DateTime_end <- as_datetime(date(date) + hms(last_time))
+  
+  # Extract info from filename
+  manikin_filename <- tools::file_path_sans_ext(basename(i))
+  
+  trial <- str_remove(basename(dirname(i)), "Round")
+  
+  frags <- str_split(manikin_filename, "_")
+  
+  wig <- case_when(
+   grepl("High", frags[[1]][1], ignore.case = TRUE) ~ "HighCurv",
+   grepl("Mid", frags[[1]][1], ignore.case = TRUE) ~ "MidCurv",
+   grepl("Low", frags[[1]][1], ignore.case = TRUE) ~ "LowCurv",
+   grepl("NoWig", frags[[1]][1], ignore.case = TRUE) ~ "Nude"
+  )
+  
+  radiation <- case_when(
+   grepl("Off", frags[[1]][2], ignore.case = TRUE) ~ "off",
+   grepl("On", frags[[1]][2], ignore.case = TRUE) ~ "on"
+  )
+  
+  wind <- case_when(
+   grepl("2", frags[[1]][3], ignore.case = TRUE) ~ 2.5,
+   grepl("1", frags[[1]][3], ignore.case = TRUE) ~ 1,
+   grepl("0", frags[[1]][3], ignore.case = TRUE) ~ 0.3
+  )
+  
+  datalist[[i]] <- tibble(DateTime_start, DateTime_end, wig = as_factor(wig), radiation = as_factor(radiation), wind, trial = as_factor(trial), mean_face_temp, mean_head_temp, mean_shoulders_temp, mean_amb_temp, mean_rh)
+  
+}
+
+experiment_log <- do.call(rbind, datalist) %>% 
+  as_tbl_time(index = DateTime_start) %>% 
+  arrange(DateTime_start)
+```
+
+# Final experimental log
+
+```{r tbl_log, include=TRUE, results='asis'}
+
+kable(experiment_log) %>% 
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+    fixed_thead = T) %>% 
+  scroll_box(width = "600px", height = "500px")
+
+write_csv(experiment_log, F("data/tidy/revised_experiment_log.csv"))
+
+```
+

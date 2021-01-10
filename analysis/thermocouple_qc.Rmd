@@ -1,5 +1,5 @@
 ---
-title: "Thermocouple data import and quality contro."
+title: "Thermocouple data import and quality control"
 author: "Tina Lasisi"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output:
@@ -82,12 +82,11 @@ Then, we import the log with the times and dates for each experiment (with condi
 
 # Import the log with each experiment time and conditions
 ExperimentLog <- as_tibble(
-  read_csv(F("data/tidy/ExperimentLog.csv"), 
-    col_types = cols(
-      Date = col_date(format = "%m/%d/%y"),
-      TimeStarted = col_time(format = "%H:%M:%S"),
-      TimeEnded = col_time(format = "%H:%M:%S")))
-  )
+  read_csv(F("data/tidy/revised_experiment_log.csv"))
+) %>% 
+  mutate(wig = as_factor(wig),
+         radiation = as_factor(radiation),
+         trial = as_factor(trial))
 
 
 head(ExperimentLog)
@@ -95,29 +94,23 @@ head(ExperimentLog)
 
 # Clean data 
 
-We then clean the dataframe for the log and remove the intervals where the wind speed is 0.3m/s and the room condition is noted as "regular". This is because after the first trial, we noticed that, at this wind speed, the manikin would overheat (and we were unable to get measurements) when we turned the radiation on and used the "low curvature" (aka. straight) wig. Because of this, we re-ran all the 0.3m/s experiments for all wigs with those conditions. The conditions are noted as "cold" which meant 4 degrees Celsius (rather than 10) and we also adjusted the manikin body temperature (but I need to check the data on this).
+On November 25th at noon, we had a discussion about the issues with overheating. While we had run a number of trials already, the straight wig with radiation on was the condition where we saw the manikin overheat. According to my notes, we decided that we would *both* lower the room temperature and increase the base temperature of the manikin (to 3 and 37 degrees Celsius, respectively, according to my notes).
 
-```{r clean_log, echo=TRUE}
+Below, I add a number of variables to help visualize including a binary factor of "regular" and "cold" for the room temperature condition (which also would include the higher manikin temperature). The actual temperature of the manikin is included in the dataframe if needed.
+
+```{r clean_log}
 
 # change columns to datetime and create intervals for each trial
 DateTimeLog <- ExperimentLog %>% 
-  mutate(DateTime_start = as_datetime(date(Date) + hms(TimeStarted)),
-         DateTime_end = as_datetime(date(Date) + hms(TimeEnded)),
-         Trial_Interval = interval(DateTime_start, DateTime_end),
+  mutate(Trial_Interval = interval(DateTime_start, DateTime_end),
          Trial_Duration = dseconds(int_length(Trial_Interval)),
-         WindSpeed = as_factor(Windspeed),
-         Wig = as_factor(Wig),
-         Radiation = as_factor(Radiation),
-         RoomConditions = as_factor(RoomConditions)
-  ) %>% 
-  select(Wig, Radiation, WindSpeed, Trial_Duration, Trial_Interval, RoomConditions, Trial, DateTime_start, DateTime_end)
+         RoomConditions = as_factor(
+           case_when(mean_amb_temp < 5 ~ "cold",
+                     TRUE ~ "regular")),
+         wind = as_factor(wind)
+  )
 
-# Also need to remove all intervals where the wind speed is 0.3 and the Room Condition is regular. But for this initial visualization I'm leaving everything in. 
-
-# %>% 
-  # filter(!(WindSpeed == "0.3" & RoomConditions == "regular"))
-
-head(DateTimeLog)
+# head(DateTimeLog)
 ```
 
 ## Table with log
@@ -132,7 +125,7 @@ kable(DateTimeLog) %>%
 
 ```
 
-Because the duration of the trials was variable, we will have to normalize the duration of the trials for comparison. 
+Because the duration of the trials was variable, we will have to normalize the duration of the trials for comparison later on. Below is the trial that was the shortest according to these experimental logs.
 
 ```{r tbl_log_min, include=TRUE, results='asis'}
 
@@ -147,7 +140,7 @@ DateTimeLog %>%
 
 # Merge data
 
-We can then merge the raw thermocouple data with the log data to create a dataframe where the experimental conditions are associated with the readings.
+We can then merge the raw thermocouple data with the log data to create a dataframe where the experimental conditions are associated with the thermocouple readings.
 
 ```{r merge_df, echo=TRUE}
 
@@ -166,33 +159,34 @@ merge_df <- fuzzy_left_join(
   mutate(seconds_interval = interval(DateTime_start, DateTime),
          seconds_duration = dseconds(int_length(seconds_interval)))
 
-
-head(merge_df)
+# head(merge_df)
 
 merge_df_long <- merge_df %>% 
   pivot_longer(cols = ch1:ch5, names_to = 'thermo_id', values_to = "temp")
 
-head(merge_df_long)
+# head(merge_df_long)
 
 ```
 
 # Visualize each experimental condition
 
 ## All data
-The plots show clearly that some of the thermocouples went haywire, registering tempertures in the 900s and above.
+The plots show clearly that some of the thermocouples went haywire, registering temperatures in the 900s and above.
+
+Additionally, according to my notes, on November 26th we decided to remove thermocouple 1 from all trials.
 
 ```{r plt_thermo_sep, echo=FALSE, fig.height=18, fig.width=12}
 
 df <- merge_df_long
   
-wiglist <- unique(levels(df$Wig))
-windlist <- unique(levels(df$WindSpeed))
+wiglist <- unique(levels(df$wig))
+windlist <- unique(levels(df$wind))
   
-for (wig in wiglist){
-  for (wind in windlist){
+for (Wig in wiglist){
+  for (Wind in windlist){
   
   plot <- df %>%
-    filter(WindSpeed == wind & Wig == wig) %>% 
+    filter(wind == Wind & wig == Wig) %>% 
     ggplot(
            aes(
              x=seconds_duration, 
@@ -200,11 +194,11 @@ for (wig in wiglist){
              group=as.factor(thermo_id), 
              color=thermo_id)) +
     geom_point()+
-    geom_line() +
-    facet_grid(Trial + RoomConditions ~ Radiation, scales = "free") +
+    # geom_line() +
+    facet_grid(trial + RoomConditions ~ radiation, scales = "free") +
     theme_bw()+
     ggtitle(paste0(
-      "Thermocouple data for ", wind, " m/s windspeed\n", "for ", wig)
+      "Thermocouple data for ", Wind, " m/s windspeed\n", "for ", Wig)
       ) +
     theme(plot.title = element_text(hjust = 0.5))
   print(plot)
@@ -215,23 +209,23 @@ for (wig in wiglist){
 
 
 ## Extreme temperatures removed
-Even with those extremes removed, it seems that there may be some issues in which durations precisely should be used for the thermocouple readings. 
+Even with those extremes removed, it seems that there may be some issues regarding which durations precisely should be used for the thermocouple readings. 
 
-The last 10 minutes of the trial may be bleeding into the next trial, or there may be some other reason for some of the more drastic demarcations within experiments.
+The last 10 minutes of the trial may be bleeding into the next trial, or there may be some other reason for some of the more drastic demarcations within experiments. Additionally, not all the readings are stable for the same amount of time before the end of the experiment.
 
 ```{r plt_thermo_sep_filt, echo=FALSE, fig.height=18, fig.width=12}
 
 df <- df %>% 
   filter(temp < quantile(df$temp, 0.95, na.rm = TRUE))
   
-wiglist <- unique(levels(df$Wig))
-windlist <- unique(levels(df$WindSpeed))
+wiglist <- unique(levels(df$wig))
+windlist <- unique(levels(df$wind))
   
-for (wig in wiglist){
-  for (wind in windlist){
+for (Wig in wiglist){
+  for (Wind in windlist){
   
   plot <- df %>%
-    filter(WindSpeed == wind & Wig == wig) %>% 
+    filter(wind == Wind & wig == Wig) %>% 
     ggplot(
            aes(
              x=seconds_duration, 
@@ -239,16 +233,20 @@ for (wig in wiglist){
              group=as.factor(thermo_id), 
              color=thermo_id)) +
     geom_point()+
-    geom_line() +
-    facet_grid(Trial + RoomConditions ~ Radiation, scales = "free") +
+    # geom_line() +
+    facet_grid(trial + RoomConditions ~ radiation, scales = "free") +
     theme_bw()+
     ggtitle(paste0(
-      "Thermocouple data for ", wind, " m/s windspeed\n", "for ", wig)
+      "Thermocouple data for ", Wind, " m/s windspeed\n", "for ", Wig)
       ) +
     theme(plot.title = element_text(hjust = 0.5))
   print(plot)
   }
 }
+
+write_csv(merge_df, file = F("data/tidy/thermo_data_wide.csv"))
+write_csv(merge_df_long, file = F("data/tidy/thermo_data_long.csv"))
+write_csv(df, file = F("data/tidy/thermo_data_long_minus_outliers.csv"))
   
 ```
 

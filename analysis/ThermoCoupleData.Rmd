@@ -23,7 +23,7 @@ library(kableExtra)
 
 # Import thermocouple data and format for date and time
 ThermoCleanMaster <- as_tibble(
-  read_csv("data/tidy/ThermoCleanMaster.csv", 
+  read_csv("data/tidy/archive/ThermoCleanMaster.csv", 
     col_types = cols(
       Date = col_date(format = "%m/%d/%y"),
       Time = col_time(format = "%H:%M:%S")))
@@ -32,7 +32,7 @@ ThermoCleanMaster <- as_tibble(
 
 # Import the log with each experiment time and conditions
 ExperimentLog <- as_tibble(
-  read_csv("data/tidy/ExperimentLog.csv", 
+  read_csv("data/tidy/archive/ExperimentLog.csv", 
     col_types = cols(
       Date = col_date(format = "%m/%d/%y"),
       TimeStarted = col_time(format = "%H:%M:%S"),
