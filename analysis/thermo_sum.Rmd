@@ -156,7 +156,7 @@ With the cleaned dataframe, we can now get summary values
 
 ### Individual plots
 
-```{r}
+```{r fig.height=14, fig.width=7}
 
 # Our data frame summary
 summary_df <- function(x) {
@@ -360,7 +360,9 @@ scatter_func_sol2(df)
 
 ## Rolling average by 10 minutes
 
-```{r}
+### Individual p.ots
+
+```{r fig.height=14, fig.width=7}
 
 # Our data frame summary
 summary_df <- function(x) {
