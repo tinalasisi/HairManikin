@@ -304,6 +304,9 @@ $(document).ready(function () {
   <a href="ManikinData.html">Manikin</a>
 </li>
 <li>
+  <a href="thermo_sum.html">Thermocouple Summary</a>
+</li>
+<li>
   <a href="thermocouple_qc.html">Thermocouple QC</a>
 </li>
 <li>
@@ -352,7 +355,7 @@ $(document).ready(function () {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2021-01-10
+<strong>Last updated:</strong> 2021-01-11
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 2 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -383,16 +386,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiHairManikintreefb82745da68ca4a45005673e716c22bad478c3d5targetblankfb82745a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/tinalasisi/HairManikin/tree/fb82745da68ca4a45005673e716c22bad478c3d5" target="_blank">fb82745</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiHairManikintree17071d61ee578615436f49f554824b375c6c7616targetblank17071d6a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/tinalasisi/HairManikin/tree/17071d61ee578615436f49f554824b375c6c7616" target="_blank">17071d6</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiHairManikintreefb82745da68ca4a45005673e716c22bad478c3d5targetblankfb82745a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiHairManikintree17071d61ee578615436f49f554824b375c6c7616targetblank17071d6a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/tinalasisi/HairManikin/tree/fb82745da68ca4a45005673e716c22bad478c3d5" target="_blank">fb82745</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/tinalasisi/HairManikin/tree/17071d61ee578615436f49f554824b375c6c7616" target="_blank">17071d6</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -401,40 +404,16 @@ Note that you need to be careful to ensure that all relevant files for the analy
 Ignored files:
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
-    Ignored:    data/raw/2020_EvaporativeDataRaw.xlsx
     Ignored:    data/raw/Havenith_2021_Manikin_Dry_Wet_Summary/
     Ignored:    data/raw/ManikinData_March2018/Processed/
-    Ignored:    data/raw/ManikinData_Oct2018/ExperimentLog_complete.xlsx
-    Ignored:    data/raw/ManikinData_Oct2018/ManikinMasterFile.xlsx
-    Ignored:    data/raw/ManikinData_Oct2018/MiscellaneousFiles/STEP 1  V7.3 NEWTON insulation calculation STEP 1 - Sept 2013 Thermdaq 8.xls
-    Ignored:    data/raw/ManikinData_Oct2018/MiscellaneousFiles/STEP 2 V1.9 Newton template insulation and vapour resistance - November 2015.xlsm
     Ignored:    data/raw/ManikinData_Oct2018/Round1/ConvertedFiles/
-    Ignored:    data/raw/ManikinData_Oct2018/Round1/NoWig_RadOff_wind0_3 (run with new conditions).xls
-    Ignored:    data/raw/ManikinData_Oct2018/Round1/NoWig_RadOn_wind0_3 (run with new conditions).xls
-    Ignored:    data/raw/ManikinData_Oct2018/Round1/STEP 1  V7.3 NEWTON insulation calculation STEP 1 - Sept 2013 Thermdaq 8.xls
-    Ignored:    data/raw/ManikinData_Oct2018/Round1/STEP 2 V1.9 Newton template insulation and vapour resistance - November 2015.xlsm
-    Ignored:    data/raw/ManikinData_Oct2018/Round1/no wig no radiation lowest wind.xlsm
-    Ignored:    data/raw/ManikinData_Oct2018/Round1/no wig rad on lowest wind.xlsm
     Ignored:    data/raw/ManikinData_Oct2018/Round2/STEP1/
     Ignored:    data/raw/ManikinData_Oct2018/ThermoLog/2021-James_email/
-    Ignored:    data/raw/ManikinData_Oct2018/ThermoLog/RawThermoFiles/ThermoCleanMaster.xlsx
-    Ignored:    data/raw/ManikinData_Oct2018/ThermoLog/RawThermoFiles/ThermocoupleLog_Oct23.xlsx
-    Ignored:    data/raw/ManikinData_Oct2018/ThermoLog/RawThermoFiles/ThermocoupleLog_Oct23Evening.xlsx
-    Ignored:    data/raw/ManikinData_Oct2018/ThermoLog/RawThermoFiles/ThermocoupleLog_Oct24.xlsx
-    Ignored:    data/raw/ManikinData_Oct2018/ThermoLog/RawThermoFiles/ThermocoupleLog_Oct25.xlsx
-    Ignored:    data/raw/ManikinData_Oct2018/ThermoLog/RawThermoFiles/ThermocoupleLog_Oct26.xlsx
-    Ignored:    data/raw/ManikinData_Oct2018/ThermoLog/RawThermoFiles/ThermocoupleLog_Oct28.xlsx
-    Ignored:    data/raw/ManikinData_Oct2018/ThermoLog/RawThermoFiles/ThermocoupleLog_Oct29.xlsx
-    Ignored:    data/raw/ManikinData_Oct2018/ThermoLog/RawThermoFiles/ThermocoupleLog_Oct30.xlsx
     Ignored:    data/raw/ManikinData_Oct2018/ThermoLog/extracted/
+    Ignored:    data/tidy/archive/
 
-Untracked files:
-    Untracked:  data/raw/ManikinData_Oct2018/ThermoLog/RawThermoFiles/ThermoCleanMaster.csv
-    Untracked:  data/tidy/archive/
-    Untracked:  data/tidy/revised_experiment_log.csv
-    Untracked:  data/tidy/thermo_data_long.csv
-    Untracked:  data/tidy/thermo_data_long_minus_outliers.csv
-    Untracked:  data/tidy/thermo_data_wide.csv
+Unstaged changes:
+    Modified:   analysis/thermocouple_qc.Rmd
 
 </code></pre>
 <p>
@@ -473,6 +452,23 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/tinalasisi/HairManikin/f21f62bee3884a459b140e0ce605fdb5e433c735/docs/license.html" target="_blank">f21f62b</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-01-10
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 html
