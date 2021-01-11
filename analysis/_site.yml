@@ -11,6 +11,8 @@ navbar:
     href: license.html
   - text: Manikin
     href: ManikinData.html
+  - text: Thermocouple Summary
+    href: thermo_sum.html
   - text: Thermocouple QC
     href: thermocouple_qc.html
   - text: Experimental Log
