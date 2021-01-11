@@ -209,14 +209,14 @@ for (Wig in wiglist){
 
 
 ## Extreme temperatures removed
-Even with those extremes removed, it seems that there may be some issues regarding which durations precisely should be used for the thermocouple readings. 
+Even with those extremes removed (i.e. temp readings > 100C), it seems that there may be some issues regarding which durations precisely should be used for the thermocouple readings. 
 
 The last 10 minutes of the trial may be bleeding into the next trial, or there may be some other reason for some of the more drastic demarcations within experiments. Additionally, not all the readings are stable for the same amount of time before the end of the experiment.
 
 ```{r plt_thermo_sep_filt, echo=FALSE, fig.height=18, fig.width=12}
 
 df <- df %>% 
-  filter(temp < quantile(df$temp, 0.95, na.rm = TRUE))
+  filter(temp < 100)
   
 wiglist <- unique(levels(df$wig))
 windlist <- unique(levels(df$wind))

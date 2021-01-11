@@ -360,7 +360,7 @@ scatter_func_sol2(df)
 
 ## Rolling average by 10 minutes
 
-### Individual p.ots
+### Individual plots
 
 ```{r fig.height=14, fig.width=7}
 
