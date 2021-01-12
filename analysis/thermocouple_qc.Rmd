@@ -157,7 +157,10 @@ merge_df <- fuzzy_left_join(
   match_fun = list(`<=`, `>=`)
 ) %>% 
   mutate(seconds_interval = interval(DateTime_start, DateTime),
-         seconds_duration = dseconds(int_length(seconds_interval)))
+         seconds_duration = dseconds(int_length(seconds_interval)),
+         wig = fct_relevel(wig, "Nude", "LowCurv", "MidCurv", "HighCurv"),
+         radiation = fct_relevel(radiation, "off", "on"))
+
 
 # head(merge_df)
 
@@ -177,7 +180,9 @@ Additionally, according to my notes, on November 26th we decided to remove therm
 
 ```{r plt_thermo_sep, echo=FALSE, fig.height=18, fig.width=12}
 
-df <- merge_df_long
+df <- merge_df_long %>% 
+  mutate(wig = fct_relevel(wig, "Nude", "LowCurv", "MidCurv", "HighCurv"),
+         radiation = fct_relevel(radiation, "off", "on"))
   
 wiglist <- unique(levels(df$wig))
 windlist <- unique(levels(df$wind))
@@ -244,10 +249,109 @@ for (Wig in wiglist){
   }
 }
 
+# write_csv(merge_df, file = F("data/tidy/thermo_data_wide.csv"))
+# write_csv(merge_df_long, file = F("data/tidy/thermo_data_long.csv"))
+# write_csv(df, file = F("data/tidy/thermo_data_long_minus_outliers.csv"))
+  
+```
+
+## Trimmed data
+
+Based on a visual inspection of the plots, we trim the data to the appropriate time frame and replot.
+
+```{r merge_df2, echo=TRUE}
+
+# Import the log with each experiment time and conditions
+ExperimentLog <- as_tibble(
+  read_csv(F("data/tidy/trimmed_revised_experiment_log.csv"))
+) %>% 
+  mutate(wig = 
+           as_factor(
+             wig, 
+             levels = c("Nude", "LowCurv", "MidCurv", "HighCurv")),
+         radiation = 
+           as_factor(
+             radiation,
+             levels = c("off", "on")),
+         trial = as_factor(trial, ordered = TRUE))
+
+
+head(ExperimentLog)
+
+# change columns to datetime and create intervals for each trial
+DateTimeLog <- ExperimentLog %>% 
+  mutate(Trial_Interval = interval(DateTime_start, DateTime_end),
+         Trial_Duration = dseconds(int_length(Trial_Interval)),
+         RoomConditions = as_factor(
+           case_when(mean_amb_temp < 5 ~ "cold",
+                     TRUE ~ "regular")),
+         wind = as_factor(wind)
+  )
+
+head(DateTimeLog)
+
+ThermoData <- as_tbl_time(raw_dfs, index = DateTime)
+
+head(ThermoData)
+
+merge_df <- fuzzy_left_join(
+  DateTimeLog, ThermoData,
+  by = c(
+    "DateTime_start" = "DateTime",
+    "DateTime_end" = "DateTime"
+  ),
+  match_fun = list(`<=`, `>=`)
+) %>% 
+  mutate(seconds_interval = interval(DateTime_start, DateTime),
+         seconds_duration = dseconds(int_length(seconds_interval)))
+
+head(merge_df)
+
+merge_df_long <- merge_df %>% 
+  pivot_longer(cols = ch1:ch5, names_to = 'thermo_id', values_to = "temp")
+
+head(merge_df_long)
+
+```
+
+
+
+```{r plt_thermo_sep_filt2, echo=FALSE, fig.height=18, fig.width=12}
+
+df <- merge_df_long %>% 
+  filter(temp < 100) %>% 
+  mutate(wig = fct_relevel(wig, "Nude", "LowCurv", "MidCurv", "HighCurv"),
+         radiation = fct_relevel(radiation, "off", "on"))
+  
+wiglist <- unique(levels(df$wig))
+windlist <- unique(levels(df$wind))
+  
+for (Wig in wiglist){
+  for (Wind in windlist){
+  
+  plot <- df %>%
+    filter(wind == Wind & wig == Wig) %>% 
+    ggplot(
+           aes(
+             x=seconds_duration, 
+             y=temp, 
+             group=as.factor(thermo_id), 
+             color=thermo_id)) +
+    geom_point()+
+    geom_path() +
+    facet_grid(trial + RoomConditions ~ radiation) +
+    ylim(25, 70) +
+    theme_bw()+
+    ggtitle(paste0(
+      "Thermocouple data for ", Wind, " m/s windspeed\n", "for ", Wig)
+      ) +
+    theme(plot.title = element_text(hjust = 0.5))
+  print(plot)
+  }
+}
+
 write_csv(merge_df, file = F("data/tidy/thermo_data_wide.csv"))
 write_csv(merge_df_long, file = F("data/tidy/thermo_data_long.csv"))
 write_csv(df, file = F("data/tidy/thermo_data_long_minus_outliers.csv"))
   
 ```
-
-
