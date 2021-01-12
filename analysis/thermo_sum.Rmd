@@ -124,11 +124,13 @@ head(extra_NA)
 
 ```
 
-## Plots
+# Plots
 
 Below we visualize the cleaned and trimmed data.
 
-```{r echo=FALSE, fig.height=18, fig.width=12}
+## Raw
+
+```{r echo=FALSE}
 df <- trim_thermo_df_long
   
 wiglist <- unique(levels(df$wig))
@@ -180,11 +182,11 @@ head(extra_NA)
 ```
 
 
-### Comparative plots
+## Comparative plots
 
-#### Thermocouples combined plot
+### Thermocouples combined plot
 
-##### Raw
+#### Raw
 
 ```{r}
 
@@ -193,15 +195,18 @@ scatter_func <- function(df, windspeed){
     dplyr::filter(wind == windspeed)
   
   plot <- ggplot(df2, aes(off, on)) +
-    geom_smooth(method = lm, se = FALSE) +
     geom_point(aes(shape = thermo_id, fill=wig), size = 5) +
     scale_shape_manual(values = c(21,22,23, 24))+
     theme_bw() +
     ggtitle(paste0(
       "Thermocouple data for ", windspeed, " m/s windspeed\n")
       ) +
+    geom_abline(slope = 1, intercept = 0)+
+    xlim(25, 60) +
+    ylim(25, 60) +
     theme(plot.title = element_text(hjust = 0.5))+
-    guides(fill=guide_legend(override.aes = list(shape=21)))
+    guides(fill=guide_legend(override.aes = list(shape=21))) +
+    coord_fixed()
   
   print(plot)
 }
@@ -228,7 +233,7 @@ write_csv(df_wide, file = F("data/tidy/summary_thermo_data_wide.csv"))
 
 #### Solar Influx
 
-```{r fig.height=8, fig.width=12}
+```{r}
 
 library(ggbeeswarm)
 
@@ -245,6 +250,8 @@ scatter_func_sol <- function(df){
                    y = solar_influx)) +
     geom_beeswarm(dodge.width = 0.7, size = 3, color="black")+
     scale_shape_manual(values = c(21,22,23, 24))+
+    ylim(-10, 20) +
+    geom_hline(yintercept = 0) +
     theme_bw() +
     guides(fill=guide_legend(override.aes = list(shape=21)))
   
@@ -256,26 +263,29 @@ scatter_func_sol(df)
 
 ```
 
-#### Thermocouples separate plots
+### Thermocouples separate plots
 
-##### Raw
+#### Raw
 
-```{r fig.height=8, fig.width=12}
+```{r}
 scatter_func2 <- function(df, windspeed){
   df2 <- df %>% 
     dplyr::filter(wind == windspeed)
   
   plot <- ggplot(df2, aes(off, on)) +
-    geom_smooth(method = lm, se = FALSE) +
+    xlim(25, 60) +
+    ylim(25, 60) +
     geom_point(aes(shape = thermo_id, fill=wig), size = 5) +
+    geom_abline(slope = 1, intercept = 0)+
     scale_shape_manual(values = c(21,22,23, 24))+
+    coord_fixed() +
     theme_bw() +
     ggtitle(paste0(
       "Thermocouple data for ", windspeed, " m/s windspeed\n")
       ) +
     theme(plot.title = element_text(hjust = 0.5)) +
     facet_wrap(vars(thermo_id)) +
-    guides(fill=guide_legend(override.aes = list(shape=21)))
+    guides(fill=guide_legend(override.aes = list(shape=21))) 
   
   print(plot)
 }
@@ -289,9 +299,9 @@ for (windspeed in windlist){
 
 ```
 
-##### Solar Influx
+#### Solar Influx
 
-```{r fig.height=8, fig.width=12}
+```{r}
 
 scatter_func_sol2 <- function(df){
   df2 <- df 
@@ -307,6 +317,8 @@ scatter_func_sol2 <- function(df){
     facet_wrap(~thermo_id) +
     geom_beeswarm(dodge.width = 0.7, size = 3, color="black")+
     scale_shape_manual(values = c(21,22,23, 24))+
+    ylim(-10, 20) +
+    geom_hline(yintercept = 0) +
     theme_bw()+
     guides(fill=guide_legend(override.aes = list(shape=21)))
   

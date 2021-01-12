@@ -265,15 +265,14 @@ Based on a visual inspection of the plots, we trim the data to the appropriate t
 ExperimentLog <- as_tibble(
   read_csv(F("data/tidy/trimmed_revised_experiment_log.csv"))
 ) %>% 
-  mutate(wig = 
-           as_factor(
-             wig, 
-             levels = c("Nude", "LowCurv", "MidCurv", "HighCurv")),
+  mutate(across(where(is_character), as_factor), 
+         wig = 
+           fct_relevel(
+             wig, "Nude", "LowCurv", "MidCurv", "HighCurv"),
          radiation = 
-           as_factor(
-             radiation,
-             levels = c("off", "on")),
-         trial = as_factor(trial, ordered = TRUE))
+           fct_relevel(
+             radiation, "off", "on"),
+         trial = fct_inseq(as.factor(trial)))
 
 
 head(ExperimentLog)
@@ -303,7 +302,14 @@ merge_df <- fuzzy_left_join(
   match_fun = list(`<=`, `>=`)
 ) %>% 
   mutate(seconds_interval = interval(DateTime_start, DateTime),
-         seconds_duration = dseconds(int_length(seconds_interval)))
+         seconds_duration = dseconds(int_length(seconds_interval)),
+         wig = 
+           fct_relevel(
+             wig, "Nude", "LowCurv", "MidCurv", "HighCurv"),
+         radiation = 
+           fct_relevel(
+             radiation, "off", "on"),
+         trial = fct_inseq(as.factor(trial)))
 
 head(merge_df)
 
@@ -330,6 +336,8 @@ for (Wig in wiglist){
   for (Wind in windlist){
   
   plot <- df %>%
+    mutate(wig = fct_relevel(wig, "Nude", "LowCurv", "MidCurv", "HighCurv"),
+         radiation = fct_relevel(radiation, "off", "on")) %>% 
     filter(wind == Wind & wig == Wig) %>% 
     ggplot(
            aes(
