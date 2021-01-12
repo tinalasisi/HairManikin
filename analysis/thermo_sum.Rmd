@@ -163,10 +163,8 @@ for (Wig in wiglist){
 ```
 
 
-## Summarize over 10 minutes
-As the thermocouple was taking readings at 0.5 minute intervals, we can first collapse those by minute
 
-```{r}
+```{r include=FALSE}
 
 mins_thermo_df_long <- trim_thermo_df_long %>% 
   group_by(wig, radiation, wind, trial, thermo_id, RoomConditions) %>% 
@@ -182,11 +180,9 @@ head(extra_NA)
 ```
 
 
-## Comparative plots
+## Thermocouples combined plot
 
-### Thermocouples combined plot
-
-#### Raw
+### Radiaton on vs. radiation off
 
 ```{r}
 
@@ -231,7 +227,7 @@ write_csv(df_wide, file = F("data/tidy/summary_thermo_data_wide.csv"))
 
 ```
 
-#### Solar Influx
+### Solar Influx
 
 ```{r}
 
@@ -263,9 +259,9 @@ scatter_func_sol(df)
 
 ```
 
-### Thermocouples separate plots
+## Thermocouples separate plots
 
-#### Raw
+### Radiaton on vs. radiation off
 
 ```{r}
 scatter_func2 <- function(df, windspeed){
@@ -299,7 +295,7 @@ for (windspeed in windlist){
 
 ```
 
-#### Solar Influx
+### Solar Influx
 
 ```{r}
 
