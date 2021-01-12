@@ -28,7 +28,7 @@ library(tidyquant)
 
 F = rprojroot::is_rstudio_project$make_fix_file()
 
-knitr::opts_chunk$set(echo = FALSE, include = TRUE, eval = TRUE, warning = FALSE, message = FALSE, fig.retina = 2, fig.width = 8, fig.height = 4, out.width = "100%")
+knitr::opts_chunk$set(echo = FALSE, include = TRUE, eval = TRUE, warning = FALSE, message = FALSE, fig.retina = 2, fig.width = 8, fig.height = 8, out.width = "100%")
 
 ```
 
@@ -69,38 +69,13 @@ head(thermo_df)
 ```
 
 
-## Limit time range
-The various trials have collected data over different periods of time. In order to compare between trials, we first trim all trials to the shortest time period. In our case, we take the last 40 minutes of each trial. Here we also filter out the trials that used "regular" room conditions with the 0.3m/s setting.
+## Clean 
+Here we filter out the trials that used "regular" room conditions with the 0.3m/s setting.
 
 ```{r}
-trim_log <- as_tbl_time(thermo_df, DateTime) %>%
-  group_by(Trial_Interval) %>% 
-  mutate(DateTime_start = DateTime_end - dminutes(40),
-         Trial_Interval = interval(DateTime_start, DateTime_end),
-         Trial_Duration = dseconds(int_length(Trial_Interval))
-  ) %>% 
-  select(DateTime_start, DateTime_end, wig, radiation, wind, trial) %>% 
-  distinct() 
 
-trim_df <- as_tbl_time(thermo_df, DateTime) %>%
+merge_df <- as_tbl_time(thermo_df, DateTime) %>%
   pivot_wider(names_from = thermo_id, values_from = temp) %>% 
-  select(-c(DateTime_start, DateTime_end, Trial_Interval, Trial_Duration, seconds_interval, seconds_duration, date, time))
-
-merge_df <- fuzzy_left_join(
-  trim_log, trim_df,
-  by = c("wig" = "wig", 
-         "trial" = "trial", 
-         "radiation" = "radiation", 
-         "wind" = "wind",
-    "DateTime_start" = "DateTime",
-    "DateTime_end" = "DateTime"
-  ),
-  match_fun = list(`==`, `==`, `==`, `==`, `<=`, `>=`)
-) %>% 
-  mutate(seconds_interval = interval(DateTime_start, DateTime),
-         seconds_duration = dseconds(int_length(seconds_interval))) %>% 
-  select(!contains("y")) %>% 
-  rename_with(~str_remove(.,".x"), contains(".x"))%>% 
   filter(!(wind == "0.3" & RoomConditions == "regular"))
 
 ```
@@ -122,66 +97,40 @@ It appears that thermocouple 1 contains missing data across the trials, so we wi
 
 trim_thermo_df <- merge_df %>% 
   select(-ch1) %>% 
-  mutate(wig = fct_relevel(wig, "Nude", "LowCurv", "MidCurv", "HighCurv")) 
+  mutate(seconds_interval = interval(DateTime_start, DateTime),
+         seconds_duration = dseconds(int_length(seconds_interval)),
+         wig = fct_relevel(wig, "Nude", "LowCurv", "MidCurv", "HighCurv"),
+         radiation = fct_relevel(radiation, "off", "on"))
 
 head(trim_thermo_df)
 
+trim_thermo_df %>% 
+  select_if(function(x) any(is.na(x))) %>% 
+  summarise_each(funs(sum(is.na(.)))) -> extra_NA
+
+head(extra_NA)
+
 trim_thermo_df_long <- trim_thermo_df %>% 
-  pivot_longer(cols = ch2:ch5, names_to = 'thermo_id', values_to = "temp")
+  pivot_longer(cols = ch2:ch5, names_to = 'thermo_id', values_to = "temp") %>% 
+  mutate(thermo_id = as_factor(thermo_id))
 
 head(trim_thermo_df_long)
 
+trim_thermo_df_long %>% 
+  select_if(function(x) any(is.na(x))) %>% 
+  summarise_each(funs(sum(is.na(.)))) -> extra_NA
+
+head(extra_NA)
+
 ```
 
-## Summarize by minute
-As the thermocouple was taking readings at 0.5 minute intervals, we can first collapse those by minute
+## Plots
 
-```{r}
+Below we visualize the cleaned and trimmed data.
 
-mins_thermo_df_long <- trim_thermo_df_long %>% 
-  group_by(Trial_Interval, wig, radiation, wind, trial, thermo_id) %>% 
-  summarize_by_time(
-    DateTime, .by = "minute",
-    value = mean(temp)
-  ) 
-
-head(mins_thermo_df_long)
-```
-
-# Visualizations
-
-With the cleaned dataframe, we can now get summary values
-
-## Rolling average by 5 minutes
-
-### Individual plots
-
-```{r fig.height=14, fig.width=7}
-
-# Our data frame summary
-summary_df <- function(x) {
-  data.frame(  
-    rolled_summary_type = c("mean", "sd"),
-    rolled_summary_val  = c(mean(x), sd(x))
-  )
-}
-
-rolling_summary <- rollify(~summary_df(.x), window = 5, 
-                           unlist = FALSE, na_value = data.frame())
-
-roll_5_thermo_long <- mins_thermo_df_long %>% 
-  ungroup() %>% 
-  group_by(wig, radiation, wind, trial) %>% 
-  select(DateTime, thermo_id, value, wig, radiation, wind, trial) %>% 
-  mutate(summary_list_col = rolling_summary(value)) %>% 
-  unnest(cols = c(summary_list_col))
-
-roll_5_thermo_wide <- roll_5_thermo_long %>% 
-  pivot_wider(names_from = thermo_id, values_from = rolled_summary_val)
-
-df <- roll_5_thermo_long%>% 
-  filter(rolled_summary_type == "mean")
-
+```{r echo=FALSE, fig.height=18, fig.width=12}
+df <- trim_thermo_df_long
+  
 wiglist <- unique(levels(df$wig))
 windlist <- unique(levels(df$wind))
   
@@ -190,45 +139,50 @@ for (Wig in wiglist){
   
   plot <- df %>%
     filter(wind == Wind & wig == Wig) %>% 
-    plot_time_series(DateTime, rolled_summary_val,
-                     .facet_vars = c(radiation, trial),
-                     .smooth = FALSE,
-                     .color_var = thermo_id,
-                     .facet_ncol = 2,
-                     .facet_scales = "free",
-                     .interactive = FALSE,
-                     .title = paste0(
+    ggplot(
+           aes(
+             x=seconds_duration, 
+             y=temp, 
+             group=as.factor(thermo_id), 
+             color=thermo_id)) +
+    geom_point()+
+    geom_path() +
+    facet_grid(trial + RoomConditions ~ radiation) +
+    ylim(25, 70) +
+    theme_bw()+
+    ggtitle(paste0(
       "Thermocouple data for ", Wind, " m/s windspeed\n", "for ", Wig)
-    )
+      ) +
+    theme(plot.title = element_text(hjust = 0.5))
+  
   print(plot)
   }
 }
-
-# 
-# write_csv(roll_5_thermo_long, file = F("data/tidy/roll_5_thermo_long.csv"))
-# write_csv(roll_5_thermo_wide, file = F("data/tidy/roll_5_thermo_wide.csv"))
-
-# We then save the most stable values from each dataset by choosing to extract the rolling average with the lowest SD
-
-mean_5_min_wide <- roll_5_thermo_long %>%
-  select(-value) %>% 
-  pivot_wider(names_from = c(thermo_id, rolled_summary_type), values_from = rolled_summary_val) %>% 
-  mutate(thermo_mean = rowMeans(across(contains("mean"))),
-         thermo_sd = rowMeans(across(contains("sd")))) %>% 
-  group_by(wig, radiation, wind, trial) %>% 
-  slice(which.min(thermo_sd)) 
-
-mean_5_min_long <- mean_5_min_wide %>% 
-  pivot_longer(cols = contains("ch"), names_to = c("thermo_id", "var"), names_pattern = "(.*)_(.*)", values_to = "temp" )
-
-write_csv(mean_5_min_long, file = F("data/tidy/mean_5_min_long.csv"))
-write_csv(mean_5_min_wide, file = F("data/tidy/mean_5_min_wide.csv"))
-
 ```
+
+
+## Summarize over 10 minutes
+As the thermocouple was taking readings at 0.5 minute intervals, we can first collapse those by minute
+
+```{r}
+
+mins_thermo_df_long <- trim_thermo_df_long %>% 
+  group_by(wig, radiation, wind, trial, thermo_id, RoomConditions) %>% 
+  summarize(temp = mean(temp, na.rm = TRUE))
+
+head(mins_thermo_df_long)
+
+mins_thermo_df_long %>% 
+  select_if(function(x) any(is.na(x))) %>% 
+  summarise_each(funs(sum(is.na(.)))) -> extra_NA
+
+head(extra_NA)
+```
+
 
 ### Comparative plots
 
-#### Thermocouples combined
+#### Thermocouples combined plot
 
 ##### Raw
 
@@ -240,18 +194,19 @@ scatter_func <- function(df, windspeed){
   
   plot <- ggplot(df2, aes(off, on)) +
     geom_smooth(method = lm, se = FALSE) +
-    geom_point(aes(color = wig, shape = thermo_id)) +
+    geom_point(aes(shape = thermo_id, fill=wig), size = 5) +
+    scale_shape_manual(values = c(21,22,23, 24))+
     theme_bw() +
     ggtitle(paste0(
       "Thermocouple data for ", windspeed, " m/s windspeed\n")
       ) +
-    theme(plot.title = element_text(hjust = 0.5))
+    theme(plot.title = element_text(hjust = 0.5))+
+    guides(fill=guide_legend(override.aes = list(shape=21)))
+  
   print(plot)
 }
 
-df <- mean_5_min_long %>% 
-    dplyr::filter(var == "mean") %>% 
-    select(-c(thermo_mean, thermo_sd, var, DateTime)) %>% 
+df <- mins_thermo_df_long %>% 
   group_by(wig, radiation, wind) %>% 
   pivot_wider(names_from = radiation, values_from = temp) %>% 
   rowwise() %>% 
@@ -263,12 +218,17 @@ for (windspeed in windlist){
   scatter_func(df, windspeed)
 }
 
+df_wide <- df %>% 
+  pivot_wider(names_from = thermo_id, values_from = c(off, on, solar_influx))
+
+write_csv(df, file = F("data/tidy/summary_thermo_data_long.csv"))
+write_csv(df_wide, file = F("data/tidy/summary_thermo_data_wide.csv"))
 
 ```
 
 #### Solar Influx
 
-```{r}
+```{r fig.height=8, fig.width=12}
 
 library(ggbeeswarm)
 
@@ -283,8 +243,11 @@ scatter_func_sol <- function(df){
                    shape = thermo_id,
                    x = wind, 
                    y = solar_influx)) +
-    geom_beeswarm(dodge.width = 0.5)+
-    theme_bw()
+    geom_beeswarm(dodge.width = 0.7, size = 3, color="black")+
+    scale_shape_manual(values = c(21,22,23, 24))+
+    theme_bw() +
+    guides(fill=guide_legend(override.aes = list(shape=21)))
+  
   print(plot)
 }
 
@@ -293,35 +256,29 @@ scatter_func_sol(df)
 
 ```
 
-
-#### Thermocouples separated
+#### Thermocouples separate plots
 
 ##### Raw
 
-```{r}
+```{r fig.height=8, fig.width=12}
 scatter_func2 <- function(df, windspeed){
   df2 <- df %>% 
     dplyr::filter(wind == windspeed)
   
   plot <- ggplot(df2, aes(off, on)) +
     geom_smooth(method = lm, se = FALSE) +
-    geom_point(aes(color = wig, shape = thermo_id)) +
+    geom_point(aes(shape = thermo_id, fill=wig), size = 5) +
+    scale_shape_manual(values = c(21,22,23, 24))+
     theme_bw() +
     ggtitle(paste0(
       "Thermocouple data for ", windspeed, " m/s windspeed\n")
       ) +
     theme(plot.title = element_text(hjust = 0.5)) +
-    facet_wrap(vars(thermo_id))
+    facet_wrap(vars(thermo_id)) +
+    guides(fill=guide_legend(override.aes = list(shape=21)))
+  
   print(plot)
 }
-
-df <- mean_5_min_long %>% 
-    dplyr::filter(var == "mean") %>% 
-    select(-c(thermo_mean, thermo_sd, var, DateTime)) %>% 
-  group_by(wig, radiation, wind) %>% 
-  pivot_wider(names_from = radiation, values_from = temp) %>% 
-  rowwise() %>% 
-  mutate(solar_influx = on-off)
 
 windlist <- unique(levels(df$wind))
 
@@ -334,7 +291,7 @@ for (windspeed in windlist){
 
 ##### Solar Influx
 
-```{r}
+```{r fig.height=8, fig.width=12}
 
 scatter_func_sol2 <- function(df){
   df2 <- df 
@@ -348,146 +305,17 @@ scatter_func_sol2 <- function(df){
                    x = wind, 
                    y = solar_influx)) +
     facet_wrap(~thermo_id) +
-    geom_beeswarm(dodge.width = 0.5)+
-    theme_bw()
+    geom_beeswarm(dodge.width = 0.7, size = 3, color="black")+
+    scale_shape_manual(values = c(21,22,23, 24))+
+    theme_bw()+
+    guides(fill=guide_legend(override.aes = list(shape=21)))
+  
   print(plot)
 }
 
 scatter_func_sol2(df)
 
 
-```
-
-## Rolling average by 10 minutes
-
-### Individual plots
-
-```{r fig.height=14, fig.width=7}
-
-# Our data frame summary
-summary_df <- function(x) {
-  data.frame(  
-    rolled_summary_type = c("mean", "sd"),
-    rolled_summary_val  = c(mean(x), sd(x))
-  )
-}
-
-rolling_summary <- rollify(~summary_df(.x), window = 10, 
-                           unlist = FALSE, na_value = data.frame())
-
-roll_10_thermo_long <- mins_thermo_df_long %>% 
-  ungroup() %>% 
-  group_by(wig, radiation, wind, trial) %>% 
-  select(DateTime, thermo_id, value, wig, radiation, wind, trial) %>% 
-  mutate(summary_list_col = rolling_summary(value)) %>% 
-  unnest(cols = c(summary_list_col))
-
-roll_10_thermo_wide <- roll_10_thermo_long %>% 
-  pivot_wider(names_from = thermo_id, values_from = rolled_summary_val)
-
-df <- roll_10_thermo_long %>% 
-  filter(rolled_summary_type == "mean")
-
-wiglist <- unique(levels(df$wig))
-windlist <- unique(levels(df$wind))
-  
-for (Wig in wiglist){
-  for (Wind in windlist){
-  
-  plot <- df %>%
-    filter(wind == Wind & wig == Wig) %>% 
-    plot_time_series(DateTime, rolled_summary_val,
-                     .facet_vars = c(radiation, trial),
-                     .smooth = FALSE,
-                     .color_var = thermo_id,
-                     .facet_ncol = 2,
-                     .facet_scales = "free",
-                     .interactive = FALSE,
-                     .title = paste0(
-      "Thermocouple data for ", Wind, " m/s windspeed\n", "for ", Wig)
-    )
-  print(plot)
-  }
-}
-
-# write_csv(roll_10_thermo_long, file = F("data/tidy/roll_10_thermo_long.csv"))
-# write_csv(roll_10_thermo_wide, file = F("data/tidy/roll_10_thermo_wide.csv"))
-
-mean_10_min_wide <- roll_10_thermo_long %>%
-  select(-value) %>% 
-  pivot_wider(names_from = c(thermo_id, rolled_summary_type), values_from = rolled_summary_val) %>% 
-  mutate(thermo_mean = rowMeans(across(contains("mean"))),
-         thermo_sd = rowMeans(across(contains("sd")))) %>% 
-  group_by(wig, radiation, wind, trial) %>% 
-  slice(which.min(thermo_sd)) 
-
-mean_10_min_long <- mean_10_min_wide %>% 
-  pivot_longer(cols = contains("ch"), names_to = c("thermo_id", "var"), names_pattern = "(.*)_(.*)", values_to = "temp" )
-
-write_csv(mean_10_min_long, file = F("data/tidy/mean_10_min_long.csv"))
-write_csv(mean_10_min_wide, file = F("data/tidy/mean_10_min_wide.csv"))
-
-
-```
-
-### Comparative plots
-
-#### Thermocouples combined
-
-##### Raw
-
-```{r}
-
-df <- mean_10_min_long %>% 
-    dplyr::filter(var == "mean") %>% 
-    select(-c(thermo_mean, thermo_sd, var, DateTime)) %>% 
-  group_by(wig, radiation, wind) %>% 
-  pivot_wider(names_from = radiation, values_from = temp)%>% 
-  rowwise() %>% 
-  mutate(solar_influx = on-off)
-
-windlist <- unique(levels(df$wind))
-
-for (windspeed in windlist){
-  scatter_func(df, windspeed)
-}
-
-
-```
-
-##### Solar Influx
-```{r}
-scatter_func_sol(df)
-```
-
-
-#### Thermocouples separated
-
-##### Raw
-
-```{r}
-
-df <- mean_10_min_long %>% 
-    dplyr::filter(var == "mean") %>% 
-    select(-c(thermo_mean, thermo_sd, var, DateTime)) %>% 
-  group_by(wig, radiation, wind) %>% 
-  pivot_wider(names_from = radiation, values_from = temp)%>% 
-  rowwise() %>% 
-  mutate(solar_influx = on-off)
-
-windlist <- unique(levels(df$wind))
-
-for (windspeed in windlist){
-  scatter_func2(df, windspeed)
-}
-
-
-```
-
-
-##### Solar Influx
-```{r}
-scatter_func_sol2(df)
 ```
 
 
