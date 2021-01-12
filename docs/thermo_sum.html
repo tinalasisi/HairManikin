@@ -11,7 +11,7 @@
 
 <meta name="author" content="Tina Lasisi" />
 
-<meta name="date" content="2021-01-11" />
+<meta name="date" content="2021-01-12" />
 
 <title>Thermocouple Summarized Data</title>
 
@@ -410,7 +410,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Thermocouple Summarized Data</h1>
 <h4 class="author">Tina Lasisi</h4>
-<h4 class="date">January 11, 2021</h4>
+<h4 class="date">January 12, 2021</h4>
 
 </div>
 
@@ -435,7 +435,7 @@ div.tocify {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2021-01-11
+<strong>Last updated:</strong> 2021-01-12
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -526,16 +526,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiHairManikintreebffb7d5124ceba0f10c19cc847a883de7de44bbftargetblankbffb7d5a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/tinalasisi/HairManikin/tree/bffb7d5124ceba0f10c19cc847a883de7de44bbf" target="_blank">bffb7d5</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiHairManikintreebecd84db30aa0715b6a88149642b7ae5f2ce571btargetblankbecd84da"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/tinalasisi/HairManikin/tree/becd84db30aa0715b6a88149642b7ae5f2ce571b" target="_blank">becd84d</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiHairManikintreebffb7d5124ceba0f10c19cc847a883de7de44bbftargetblankbffb7d5a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiHairManikintreebecd84db30aa0715b6a88149642b7ae5f2ce571btargetblankbecd84da" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/tinalasisi/HairManikin/tree/bffb7d5124ceba0f10c19cc847a883de7de44bbf" target="_blank">bffb7d5</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/tinalasisi/HairManikin/tree/becd84db30aa0715b6a88149642b7ae5f2ce571b" target="_blank">becd84d</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -544,6 +544,7 @@ Note that you need to be careful to ensure that all relevant files for the analy
 Ignored files:
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
+    Ignored:    analysis/figure/
     Ignored:    data/raw/Havenith_2021_Manikin_Dry_Wet_Summary/
     Ignored:    data/raw/ManikinData_March2018/Processed/
     Ignored:    data/raw/ManikinData_Oct2018/Round1/ConvertedFiles/
@@ -592,6 +593,57 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/tinalasisi/HairManikin/blob/becd84db30aa0715b6a88149642b7ae5f2ce571b/analysis/thermo_sum.Rmd" target="_blank">becd84d</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-01-12
+</td>
+<td>
+updating thermocouple summary data
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/tinalasisi/HairManikin/blob/b98baa8f06909782ac5f167c788558e159cc411e/analysis/thermo_sum.Rmd" target="_blank">b98baa8</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-01-11
+</td>
+<td>
+Updated spelling error
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/tinalasisi/HairManikin/ed6359efd44aab947a137349caa6add60849b590/docs/thermo_sum.html" target="_blank">ed6359e</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-01-11
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -664,541 +716,91 @@ head(thermo_df)</code></pre>
 <pre><code># A tibble: 6 x 21
   DateTime_start      DateTime_end        wig   radiation wind  trial
   &lt;dttm&gt;              &lt;dttm&gt;              &lt;fct&gt; &lt;fct&gt;     &lt;fct&gt; &lt;fct&gt;
-1 2018-10-23 13:41:11 2018-10-23 14:28:43 Nude  on        1     1    
-2 2018-10-23 13:41:11 2018-10-23 14:28:43 Nude  on        1     1    
-3 2018-10-23 13:41:11 2018-10-23 14:28:43 Nude  on        1     1    
-4 2018-10-23 13:41:11 2018-10-23 14:28:43 Nude  on        1     1    
-5 2018-10-23 13:41:11 2018-10-23 14:28:43 Nude  on        1     1    
-6 2018-10-23 13:41:11 2018-10-23 14:28:43 Nude  on        1     1    
+1 2018-10-23 14:15:00 2018-10-23 14:25:00 Nude  on        1     1    
+2 2018-10-23 14:15:00 2018-10-23 14:25:00 Nude  on        1     1    
+3 2018-10-23 14:15:00 2018-10-23 14:25:00 Nude  on        1     1    
+4 2018-10-23 14:15:00 2018-10-23 14:25:00 Nude  on        1     1    
+5 2018-10-23 14:15:00 2018-10-23 14:25:00 Nude  on        1     1    
+6 2018-10-23 14:15:00 2018-10-23 14:25:00 Nude  on        1     1    
 # … with 15 more variables: mean_face_temp &lt;dbl&gt;, mean_head_temp &lt;dbl&gt;,
 #   mean_shoulders_temp &lt;dbl&gt;, mean_amb_temp &lt;dbl&gt;, mean_rh &lt;dbl&gt;,
-#   Trial_Interval &lt;chr&gt;, Trial_Duration &lt;chr&gt;, RoomConditions &lt;fct&gt;,
+#   Trial_Interval &lt;chr&gt;, Trial_Duration &lt;fct&gt;, RoomConditions &lt;fct&gt;,
 #   date &lt;date&gt;, time &lt;time&gt;, DateTime &lt;dttm&gt;, seconds_interval &lt;chr&gt;,
 #   seconds_duration &lt;chr&gt;, thermo_id &lt;chr&gt;, temp &lt;dbl&gt;</code></pre>
-<div id="limit-time-range" class="section level2">
-<h2><span class="header-section-number">1.1</span> Limit time range</h2>
-<p>The various trials have collected data over different periods of time. In order to compare between trials, we first trim all trials to the shortest time period. In our case, we take the last 40 minutes of each trial. Here we also filter out the trials that used “regular” room conditions with the 0.3m/s setting.</p>
+<div id="clean" class="section level2">
+<h2><span class="header-section-number">1.1</span> Clean</h2>
+<p>Here we filter out the trials that used “regular” room conditions with the 0.3m/s setting.</p>
 <p>Then we check for any issues with the data.</p>
 <pre><code># A tibble: 1 x 1
     ch1
   &lt;int&gt;
-1   464</code></pre>
+1   137</code></pre>
 <p>It appears that thermocouple 1 contains missing data across the trials, so we will remove it.</p>
-<pre><code># A tibble: 6 x 20
-  Trial_Interval                                   DateTime_start     
-  &lt;Interval&gt;                                       &lt;dttm&gt;             
-1 2018-10-23 13:48:43 UTC--2018-10-23 14:28:43 UTC 2018-10-23 13:48:43
-2 2018-10-23 13:48:43 UTC--2018-10-23 14:28:43 UTC 2018-10-23 13:48:43
-3 2018-10-23 13:48:43 UTC--2018-10-23 14:28:43 UTC 2018-10-23 13:48:43
-4 2018-10-23 13:48:43 UTC--2018-10-23 14:28:43 UTC 2018-10-23 13:48:43
-5 2018-10-23 13:48:43 UTC--2018-10-23 14:28:43 UTC 2018-10-23 13:48:43
-6 2018-10-23 13:48:43 UTC--2018-10-23 14:28:43 UTC 2018-10-23 13:48:43
-# … with 18 more variables: DateTime_end &lt;dttm&gt;, wig &lt;fct&gt;, radiation &lt;fct&gt;,
-#   wind &lt;fct&gt;, trial &lt;fct&gt;, mean_face_temp &lt;dbl&gt;, mean_head_temp &lt;dbl&gt;,
+<pre><code># A tibble: 6 x 23
+  DateTime_start      DateTime_end        wig   radiation wind  trial
+  &lt;dttm&gt;              &lt;dttm&gt;              &lt;fct&gt; &lt;fct&gt;     &lt;fct&gt; &lt;fct&gt;
+1 2018-10-23 14:15:00 2018-10-23 14:25:00 Nude  on        1     1    
+2 2018-10-23 14:15:00 2018-10-23 14:25:00 Nude  on        1     1    
+3 2018-10-23 14:15:00 2018-10-23 14:25:00 Nude  on        1     1    
+4 2018-10-23 14:15:00 2018-10-23 14:25:00 Nude  on        1     1    
+5 2018-10-23 14:15:00 2018-10-23 14:25:00 Nude  on        1     1    
+6 2018-10-23 14:15:00 2018-10-23 14:25:00 Nude  on        1     1    
+# … with 17 more variables: mean_face_temp &lt;dbl&gt;, mean_head_temp &lt;dbl&gt;,
 #   mean_shoulders_temp &lt;dbl&gt;, mean_amb_temp &lt;dbl&gt;, mean_rh &lt;dbl&gt;,
-#   RoomConditions &lt;fct&gt;, DateTime &lt;dttm&gt;, ch2 &lt;dbl&gt;, ch3 &lt;dbl&gt;, ch4 &lt;dbl&gt;,
-#   ch5 &lt;dbl&gt;, seconds_interval &lt;Interval&gt;, seconds_duration &lt;Duration&gt;</code></pre>
-<pre><code># A tibble: 6 x 18
-  Trial_Interval                                   DateTime_start     
-  &lt;Interval&gt;                                       &lt;dttm&gt;             
-1 2018-10-23 13:48:43 UTC--2018-10-23 14:28:43 UTC 2018-10-23 13:48:43
-2 2018-10-23 13:48:43 UTC--2018-10-23 14:28:43 UTC 2018-10-23 13:48:43
-3 2018-10-23 13:48:43 UTC--2018-10-23 14:28:43 UTC 2018-10-23 13:48:43
-4 2018-10-23 13:48:43 UTC--2018-10-23 14:28:43 UTC 2018-10-23 13:48:43
-5 2018-10-23 13:48:43 UTC--2018-10-23 14:28:43 UTC 2018-10-23 13:48:43
-6 2018-10-23 13:48:43 UTC--2018-10-23 14:28:43 UTC 2018-10-23 13:48:43
-# … with 16 more variables: DateTime_end &lt;dttm&gt;, wig &lt;fct&gt;, radiation &lt;fct&gt;,
-#   wind &lt;fct&gt;, trial &lt;fct&gt;, mean_face_temp &lt;dbl&gt;, mean_head_temp &lt;dbl&gt;,
+#   Trial_Interval &lt;chr&gt;, Trial_Duration &lt;fct&gt;, RoomConditions &lt;fct&gt;,
+#   date &lt;date&gt;, time &lt;time&gt;, DateTime &lt;dttm&gt;, seconds_interval &lt;Interval&gt;,
+#   seconds_duration &lt;Duration&gt;, ch2 &lt;dbl&gt;, ch3 &lt;dbl&gt;, ch4 &lt;dbl&gt;, ch5 &lt;dbl&gt;</code></pre>
+<pre><code># A tibble: 1 x 0</code></pre>
+<pre><code># A tibble: 6 x 21
+  DateTime_start      DateTime_end        wig   radiation wind  trial
+  &lt;dttm&gt;              &lt;dttm&gt;              &lt;fct&gt; &lt;fct&gt;     &lt;fct&gt; &lt;fct&gt;
+1 2018-10-23 14:15:00 2018-10-23 14:25:00 Nude  on        1     1    
+2 2018-10-23 14:15:00 2018-10-23 14:25:00 Nude  on        1     1    
+3 2018-10-23 14:15:00 2018-10-23 14:25:00 Nude  on        1     1    
+4 2018-10-23 14:15:00 2018-10-23 14:25:00 Nude  on        1     1    
+5 2018-10-23 14:15:00 2018-10-23 14:25:00 Nude  on        1     1    
+6 2018-10-23 14:15:00 2018-10-23 14:25:00 Nude  on        1     1    
+# … with 15 more variables: mean_face_temp &lt;dbl&gt;, mean_head_temp &lt;dbl&gt;,
 #   mean_shoulders_temp &lt;dbl&gt;, mean_amb_temp &lt;dbl&gt;, mean_rh &lt;dbl&gt;,
-#   RoomConditions &lt;fct&gt;, DateTime &lt;dttm&gt;, seconds_interval &lt;Interval&gt;,
-#   seconds_duration &lt;Duration&gt;, thermo_id &lt;chr&gt;, temp &lt;dbl&gt;</code></pre>
+#   Trial_Interval &lt;chr&gt;, Trial_Duration &lt;fct&gt;, RoomConditions &lt;fct&gt;,
+#   date &lt;date&gt;, time &lt;time&gt;, DateTime &lt;dttm&gt;, seconds_interval &lt;Interval&gt;,
+#   seconds_duration &lt;Duration&gt;, thermo_id &lt;fct&gt;, temp &lt;dbl&gt;</code></pre>
+<pre><code># A tibble: 1 x 0</code></pre>
 </div>
-<div id="summarize-by-minute" class="section level2">
-<h2><span class="header-section-number">1.2</span> Summarize by minute</h2>
+<div id="plots" class="section level2">
+<h2><span class="header-section-number">1.2</span> Plots</h2>
+<p>Below we visualize the cleaned and trimmed data.</p>
+<p><img src="figure/thermo_sum.Rmd/unnamed-chunk-4-1.png" width="100%" style="display: block; margin: auto;" /><img src="figure/thermo_sum.Rmd/unnamed-chunk-4-2.png" width="100%" style="display: block; margin: auto;" /><img src="figure/thermo_sum.Rmd/unnamed-chunk-4-3.png" width="100%" style="display: block; margin: auto;" /><img src="figure/thermo_sum.Rmd/unnamed-chunk-4-4.png" width="100%" style="display: block; margin: auto;" /><img src="figure/thermo_sum.Rmd/unnamed-chunk-4-5.png" width="100%" style="display: block; margin: auto;" /><img src="figure/thermo_sum.Rmd/unnamed-chunk-4-6.png" width="100%" style="display: block; margin: auto;" /><img src="figure/thermo_sum.Rmd/unnamed-chunk-4-7.png" width="100%" style="display: block; margin: auto;" /><img src="figure/thermo_sum.Rmd/unnamed-chunk-4-8.png" width="100%" style="display: block; margin: auto;" /><img src="figure/thermo_sum.Rmd/unnamed-chunk-4-9.png" width="100%" style="display: block; margin: auto;" /><img src="figure/thermo_sum.Rmd/unnamed-chunk-4-10.png" width="100%" style="display: block; margin: auto;" /><img src="figure/thermo_sum.Rmd/unnamed-chunk-4-11.png" width="100%" style="display: block; margin: auto;" /><img src="figure/thermo_sum.Rmd/unnamed-chunk-4-12.png" width="100%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="summarize-over-10-minutes" class="section level2">
+<h2><span class="header-section-number">1.3</span> Summarize over 10 minutes</h2>
 <p>As the thermocouple was taking readings at 0.5 minute intervals, we can first collapse those by minute</p>
-<pre><code># A tibble: 6 x 8
-# Groups:   Trial_Interval, wig, radiation, wind, trial, thermo_id [1]
-  Trial_Interval                                   wig   radiation wind  trial
-  &lt;Interval&gt;                                       &lt;fct&gt; &lt;fct&gt;     &lt;fct&gt; &lt;fct&gt;
-1 2018-10-23 13:48:43 UTC--2018-10-23 14:28:43 UTC Nude  on        1     1    
-2 2018-10-23 13:48:43 UTC--2018-10-23 14:28:43 UTC Nude  on        1     1    
-3 2018-10-23 13:48:43 UTC--2018-10-23 14:28:43 UTC Nude  on        1     1    
-4 2018-10-23 13:48:43 UTC--2018-10-23 14:28:43 UTC Nude  on        1     1    
-5 2018-10-23 13:48:43 UTC--2018-10-23 14:28:43 UTC Nude  on        1     1    
-6 2018-10-23 13:48:43 UTC--2018-10-23 14:28:43 UTC Nude  on        1     1    
-# … with 3 more variables: thermo_id &lt;chr&gt;, DateTime &lt;dttm&gt;, value &lt;dbl&gt;</code></pre>
-</div>
-</div>
-<div id="visualizations" class="section level1">
-<h1><span class="header-section-number">2</span> Visualizations</h1>
-<p>With the cleaned dataframe, we can now get summary values</p>
-<div id="rolling-average-by-5-minutes" class="section level2">
-<h2><span class="header-section-number">2.1</span> Rolling average by 5 minutes</h2>
-<div id="individual-plots" class="section level3">
-<h3><span class="header-section-number">2.1.1</span> Individual plots</h3>
-<p><img src="figure/thermo_sum.Rmd/unnamed-chunk-5-1.png" width="100%" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-5-1">
-Past versions of unnamed-chunk-5-1.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-5-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/HairManikin/blob/7934685b32cc1c8513cc2e062308929e68fa3b9b/docs/figure/thermo_sum.Rmd/unnamed-chunk-5-1.png" target="_blank">7934685</a>
-</td>
-<td>
-tinalasisi
-</td>
-<td>
-2021-01-11
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><img src="figure/thermo_sum.Rmd/unnamed-chunk-5-2.png" width="100%" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-5-2">
-Past versions of unnamed-chunk-5-2.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-5-2" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/HairManikin/blob/7934685b32cc1c8513cc2e062308929e68fa3b9b/docs/figure/thermo_sum.Rmd/unnamed-chunk-5-2.png" target="_blank">7934685</a>
-</td>
-<td>
-tinalasisi
-</td>
-<td>
-2021-01-11
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><img src="figure/thermo_sum.Rmd/unnamed-chunk-5-3.png" width="100%" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-5-3">
-Past versions of unnamed-chunk-5-3.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-5-3" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/HairManikin/blob/7934685b32cc1c8513cc2e062308929e68fa3b9b/docs/figure/thermo_sum.Rmd/unnamed-chunk-5-3.png" target="_blank">7934685</a>
-</td>
-<td>
-tinalasisi
-</td>
-<td>
-2021-01-11
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><img src="figure/thermo_sum.Rmd/unnamed-chunk-5-4.png" width="100%" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-5-4">
-Past versions of unnamed-chunk-5-4.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-5-4" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/HairManikin/blob/7934685b32cc1c8513cc2e062308929e68fa3b9b/docs/figure/thermo_sum.Rmd/unnamed-chunk-5-4.png" target="_blank">7934685</a>
-</td>
-<td>
-tinalasisi
-</td>
-<td>
-2021-01-11
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><img src="figure/thermo_sum.Rmd/unnamed-chunk-5-5.png" width="100%" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-5-5">
-Past versions of unnamed-chunk-5-5.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-5-5" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/HairManikin/blob/7934685b32cc1c8513cc2e062308929e68fa3b9b/docs/figure/thermo_sum.Rmd/unnamed-chunk-5-5.png" target="_blank">7934685</a>
-</td>
-<td>
-tinalasisi
-</td>
-<td>
-2021-01-11
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><img src="figure/thermo_sum.Rmd/unnamed-chunk-5-6.png" width="100%" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-5-6">
-Past versions of unnamed-chunk-5-6.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-5-6" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/HairManikin/blob/7934685b32cc1c8513cc2e062308929e68fa3b9b/docs/figure/thermo_sum.Rmd/unnamed-chunk-5-6.png" target="_blank">7934685</a>
-</td>
-<td>
-tinalasisi
-</td>
-<td>
-2021-01-11
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><img src="figure/thermo_sum.Rmd/unnamed-chunk-5-7.png" width="100%" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-5-7">
-Past versions of unnamed-chunk-5-7.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-5-7" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/HairManikin/blob/7934685b32cc1c8513cc2e062308929e68fa3b9b/docs/figure/thermo_sum.Rmd/unnamed-chunk-5-7.png" target="_blank">7934685</a>
-</td>
-<td>
-tinalasisi
-</td>
-<td>
-2021-01-11
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><img src="figure/thermo_sum.Rmd/unnamed-chunk-5-8.png" width="100%" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-5-8">
-Past versions of unnamed-chunk-5-8.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-5-8" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/HairManikin/blob/7934685b32cc1c8513cc2e062308929e68fa3b9b/docs/figure/thermo_sum.Rmd/unnamed-chunk-5-8.png" target="_blank">7934685</a>
-</td>
-<td>
-tinalasisi
-</td>
-<td>
-2021-01-11
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><img src="figure/thermo_sum.Rmd/unnamed-chunk-5-9.png" width="100%" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-5-9">
-Past versions of unnamed-chunk-5-9.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-5-9" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/HairManikin/blob/7934685b32cc1c8513cc2e062308929e68fa3b9b/docs/figure/thermo_sum.Rmd/unnamed-chunk-5-9.png" target="_blank">7934685</a>
-</td>
-<td>
-tinalasisi
-</td>
-<td>
-2021-01-11
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><img src="figure/thermo_sum.Rmd/unnamed-chunk-5-10.png" width="100%" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-5-10">
-Past versions of unnamed-chunk-5-10.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-5-10" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/HairManikin/blob/7934685b32cc1c8513cc2e062308929e68fa3b9b/docs/figure/thermo_sum.Rmd/unnamed-chunk-5-10.png" target="_blank">7934685</a>
-</td>
-<td>
-tinalasisi
-</td>
-<td>
-2021-01-11
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><img src="figure/thermo_sum.Rmd/unnamed-chunk-5-11.png" width="100%" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-5-11">
-Past versions of unnamed-chunk-5-11.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-5-11" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/HairManikin/blob/7934685b32cc1c8513cc2e062308929e68fa3b9b/docs/figure/thermo_sum.Rmd/unnamed-chunk-5-11.png" target="_blank">7934685</a>
-</td>
-<td>
-tinalasisi
-</td>
-<td>
-2021-01-11
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><img src="figure/thermo_sum.Rmd/unnamed-chunk-5-12.png" width="100%" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-5-12">
-Past versions of unnamed-chunk-5-12.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-5-12" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/HairManikin/blob/7934685b32cc1c8513cc2e062308929e68fa3b9b/docs/figure/thermo_sum.Rmd/unnamed-chunk-5-12.png" target="_blank">7934685</a>
-</td>
-<td>
-tinalasisi
-</td>
-<td>
-2021-01-11
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
+<pre><code># A tibble: 6 x 7
+# Groups:   wig, radiation, wind, trial, thermo_id [6]
+  wig   radiation wind  trial thermo_id RoomConditions  temp
+  &lt;fct&gt; &lt;fct&gt;     &lt;fct&gt; &lt;fct&gt; &lt;fct&gt;     &lt;fct&gt;          &lt;dbl&gt;
+1 Nude  off       0.3   1     ch2       cold            37.4
+2 Nude  off       0.3   1     ch3       cold            36.6
+3 Nude  off       0.3   1     ch4       cold            34.2
+4 Nude  off       0.3   1     ch5       cold            32.0
+5 Nude  off       0.3   2     ch2       cold            47.6
+6 Nude  off       0.3   2     ch3       cold            51.3</code></pre>
+<pre><code># A tibble: 6 x 5
+# Groups:   wig, radiation, wind, trial [2]
+  wig   radiation wind  trial thermo_id
+  &lt;fct&gt; &lt;fct&gt;     &lt;fct&gt; &lt;fct&gt; &lt;fct&gt;    
+1 Nude  off       0.3   1     ch2      
+2 Nude  off       0.3   1     ch3      
+3 Nude  off       0.3   1     ch4      
+4 Nude  off       0.3   1     ch5      
+5 Nude  off       0.3   2     ch2      
+6 Nude  off       0.3   2     ch3      </code></pre>
 <div id="comparative-plots" class="section level3">
-<h3><span class="header-section-number">2.1.2</span> Comparative plots</h3>
-<div id="thermocouples-combined" class="section level4">
-<h4><span class="header-section-number">2.1.2.1</span> Thermocouples combined</h4>
+<h3><span class="header-section-number">1.3.1</span> Comparative plots</h3>
+<div id="thermocouples-combined-plot" class="section level4">
+<h4><span class="header-section-number">1.3.1.1</span> Thermocouples combined plot</h4>
 <div id="raw" class="section level5">
-<h5><span class="header-section-number">2.1.2.1.1</span> Raw</h5>
+<h5><span class="header-section-number">1.3.1.1.1</span> Raw</h5>
 <p><img src="figure/thermo_sum.Rmd/unnamed-chunk-6-1.png" width="100%" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-6-1">
@@ -1316,7 +918,7 @@ tinalasisi
 </div>
 </div>
 <div id="solar-influx" class="section level4">
-<h4><span class="header-section-number">2.1.2.2</span> Solar Influx</h4>
+<h4><span class="header-section-number">1.3.1.2</span> Solar Influx</h4>
 <p><img src="figure/thermo_sum.Rmd/unnamed-chunk-7-1.png" width="100%" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-7-1">
@@ -1356,10 +958,10 @@ tinalasisi
 </div>
 </div>
 </div>
-<div id="thermocouples-separated" class="section level4">
-<h4><span class="header-section-number">2.1.2.3</span> Thermocouples separated</h4>
+<div id="thermocouples-separate-plots" class="section level4">
+<h4><span class="header-section-number">1.3.1.3</span> Thermocouples separate plots</h4>
 <div id="raw-1" class="section level5">
-<h5><span class="header-section-number">2.1.2.3.1</span> Raw</h5>
+<h5><span class="header-section-number">1.3.1.3.1</span> Raw</h5>
 <p><img src="figure/thermo_sum.Rmd/unnamed-chunk-8-1.png" width="100%" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-8-1">
@@ -1476,7 +1078,7 @@ tinalasisi
 </div>
 </div>
 <div id="solar-influx-1" class="section level5">
-<h5><span class="header-section-number">2.1.2.3.2</span> Solar Influx</h5>
+<h5><span class="header-section-number">1.3.1.3.2</span> Solar Influx</h5>
 <p><img src="figure/thermo_sum.Rmd/unnamed-chunk-9-1.png" width="100%" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-9-1">
@@ -1503,793 +1105,6 @@ Date
 <tr>
 <td>
 <a href="https://github.com/tinalasisi/HairManikin/blob/7934685b32cc1c8513cc2e062308929e68fa3b9b/docs/figure/thermo_sum.Rmd/unnamed-chunk-9-1.png" target="_blank">7934685</a>
-</td>
-<td>
-tinalasisi
-</td>
-<td>
-2021-01-11
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div id="rolling-average-by-10-minutes" class="section level2">
-<h2><span class="header-section-number">2.2</span> Rolling average by 10 minutes</h2>
-<div id="individual-p.ots" class="section level3">
-<h3><span class="header-section-number">2.2.1</span> Individual p.ots</h3>
-<p><img src="figure/thermo_sum.Rmd/unnamed-chunk-10-1.png" width="100%" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-10-1">
-Past versions of unnamed-chunk-10-1.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-10-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/HairManikin/blob/7934685b32cc1c8513cc2e062308929e68fa3b9b/docs/figure/thermo_sum.Rmd/unnamed-chunk-10-1.png" target="_blank">7934685</a>
-</td>
-<td>
-tinalasisi
-</td>
-<td>
-2021-01-11
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><img src="figure/thermo_sum.Rmd/unnamed-chunk-10-2.png" width="100%" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-10-2">
-Past versions of unnamed-chunk-10-2.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-10-2" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/HairManikin/blob/7934685b32cc1c8513cc2e062308929e68fa3b9b/docs/figure/thermo_sum.Rmd/unnamed-chunk-10-2.png" target="_blank">7934685</a>
-</td>
-<td>
-tinalasisi
-</td>
-<td>
-2021-01-11
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><img src="figure/thermo_sum.Rmd/unnamed-chunk-10-3.png" width="100%" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-10-3">
-Past versions of unnamed-chunk-10-3.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-10-3" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/HairManikin/blob/7934685b32cc1c8513cc2e062308929e68fa3b9b/docs/figure/thermo_sum.Rmd/unnamed-chunk-10-3.png" target="_blank">7934685</a>
-</td>
-<td>
-tinalasisi
-</td>
-<td>
-2021-01-11
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><img src="figure/thermo_sum.Rmd/unnamed-chunk-10-4.png" width="100%" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-10-4">
-Past versions of unnamed-chunk-10-4.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-10-4" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/HairManikin/blob/7934685b32cc1c8513cc2e062308929e68fa3b9b/docs/figure/thermo_sum.Rmd/unnamed-chunk-10-4.png" target="_blank">7934685</a>
-</td>
-<td>
-tinalasisi
-</td>
-<td>
-2021-01-11
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><img src="figure/thermo_sum.Rmd/unnamed-chunk-10-5.png" width="100%" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-10-5">
-Past versions of unnamed-chunk-10-5.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-10-5" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/HairManikin/blob/7934685b32cc1c8513cc2e062308929e68fa3b9b/docs/figure/thermo_sum.Rmd/unnamed-chunk-10-5.png" target="_blank">7934685</a>
-</td>
-<td>
-tinalasisi
-</td>
-<td>
-2021-01-11
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><img src="figure/thermo_sum.Rmd/unnamed-chunk-10-6.png" width="100%" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-10-6">
-Past versions of unnamed-chunk-10-6.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-10-6" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/HairManikin/blob/7934685b32cc1c8513cc2e062308929e68fa3b9b/docs/figure/thermo_sum.Rmd/unnamed-chunk-10-6.png" target="_blank">7934685</a>
-</td>
-<td>
-tinalasisi
-</td>
-<td>
-2021-01-11
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><img src="figure/thermo_sum.Rmd/unnamed-chunk-10-7.png" width="100%" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-10-7">
-Past versions of unnamed-chunk-10-7.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-10-7" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/HairManikin/blob/7934685b32cc1c8513cc2e062308929e68fa3b9b/docs/figure/thermo_sum.Rmd/unnamed-chunk-10-7.png" target="_blank">7934685</a>
-</td>
-<td>
-tinalasisi
-</td>
-<td>
-2021-01-11
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><img src="figure/thermo_sum.Rmd/unnamed-chunk-10-8.png" width="100%" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-10-8">
-Past versions of unnamed-chunk-10-8.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-10-8" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/HairManikin/blob/7934685b32cc1c8513cc2e062308929e68fa3b9b/docs/figure/thermo_sum.Rmd/unnamed-chunk-10-8.png" target="_blank">7934685</a>
-</td>
-<td>
-tinalasisi
-</td>
-<td>
-2021-01-11
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><img src="figure/thermo_sum.Rmd/unnamed-chunk-10-9.png" width="100%" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-10-9">
-Past versions of unnamed-chunk-10-9.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-10-9" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/HairManikin/blob/7934685b32cc1c8513cc2e062308929e68fa3b9b/docs/figure/thermo_sum.Rmd/unnamed-chunk-10-9.png" target="_blank">7934685</a>
-</td>
-<td>
-tinalasisi
-</td>
-<td>
-2021-01-11
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><img src="figure/thermo_sum.Rmd/unnamed-chunk-10-10.png" width="100%" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-10-10">
-Past versions of unnamed-chunk-10-10.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-10-10" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/HairManikin/blob/7934685b32cc1c8513cc2e062308929e68fa3b9b/docs/figure/thermo_sum.Rmd/unnamed-chunk-10-10.png" target="_blank">7934685</a>
-</td>
-<td>
-tinalasisi
-</td>
-<td>
-2021-01-11
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><img src="figure/thermo_sum.Rmd/unnamed-chunk-10-11.png" width="100%" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-10-11">
-Past versions of unnamed-chunk-10-11.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-10-11" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/HairManikin/blob/7934685b32cc1c8513cc2e062308929e68fa3b9b/docs/figure/thermo_sum.Rmd/unnamed-chunk-10-11.png" target="_blank">7934685</a>
-</td>
-<td>
-tinalasisi
-</td>
-<td>
-2021-01-11
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><img src="figure/thermo_sum.Rmd/unnamed-chunk-10-12.png" width="100%" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-10-12">
-Past versions of unnamed-chunk-10-12.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-10-12" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/HairManikin/blob/7934685b32cc1c8513cc2e062308929e68fa3b9b/docs/figure/thermo_sum.Rmd/unnamed-chunk-10-12.png" target="_blank">7934685</a>
-</td>
-<td>
-tinalasisi
-</td>
-<td>
-2021-01-11
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-<div id="comparative-plots-1" class="section level3">
-<h3><span class="header-section-number">2.2.2</span> Comparative plots</h3>
-<div id="thermocouples-combined-1" class="section level4">
-<h4><span class="header-section-number">2.2.2.1</span> Thermocouples combined</h4>
-<div id="raw-2" class="section level5">
-<h5><span class="header-section-number">2.2.2.1.1</span> Raw</h5>
-<p><img src="figure/thermo_sum.Rmd/unnamed-chunk-11-1.png" width="100%" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-11-1">
-Past versions of unnamed-chunk-11-1.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-11-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/HairManikin/blob/7934685b32cc1c8513cc2e062308929e68fa3b9b/docs/figure/thermo_sum.Rmd/unnamed-chunk-11-1.png" target="_blank">7934685</a>
-</td>
-<td>
-tinalasisi
-</td>
-<td>
-2021-01-11
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><img src="figure/thermo_sum.Rmd/unnamed-chunk-11-2.png" width="100%" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-11-2">
-Past versions of unnamed-chunk-11-2.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-11-2" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/HairManikin/blob/7934685b32cc1c8513cc2e062308929e68fa3b9b/docs/figure/thermo_sum.Rmd/unnamed-chunk-11-2.png" target="_blank">7934685</a>
-</td>
-<td>
-tinalasisi
-</td>
-<td>
-2021-01-11
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><img src="figure/thermo_sum.Rmd/unnamed-chunk-11-3.png" width="100%" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-11-3">
-Past versions of unnamed-chunk-11-3.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-11-3" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/HairManikin/blob/7934685b32cc1c8513cc2e062308929e68fa3b9b/docs/figure/thermo_sum.Rmd/unnamed-chunk-11-3.png" target="_blank">7934685</a>
-</td>
-<td>
-tinalasisi
-</td>
-<td>
-2021-01-11
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-<div id="solar-influx-2" class="section level5">
-<h5><span class="header-section-number">2.2.2.1.2</span> Solar Influx</h5>
-<p><img src="figure/thermo_sum.Rmd/unnamed-chunk-12-1.png" width="100%" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-12-1">
-Past versions of unnamed-chunk-12-1.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-12-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/HairManikin/blob/7934685b32cc1c8513cc2e062308929e68fa3b9b/docs/figure/thermo_sum.Rmd/unnamed-chunk-12-1.png" target="_blank">7934685</a>
-</td>
-<td>
-tinalasisi
-</td>
-<td>
-2021-01-11
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-</div>
-<div id="thermocouples-separated-1" class="section level4">
-<h4><span class="header-section-number">2.2.2.2</span> Thermocouples separated</h4>
-<div id="raw-3" class="section level5">
-<h5><span class="header-section-number">2.2.2.2.1</span> Raw</h5>
-<p><img src="figure/thermo_sum.Rmd/unnamed-chunk-13-1.png" width="100%" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-13-1">
-Past versions of unnamed-chunk-13-1.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-13-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/HairManikin/blob/7934685b32cc1c8513cc2e062308929e68fa3b9b/docs/figure/thermo_sum.Rmd/unnamed-chunk-13-1.png" target="_blank">7934685</a>
-</td>
-<td>
-tinalasisi
-</td>
-<td>
-2021-01-11
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><img src="figure/thermo_sum.Rmd/unnamed-chunk-13-2.png" width="100%" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-13-2">
-Past versions of unnamed-chunk-13-2.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-13-2" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/HairManikin/blob/7934685b32cc1c8513cc2e062308929e68fa3b9b/docs/figure/thermo_sum.Rmd/unnamed-chunk-13-2.png" target="_blank">7934685</a>
-</td>
-<td>
-tinalasisi
-</td>
-<td>
-2021-01-11
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><img src="figure/thermo_sum.Rmd/unnamed-chunk-13-3.png" width="100%" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-13-3">
-Past versions of unnamed-chunk-13-3.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-13-3" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/HairManikin/blob/7934685b32cc1c8513cc2e062308929e68fa3b9b/docs/figure/thermo_sum.Rmd/unnamed-chunk-13-3.png" target="_blank">7934685</a>
-</td>
-<td>
-tinalasisi
-</td>
-<td>
-2021-01-11
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-<div id="solar-influx-3" class="section level5">
-<h5><span class="header-section-number">2.2.2.2.2</span> Solar Influx</h5>
-<p><img src="figure/thermo_sum.Rmd/unnamed-chunk-14-1.png" width="100%" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-14-1">
-Past versions of unnamed-chunk-14-1.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-14-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/HairManikin/blob/7934685b32cc1c8513cc2e062308929e68fa3b9b/docs/figure/thermo_sum.Rmd/unnamed-chunk-14-1.png" target="_blank">7934685</a>
 </td>
 <td>
 tinalasisi
