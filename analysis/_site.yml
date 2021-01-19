@@ -10,7 +10,7 @@ navbar:
   - text: License
     href: license.html
   - text: Manikin
-    href: ManikinData.html
+    href: manikin2021.html
   - text: Thermocouple Summary
     href: thermo_sum.html
   - text: Thermocouple QC

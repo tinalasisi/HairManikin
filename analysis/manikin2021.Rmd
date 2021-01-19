@@ -1,0 +1,240 @@
+---
+title: "Manikin data"
+author: "Tina Lasisi"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output:
+  workflowr::wflow_html:
+    toc: yes
+    toc_float: true
+    number_sections: yes
+editor_options:
+  chunk_output_type: console
+---
+
+```{r setup, message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
+
+library(tidyverse)
+library(knitr)
+library(tibbletime)
+library(lubridate)
+library(kableExtra)
+library(fs)
+library(janitor)
+library(fuzzyjoin)
+library(timetk)
+library(tidyquant)
+
+
+F = rprojroot::is_rstudio_project$make_fix_file()
+
+knitr::opts_chunk$set(echo = FALSE, include = TRUE, eval = TRUE, warning = FALSE, message = FALSE, fig.retina = 2, fig.width = 8, fig.height = 6, out.width = "100%")
+
+```
+
+# Importing data
+
+```{r}
+
+Havenith_2020_tidy <- read_csv(F("data/tidy/Havenith_2020_tidy.csv"), 
+    col_types = cols(
+      wig = col_factor(levels = c("Nude", 
+        "LowCurv", "MidCurv", "HighCurv")), 
+      radiation = col_factor(levels = c("off", 
+            "on")),
+      wind = col_factor(levels = c("0.3", "1", "2.5")), 
+      tsk = col_factor(levels = c("34.0", "38.0")),
+      wet_dry = col_factor(levels = c("dry", 
+            "wet"))))
+
+head(Havenith_2020_tidy)
+
+```
+
+## Summary statistics
+
+```{r}
+
+# means and sd
+
+sum_manikin_df <- Havenith_2020_tidy %>% 
+  group_by(wig, radiation, wind, wet_dry, tsk) %>% 
+  summarise(across(
+    where(is.numeric), 
+    list(mean = mean, s = sd), 
+    na.rm = TRUE, 
+    .names = "{col}_{fn}"
+    ),
+    n = n()
+    )
+
+head(sum_manikin_df)
+
+```
+
+## Solar influx
+
+```{r}
+
+dry_influx_df <- sum_manikin_df %>% 
+  select(wig, radiation, wind, wet_dry, tsk, w_m2_mean) %>% 
+  filter(wet_dry == "dry") %>% 
+  pivot_wider(names_from = radiation, values_from = w_m2_mean) %>% 
+  mutate(net_w_m2 = off-on)
+
+corr4c_dry_influx_df <- sum_manikin_df %>% 
+  select(wig, radiation, wind, wet_dry, tsk, w_m2_mean, m2k_W_mean) %>% 
+  mutate(
+    w_m2_4C = 
+      case_when(radiation == "off" ~ 28/m2k_W_mean,
+                TRUE ~ NaN),
+    w_m2_30C = 
+      case_when(radiation == "off" ~ 5/m2k_W_mean,
+                TRUE ~ NaN)) %>% 
+  drop_na() %>% 
+  ungroup() %>% 
+  select(-radiation)
+
+dry_influx_df2 <- inner_join(dry_influx_df, corr4c_dry_influx_df) %>% 
+  mutate(solar_w_m2_4C = w_m2_4C-net_w_m2,
+         solar_w_m2_30C = w_m2_30C-net_w_m2,
+         sweat_zero_gain = case_when(
+           solar_w_m2_30C < 0 ~ abs(solar_w_m2_30C/2430*3600),
+           TRUE ~ 0
+         )) %>% 
+  select(wig, wind, wet_dry, tsk, w_m2_4C, w_m2_30C, solar_w_m2_4C, solar_w_m2_30C, sweat_zero_gain)
+
+
+
+wet_influx_df <- sum_manikin_df %>% 
+  select(wig, radiation, wind, wet_dry, tsk, w_m2_mean) %>% 
+  filter(wet_dry == "wet") %>%
+  pivot_wider(names_from = radiation, values_from = w_m2_mean) %>% 
+  mutate(net_w_m2 = off-on) %>% 
+  drop_na() 
+
+dry_merge <- dry_influx_df2 %>% 
+  ungroup() %>% 
+  select(-wet_dry, -tsk)
+
+wet_influx_df2 <- full_join(dry_merge, wet_influx_df) %>% 
+  mutate(dry_wet_30C = w_m2_30C + on,
+         diff_dry_wet = dry_wet_30C-solar_w_m2_30C,
+         sweat_max = diff_dry_wet/2430*3600) %>% 
+  select(wig, wind, wet_dry, w_m2_4C, w_m2_30C, dry_wet_30C, diff_dry_wet, sweat_max)
+
+```
+
+# Plots
+
+## Dry vs. wet heat loss
+
+```{r}
+
+merge1 <- bind_rows(wet_influx_df, dry_influx_df)
+
+plot <- ggplot(merge1, aes(off, on)) +
+  geom_point(aes(shape = wind, fill=wig), size = 5) +
+  scale_shape_manual(values = c(21,22,23, 24))+
+  theme_bw() +
+  geom_abline(slope = 1, intercept = 0)+
+  xlim(0, 500) +
+  ylim(0, 500) +
+  theme(plot.title = element_text(hjust = 0.5))+
+  guides(fill=guide_legend(override.aes = list(shape=21))) +
+  coord_fixed() +
+  facet_wrap(vars(wet_dry)) +
+  theme(legend.position = "bottom", legend.box = "vertical", legend.margin = margin())
+
+print(plot)
+
+
+```
+
+
+## Net solar influx
+
+```{r}
+
+
+plot <- ggplot(merge1, aes(wind, net_w_m2)) +
+  geom_point(aes(color=wig, fill=wig), size = 3) +
+  ylim(0, 200) +
+  geom_path(aes(group=wig, color=wig))+
+  theme_bw() +
+  theme(plot.title = element_text(hjust = 0.5)) +
+facet_wrap(vars(wet_dry)) +
+theme(legend.position = "bottom", legend.box = "vertical", legend.margin = margin())
+
+print(plot)
+
+```
+
+## Heat loss
+
+```{r fig.width=12}
+
+combo1 <- dry_influx_df2 %>% 
+  select(wig, wind, wet_dry, heat_loss30=solar_w_m2_30C)
+
+combo2 <- wet_influx_df2 %>% 
+  select(wig, wind, wet_dry, heat_loss30=dry_wet_30C)
+
+heat_merge_df <- bind_rows(combo1, combo2)
+  
+df <- heat_merge_df
+
+plot <- ggplot(df, aes(wind, heat_loss30)) +
+  geom_point(aes(color=wig, fill=wig), size = 3) +
+  geom_path(aes(group=wig, color=wig))+
+  theme_bw() +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  facet_wrap(vars(wet_dry))
+
+print(plot)
+
+
+```
+
+### Difference
+
+```{r}
+
+plot <- ggplot(wet_influx_df2, aes(wind, diff_dry_wet)) +
+  geom_point(aes(color=wig, fill=wig), size = 3) +
+  geom_path(aes(group=wig, color=wig))+
+  theme_bw() +
+  theme(plot.title = element_text(hjust = 0.5))
+
+print(plot)
+
+
+```
+
+## Sweat requirement
+
+```{r fig.width=12}
+
+combo1 <- wet_influx_df2 %>% 
+  select(wig, wind, wet_dry, sweat=sweat_max)
+
+combo2 <- dry_influx_df2 %>% 
+  select(wig, wind, wet_dry, sweat=sweat_zero_gain)
+
+sweat_merge_df <- bind_rows(combo1, combo2) %>% 
+  rename(sweat_type=wet_dry) %>% 
+  mutate(sweat_type = as_factor(
+    case_when(sweat_type=="wet" ~ "max",
+              sweat_type=="dry" ~ "zero_gain")))
+
+plot <- ggplot(sweat_merge_df, aes(wind, sweat)) +
+  geom_point(aes(color=wig, fill=wig), size = 3) +
+  geom_path(aes(group=wig, color=wig))+
+  theme_bw() +
+  theme(plot.title = element_text(hjust = 0.5))+
+  facet_wrap(vars(sweat_type))
+
+print(plot)
+
+
+```
+
