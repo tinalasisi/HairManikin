@@ -15,14 +15,12 @@ editor_options:
 
 library(tidyverse)
 library(knitr)
-library(tibbletime)
-library(lubridate)
 library(kableExtra)
 library(fs)
 library(janitor)
 library(fuzzyjoin)
-library(timetk)
 library(tidyquant)
+library(ggstatsplot)
 
 
 F = rprojroot::is_rstudio_project$make_fix_file()
@@ -31,9 +29,10 @@ knitr::opts_chunk$set(echo = FALSE, include = TRUE, eval = TRUE, warning = FALSE
 
 ```
 
-# Importing data
 
-```{r}
+```{r df_import, include=FALSE}
+
+# Importing data
 
 Havenith_2020_tidy <- read_csv(F("data/tidy/Havenith_2020_tidy.csv"), 
     col_types = cols(
@@ -50,9 +49,8 @@ head(Havenith_2020_tidy)
 
 ```
 
-## Summary statistics
 
-```{r}
+```{r df_summary, include=FALSE}
 
 # means and sd
 
@@ -71,9 +69,10 @@ head(sum_manikin_df)
 
 ```
 
-## Solar influx
 
-```{r}
+```{r df_solinflux, include=FALSE}
+
+# solar influx
 
 dry_influx_df <- sum_manikin_df %>% 
   select(wig, radiation, wind, wet_dry, tsk, w_m2_mean) %>% 
@@ -124,11 +123,19 @@ wet_influx_df2 <- full_join(dry_merge, wet_influx_df) %>%
 
 ```
 
-# Plots
 
-## Dry vs. wet heat loss
+# Dry vs. wet heat loss
 
-```{r}
+The dry measurements were taken at two different temperatures - one with $T_{manikin}= 34^\circ C$ and $T_{ambient}= 8^\circ C$, and another with $T_{manikin}= 38^\circ C$ and $T_{ambient}= 4^\circ C$. 
+
+The second set of temperature options was found to be necessary with the straight (low curvature) wig in the $0.3\; m/s$ wind speed setting with the radiation on because the manikin would overheat to the point where no heat loss could be measured. James and I then made sure to conduct all the $0.3\; m/s$ wind speed experiments with this second option. 
+
+In the preparation of the data, George applied a correction to bring all the measurements to the same temperature, i.e. $T_{ambient}= 4^\circ C$. 
+
+
+The wet measurements refer to heat exchange rather than dry heat loss. These measurements were taken with the temperature settings $T_{manikin}= 34^\circ C$ and $T_{ambient}= 34^\circ C$ or $T_{manikin}=T_{ambient}$.
+
+```{r plt_drywet_scatter}
 
 merge1 <- bind_rows(wet_influx_df, dry_influx_df)
 
@@ -139,7 +146,9 @@ plot <- ggplot(merge1, aes(off, on)) +
   geom_abline(slope = 1, intercept = 0)+
   xlim(0, 500) +
   ylim(0, 500) +
-  theme(plot.title = element_text(hjust = 0.5))+
+  ggtitle("Dry heat loss and wet heat exchange data")+
+  theme(plot.title = element_text(hjust = 0.5), plot.caption = element_text(hjust = 0.5))+
+  labs(caption = "Comparison of dry heat loss and wet heat exchange for various head coverings\n at 3 wind speeds with radiation on/off", x = bquote('Radiation off'~(W/m^2)), y = bquote('Radiation on'~(W/m^2)))+
   guides(fill=guide_legend(override.aes = list(shape=21))) +
   coord_fixed() +
   facet_wrap(vars(wet_dry)) +
@@ -150,10 +159,41 @@ print(plot)
 
 ```
 
+# Solar influx 
 
-## Net solar influx
+We can also look specifically at the effect of the radiation by subtracting the measurements with radiation off from those with radiation on. 
 
-```{r}
+From the plots below, it is apparent that the experiments with a "Nude" manikin scalp show a considerably different pattern than any of the wigs. 
+
+Interestingly, in the dry experiments, the effect of solar radiation appears to cluster more by wig, while the wet experiments show a solar influx that is more patterned by wind speed.
+
+## As function of heat loss (radiation off)
+
+```{r plt_drywet_scatter2}
+
+
+plot <- ggplot(merge1, aes(off, net_w_m2)) +
+  geom_point(aes(shape = wind, fill=wig), size = 5) +
+  scale_shape_manual(values = c(21,22,23, 24))+
+  theme_bw() +
+  geom_hline(yintercept =  0) +
+  ggtitle("Solar influx")+
+  theme(plot.title = element_text(hjust = 0.5), plot.caption = element_text(hjust = 0.5))+
+  labs(caption = "This plot shows the solar influx as a function of heat loss in the radiation off state. \nThe horizontal line is at zero showing that all values are positive.", x = bquote('Radiation off'~(W/m^2)), y = bquote('Solar influx'~(W/m^2)))+
+  guides(fill=guide_legend(override.aes = list(shape=21))) +
+  theme(legend.position = "bottom", legend.box = "vertical", legend.margin = margin()) +
+  facet_wrap(vars(wet_dry)) 
+
+print(plot)
+
+
+```
+
+## As function of wind speed
+
+Below, we plot the same net heat loss as a function of wind speed. Similarly, we see that, in the dry experiments, there is a very clear effect of wig type and no hair, while the wet experiments show a much more pronounced effect of windspeed.
+
+```{r plt_influx}
 
 
 plot <- ggplot(merge1, aes(wind, net_w_m2)) +
@@ -162,6 +202,7 @@ plot <- ggplot(merge1, aes(wind, net_w_m2)) +
   geom_path(aes(group=wig, color=wig))+
   theme_bw() +
   theme(plot.title = element_text(hjust = 0.5)) +
+  labs(title = "Solar influx as function of wind", x = bquote('Wind speed'~(m/s)), y=bquote('Solar influx'~(W/m^2))) +
 facet_wrap(vars(wet_dry)) +
 theme(legend.position = "bottom", legend.box = "vertical", legend.margin = margin())
 
@@ -169,9 +210,58 @@ print(plot)
 
 ```
 
-## Heat loss
 
-```{r fig.width=12}
+Testing this as a nonparametric repeated measures anova, it appears that wind speed is significant in each case. 
+
+```{r plt_influx2, fig.width=12}
+
+
+grouped_ggwithinstats(
+  data = dplyr::ungroup(merge1),
+  x = wind,
+  xlab = bquote('Wind speed'~(m/s)),
+  y = net_w_m2,
+  ylab = bquote('Solar influx'~(W/m^2)),
+  grouping.var = wet_dry,
+  title.prefix = "Condition",
+  type = "np",
+  outlier.tagging = TRUE
+)
+
+```
+
+
+Looking at the effect of wigs, we see that this is only significant effect in the dry experiments, although the range of variation is much reduced in the wet experiments.
+
+```{r plt_influx3, fig.width=12}
+
+
+grouped_ggwithinstats(
+  data = dplyr::ungroup(merge1),
+  x = wig,
+  y = net_w_m2,
+  xlab = "Wig",
+  ylab = bquote('Solar influx'~(W/m^2)),
+  grouping.var = wet_dry,
+  type = "np",
+  title.prefix = "Condition",
+  outlier.tagging = TRUE,
+  outlier.label = wind,
+  outlier.coef = 1)
+
+
+```
+
+
+# Heat loss at 30 C
+
+Here are plots for the total heat losses (convective + radiative) recalculated for an ambient temperature of $30^\circ C$. 
+
+What becomes apparent now is that there is a substantial heat gain in the dry condition. 
+
+However, the wet condition assumes an "unlimited" amount of sweat (i.e. the most that can be evaporated) - but this is not physiologically realistic. 
+
+```{r plt_heat_30C, fig.width=12}
 
 combo1 <- dry_influx_df2 %>% 
   select(wig, wind, wet_dry, heat_loss30=solar_w_m2_30C)
@@ -187,17 +277,62 @@ plot <- ggplot(df, aes(wind, heat_loss30)) +
   geom_point(aes(color=wig, fill=wig), size = 3) +
   geom_path(aes(group=wig, color=wig))+
   theme_bw() +
+  labs(title = "Total heat losses with solar exposure \nrecalculated for ambient temperature of 30C", x = bquote('Wind speed'~(m/s)), y = bquote('Heat loss'~(W/m^2)))+
   theme(plot.title = element_text(hjust = 0.5)) +
-  facet_wrap(vars(wet_dry))
+  facet_wrap(vars(wet_dry)) +
+  ylim(-200, 400)
 
 print(plot)
 
 
 ```
 
-### Difference
+The differences between wind speed across groups appear to be statistically significant, with the "nude" condition always as an outlier.
 
-```{r}
+```{r plt_heat30C_wind, fig.width=12}
+
+
+grouped_ggwithinstats(
+  data = dplyr::ungroup(df),
+  x = wind,
+  y = heat_loss30,
+  xlab = bquote('Wind speed'~(m/s)),
+  ylab = bquote('Solar influx'~(W/m^2)),
+  grouping.var = wet_dry,
+  type = "np",
+  title.prefix = "Condition",
+  outlier.tagging = TRUE,
+  outlier.label = wig,
+  outlier.coef = 1)
+
+
+```
+
+Similarly, the differences between head covers is significant.
+
+```{r plt_heat30C_wig}
+
+grouped_ggwithinstats(
+  data = dplyr::ungroup(df),
+  x = wig,
+  y = heat_loss30,
+  xlab = "Wig",
+  ylab = bquote('Solar influx'~(W/m^2)),
+  grouping.var = wet_dry,
+  type = "np",
+  title.prefix = "Condition",
+  outlier.tagging = TRUE,
+  outlier.label = wind,
+  outlier.coef = 1)
+
+
+```
+
+## Difference
+
+Looking at the difference between dry and wet heat loss, we see that the difference is stark between hair and no hair. Suggesting that unlimited evaporation renders hairlessness much more beneficial. We also see a steady increase in the difference between wet and dry heat losses with increases in wind speed due to the increasing contribution of convection to the evaporation.
+
+```{r plt_diff_wetdry}
 
 plot <- ggplot(wet_influx_df2, aes(wind, diff_dry_wet)) +
   geom_point(aes(color=wig, fill=wig), size = 3) +
@@ -210,10 +345,47 @@ print(plot)
 
 ```
 
-## Sweat requirement
+The differences appear to be significant between windspeed.
 
-```{r fig.width=12}
+```{r plt_diff_wetdry2, fig.width=12}
 
+ggwithinstats(
+  data = dplyr::ungroup(wet_influx_df2),
+  x = wind,
+  y = diff_dry_wet,
+  xlab = bquote('Wind speed'~(m/s)),
+  ylab = bquote('Difference in heat loss'~(W/m^2)),
+  type = "np",
+  outlier.tagging = TRUE,
+  outlier.label = wig,
+  outlier.coef = 1)
+
+```
+
+Similarly, differences between wigs are significant.
+
+```{r plt_diff_wetdry3}
+
+ggwithinstats(
+  data = dplyr::ungroup(wet_influx_df2),
+  x = wig,
+  y = diff_dry_wet,
+  xlab = "Wig",
+  ylab = bquote('Difference in heat loss'~(W/m^2)),
+  type = "np",
+  outlier.tagging = TRUE,
+  outlier.label = wind,
+  outlier.coef = 1)
+
+```
+
+# Sweat requirement
+
+Another way to approach the comparison is to calculte the sweat rate. Here, we plot the sweat rate potential (left) and the sweat rate required to cancel out heat gain at $T_{ambient} = 30^\circ C$.
+
+What emerges is that while heat loss potential is higher without hair as a barrier (i.e. the "nude" condition), the *potential* sweat far exceeds the physiologically possible sweat rate for humans. The plot for zero heat gain shoes that a nude scalp requires the most sweat and this requirement is inversely correlated with hair curvature.
+
+```{r plt_sweat, fig.width=12}
 combo1 <- wet_influx_df2 %>% 
   select(wig, wind, wet_dry, sweat=sweat_max)
 
@@ -234,7 +406,44 @@ plot <- ggplot(sweat_merge_df, aes(wind, sweat)) +
   facet_wrap(vars(sweat_type))
 
 print(plot)
+```
 
+The effect of wind speed appears to be significant in both cases.
+
+```{r plt_sweat2, fig.width=12}
+
+grouped_ggwithinstats(
+  data = dplyr::ungroup(sweat_merge_df),
+  x = wind,
+  y = sweat,
+  xlab = bquote('Wind speed'~(m/s)),
+  ylab = bquote('Difference in heat loss'~(W/m^2)),
+  grouping.var = sweat_type,
+  title.prefix = "Sweat rate",
+  type = "np",
+  outlier.tagging = TRUE,
+  outlier.label = wig,
+  outlier.coef = 1)
 
 ```
+
+Also, hair appears to be a significant contributor to the sweat requirement. 
+
+```{r plt_sweat3, fig.width=12}
+
+grouped_ggwithinstats(
+  data = dplyr::ungroup(sweat_merge_df),
+  x = wind,
+  y = sweat,
+  xlab = bquote('Wind speed'~(m/s)),
+  ylab = bquote('Difference in heat loss'~(W/m^2)),
+  grouping.var = sweat_type,
+  title.prefix = "Sweat rate",
+  type = "np",
+  outlier.tagging = TRUE,
+  outlier.label = wig,
+  outlier.coef = 1)
+
+```
+
 

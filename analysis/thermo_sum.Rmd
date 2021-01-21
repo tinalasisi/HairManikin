@@ -54,7 +54,7 @@ pltsave_func <- function(plot, plot_path, width, height){
 
 First, we import the data directly from the clean thermocouple data (i.e. without outliers). 
 
-```{r read_dfs, echo=TRUE}
+```{r read_dfs, include=FALSE}
 
 thermo_df <- F("data/tidy/thermo_data_long_minus_outliers.csv") %>% 
   read_csv()
@@ -68,11 +68,21 @@ head(thermo_df)
 
 ```
 
+```{r tbl_log, include=TRUE, results='asis'}
+
+kable(head(thermo_df)) %>% 
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+    fixed_thead = T) %>% 
+  scroll_box(width = "600px", height = "500px")
+
+```
+
 
 ## Clean 
 Here we filter out the trials that used "regular" room conditions with the 0.3m/s setting.
 
-```{r}
+```{r include=FALSE}
 
 merge_df <- as_tbl_time(thermo_df, DateTime) %>%
   pivot_wider(names_from = thermo_id, values_from = temp) %>% 
@@ -93,7 +103,7 @@ head(extra_NA)
 
 It appears that thermocouple 1 contains missing data across the trials, so we will remove it. 
 
-```{r}
+```{r include=FALSE}
 
 trim_thermo_df <- merge_df %>% 
   select(-ch1) %>% 
