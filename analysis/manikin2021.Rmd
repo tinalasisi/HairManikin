@@ -25,6 +25,10 @@ library(ggstatsplot)
 
 F = rprojroot::is_rstudio_project$make_fix_file()
 
+palettedf <- tibble(paletteer::palettes_d_names)
+
+# filter(.data = palettedf, length > 10 & type == "qualitative")
+
 knitr::opts_chunk$set(echo = FALSE, include = TRUE, eval = TRUE, warning = FALSE, message = FALSE, fig.retina = 2, fig.width = 8, fig.height = 6, out.width = "100%")
 
 ```
@@ -124,16 +128,15 @@ wet_influx_df2 <- full_join(dry_merge, wet_influx_df) %>%
 ```
 
 
-# Dry vs. wet heat loss
+# Heat loss (raw)
 
-The dry measurements were taken at two different temperatures - one with $T_{manikin}= 34^\circ C$ and $T_{ambient}= 8^\circ C$, and another with $T_{manikin}= 38^\circ C$ and $T_{ambient}= 4^\circ C$. 
+The dry measurements were taken at two different temperatures - one with $T_{manikin}= 34^\circ C$ and $T_{ambient}= 8^\circ C$, and another with $T_{manikin}= 38^\circ C$ and $T_{ambient}= 4^\circ C$.
 
-The second set of temperature options was found to be necessary with the straight (low curvature) wig in the $0.3\; m/s$ wind speed setting with the radiation on because the manikin would overheat to the point where no heat loss could be measured. James and I then made sure to conduct all the $0.3\; m/s$ wind speed experiments with this second option. 
+The second set of temperature options was found to be necessary with the straight (low curvature) wig in the $0.3\; m/s$ wind speed setting with the radiation on because the manikin would overheat to the point where no heat loss could be measured. We then made sure to conduct all the $0.3\; m/s$ wind speed experiments with this second option. 
 
-In the preparation of the data, George applied a correction to bring all the measurements to the same temperature, i.e. $T_{ambient}= 4^\circ C$. 
+In the preparation of the data, we applied a correction to bring all the measurements to the same temperature, i.e. $T_{ambient}= 4^\circ C$. 
 
-
-The wet measurements refer to heat exchange rather than dry heat loss. These measurements were taken with the temperature settings $T_{manikin}= 34^\circ C$ and $T_{ambient}= 34^\circ C$ or $T_{manikin}=T_{ambient}$.
+The wet measurements are based on heat exchange rather than dry heat loss. These measurements were taken with the temperature settings $T_{manikin}= 34^\circ C$ and $T_{ambient}= 34^\circ C$ or $T_{manikin}=T_{ambient}$. The measurements have been converted to heat loss for comparative purposes.
 
 ```{r plt_drywet_scatter}
 
@@ -158,6 +161,7 @@ print(plot)
 
 
 ```
+
 
 # Solar influx 
 
@@ -210,45 +214,62 @@ print(plot)
 
 ```
 
+## Heat loss unstandardized lm
+```{r lm_rawheatloss}
+raw.heatloss.lm <- lm(
+  formula = 
+    w_m2_mean ~ wet_dry + radiation + as.numeric(wind) + wig + wet_dry*as.numeric(wind) + wet_dry*wig + wet_dry*radiation + radiation*wig,
+  data = sum_manikin_df)
+```
 
-Testing this as a nonparametric repeated measures anova, it appears that wind speed is significant in each case. 
 
-```{r plt_influx2, fig.width=12}
+```{r tbl_lm_rawheatloss}
+lmdf <- summary(raw.heatloss.lm) %>% 
+  broom::tidy()
+
+lmdf %>% 
+  kbl %>% 
+  kable_minimal()
+```
 
 
-grouped_ggwithinstats(
-  data = dplyr::ungroup(merge1),
-  x = wind,
-  xlab = bquote('Wind speed'~(m/s)),
-  y = net_w_m2,
-  ylab = bquote('Solar influx'~(W/m^2)),
-  grouping.var = wet_dry,
-  title.prefix = "Condition",
-  type = "np",
-  outlier.tagging = TRUE
+```{r plt_lm_rawheatloss}
+ggstatsplot::ggcoefstats(
+  x = raw.heatloss.lm,
+  sort = "ascending",
+  ggtheme = ggplot2::theme_bw(),
+  package = "Polychrome",
+  palette = "dark",
+  only.significant = T
 )
 
 ```
 
+## Heat loss standardized lm
+```{r lm_rawheatloss_std}
+raw.heatloss.lm.beta <- lm.beta::lm.beta(raw.heatloss.lm)
+```
 
-Looking at the effect of wigs, we see that this is only significant effect in the dry experiments, although the range of variation is much reduced in the wet experiments.
 
-```{r plt_influx3, fig.width=12}
+```{r tbl_lm_rawheatloss_std}
+lmdf <- summary(raw.heatloss.lm.beta) %>% 
+  broom::tidy()
+
+lmdf %>% 
+  kbl %>% 
+  kable_minimal()
+```
 
 
-grouped_ggwithinstats(
-  data = dplyr::ungroup(merge1),
-  x = wig,
-  y = net_w_m2,
-  xlab = "Wig",
-  ylab = bquote('Solar influx'~(W/m^2)),
-  grouping.var = wet_dry,
-  type = "np",
-  title.prefix = "Condition",
-  outlier.tagging = TRUE,
-  outlier.label = wind,
-  outlier.coef = 1)
-
+```{r plt_lm_rawheatloss_std}
+ggstatsplot::ggcoefstats(
+  x = raw.heatloss.lm.beta,
+  sort = "ascending",
+  ggtheme = ggplot2::theme_bw(),
+  package = "Polychrome",
+  palette = "dark",
+  only.significant = T
+)
 
 ```
 
@@ -261,8 +282,7 @@ What becomes apparent now is that there is a substantial heat gain in the dry co
 
 However, the wet condition assumes an "unlimited" amount of sweat (i.e. the most that can be evaporated) - but this is not physiologically realistic. 
 
-```{r plt_heat_30C, fig.width=12}
-
+```{r df_heat_30C}
 combo1 <- dry_influx_df2 %>% 
   select(wig, wind, wet_dry, heat_loss30=solar_w_m2_30C)
 
@@ -272,7 +292,10 @@ combo2 <- wet_influx_df2 %>%
 heat_merge_df <- bind_rows(combo1, combo2)
   
 df <- heat_merge_df
+```
 
+
+```{r plt_heat_30C, fig.width=12}
 plot <- ggplot(df, aes(wind, heat_loss30)) +
   geom_point(aes(color=wig, fill=wig), size = 3) +
   geom_path(aes(group=wig, color=wig))+
@@ -287,48 +310,188 @@ print(plot)
 
 ```
 
+
+We created a linear model to test the significance of various factors on heat loss
+
+## Unstandardized lm
+```{r lm_drywet30}
+heatloss.lm <- lm(
+  formula = 
+    heat_loss30 ~ wet_dry + as.numeric(wind) + wig + wet_dry*as.numeric(wind) + wet_dry*wig, 
+  data = heat_merge_df)
+```
+
+
+```{r tbl_lm_drywet30}
+summary(heatloss.lm) %>% 
+  broom::tidy() %>% 
+  kbl() %>% 
+  kable_minimal()
+```
+
+
+```{r plt_lm_drywet30}
+ggstatsplot::ggcoefstats(
+  x = heatloss.lm,
+  sort = "ascending", # sorting the terms of the model based on estimate values
+  ggtheme = ggplot2::theme_bw(),
+  package = "ggsci",
+  palette = "default_aaas",
+  messages = F,
+  only.significant = T
+)
+
+```
+
+
+```{r lm_dry30sep}
+df <- heat_merge_df %>% 
+  filter(wet_dry == "dry")
+
+heatloss.lm.dry <- lm(
+  formula = 
+    heat_loss30 ~ as.numeric(wind) + wig, 
+  data = df)
+```
+
+
+```{r tbl_lm_dry30sep}
+summary(heatloss.lm.dry) %>% 
+  broom::tidy() %>% 
+  kbl() %>% 
+  kable_minimal()
+```
+
+
+```{r lm_wet30sep}
+df <- heat_merge_df %>% 
+  filter(wet_dry == "wet")
+
+heatloss.lm.wet <- lm(
+  formula = 
+    heat_loss30 ~ as.numeric(wind) + wig, 
+  data = df)
+```
+
+
+```{r tbl_lm_wet30sep}
+summary(heatloss.lm.wet) %>% 
+  broom::tidy() %>% 
+  kbl() %>% 
+  kable_minimal()
+```
+
+
+```{r plt_lm_drywet30sep}
+ggstatsplot::combine_plots(
+  ggstatsplot::ggcoefstats(
+  x = heatloss.lm.dry,
+  title = "Dry",
+  sort = "ascending", # sorting the terms of the model based on estimate values
+  ggtheme = ggplot2::theme_bw(),
+  package = "ggsci",
+  palette = "default_aaas",
+  messages = F,
+  only.significant = T
+),
+ggstatsplot::ggcoefstats(
+  x = heatloss.lm.wet,
+  title = "Wet",
+  sort = "ascending", # sorting the terms of the model based on estimate values
+  ggtheme = ggplot2::theme_bw(),
+  package = "ggsci",
+  palette = "default_aaas",
+  messages = F,
+  only.significant = T
+)
+)
+
+
+```
+
+
+## Standardized lm
 The differences between wind speed across groups appear to be statistically significant, with the "nude" condition always as an outlier.
 
-```{r plt_heat30C_wind, fig.width=12}
+```{r lm_drywet30std}
+heatloss.lm.beta <- lm.beta::lm.beta(heatloss.lm)
+```
 
 
-grouped_ggwithinstats(
-  data = dplyr::ungroup(df),
-  x = wind,
-  y = heat_loss30,
-  xlab = bquote('Wind speed'~(m/s)),
-  ylab = bquote('Solar influx'~(W/m^2)),
-  grouping.var = wet_dry,
-  type = "np",
-  title.prefix = "Condition",
-  outlier.tagging = TRUE,
-  outlier.label = wig,
-  outlier.coef = 1)
+```{r tbl_lm_drywet30std}
+summary(heatloss.lm.beta) %>% 
+  broom::tidy() %>% 
+  kbl() %>% 
+  kable_minimal()
+```
 
+
+```{r plt_lm_drywet30std}
+ggstatsplot::ggcoefstats(
+  x = heatloss.lm.beta,
+  sort = "ascending", # sorting the terms of the model based on estimate values
+  ggtheme = ggplot2::theme_bw(),
+  package = "ggsci",
+  palette = "default_aaas",
+  messages = F,
+  only.significant = T
+)
 
 ```
 
-Similarly, the differences between head covers is significant.
 
-```{r plt_heat30C_wig}
+```{r lm_dry30sepstd}
+heatloss.lm.dry.beta <- lm.beta::lm.beta(heatloss.lm.dry)
+```
 
-grouped_ggwithinstats(
-  data = dplyr::ungroup(df),
-  x = wig,
-  y = heat_loss30,
-  xlab = "Wig",
-  ylab = bquote('Solar influx'~(W/m^2)),
-  grouping.var = wet_dry,
-  type = "np",
-  title.prefix = "Condition",
-  outlier.tagging = TRUE,
-  outlier.label = wind,
-  outlier.coef = 1)
 
+```{r tbl_lm_dry30sepstd}
+summary(heatloss.lm.dry.beta)%>% 
+  broom::tidy() %>% 
+  kbl() %>% 
+  kable_minimal()
+```
+
+
+```{r lm_wet30sepstd}
+heatloss.lm.wet.beta <- lm.beta::lm.beta(heatloss.lm.wet)
+```
+
+
+```{r tbl_lm_wet30sepstd}
+summary(heatloss.lm.wet.beta)%>% 
+  broom::tidy() %>% 
+  kbl() %>% 
+  kable_minimal()
+```
+
+
+```{r plt_lm_drywet30sepstd}
+ggstatsplot::combine_plots(
+  ggstatsplot::ggcoefstats(
+  x = heatloss.lm.dry.beta,
+  title = "Dry",
+  sort = "ascending", 
+  ggtheme = ggplot2::theme_bw(),
+  package = "ggsci",
+  palette = "default_aaas",
+  messages = F
+),
+ggstatsplot::ggcoefstats(
+  x = heatloss.lm.wet.beta,
+  title = "Wet",
+  sort = "ascending",
+  ggtheme = ggplot2::theme_bw(),
+  package = "ggsci",
+  palette = "default_aaas",
+  messages = F
+)
+)
 
 ```
 
-## Difference
+
+## Effect of evaporative heat loss
 
 Looking at the difference between dry and wet heat loss, we see that the difference is stark between hair and no hair. Suggesting that unlimited evaporation renders hairlessness much more beneficial. We also see a steady increase in the difference between wet and dry heat losses with increases in wind speed due to the increasing contribution of convection to the evaporation.
 
@@ -345,37 +508,60 @@ print(plot)
 
 ```
 
-The differences appear to be significant between windspeed.
+```{r lm_diffwetdry}
+diff.wetdry.lm <- lm(
+  formula = 
+    diff_dry_wet ~ as.numeric(wind) + wig,
+  data = wet_influx_df2)
+```
 
-```{r plt_diff_wetdry2, fig.width=12}
 
-ggwithinstats(
-  data = dplyr::ungroup(wet_influx_df2),
-  x = wind,
-  y = diff_dry_wet,
-  xlab = bquote('Wind speed'~(m/s)),
-  ylab = bquote('Difference in heat loss'~(W/m^2)),
-  type = "np",
-  outlier.tagging = TRUE,
-  outlier.label = wig,
-  outlier.coef = 1)
+```{r tbl_lm_diffwetdry}
+lmdf <- summary(diff.wetdry.lm) %>% 
+  broom::tidy()
+
+lmdf %>% 
+  kbl %>% 
+  kable_minimal()
+```
+
+
+```{r plt_lm_diffwetdry}
+ggstatsplot::ggcoefstats(
+  x = diff.wetdry.lm,
+  sort = "ascending",
+  ggtheme = ggplot2::theme_bw(),
+  package = "Polychrome",
+  palette = "dark",
+  only.significant = T
+)
 
 ```
 
-Similarly, differences between wigs are significant.
+```{r lm_diffwetdry_std}
+diff.wetdry.lm.beta <- lm.beta::lm.beta(diff.wetdry.lm)
+```
 
-```{r plt_diff_wetdry3}
 
-ggwithinstats(
-  data = dplyr::ungroup(wet_influx_df2),
-  x = wig,
-  y = diff_dry_wet,
-  xlab = "Wig",
-  ylab = bquote('Difference in heat loss'~(W/m^2)),
-  type = "np",
-  outlier.tagging = TRUE,
-  outlier.label = wind,
-  outlier.coef = 1)
+```{r tbl_lm_diffwetdry_std}
+lmdf <- summary(diff.wetdry.lm.beta) %>% 
+  broom::tidy()
+
+lmdf %>% 
+  kbl %>% 
+  kable_minimal()
+```
+
+
+```{r plt_lm_diffwetdry_std}
+ggstatsplot::ggcoefstats(
+  x = diff.wetdry.lm.beta,
+  sort = "ascending",
+  ggtheme = ggplot2::theme_bw(),
+  package = "Polychrome",
+  palette = "dark",
+  only.significant = T
+)
 
 ```
 
@@ -385,7 +571,7 @@ Another way to approach the comparison is to calculte the sweat rate. Here, we p
 
 What emerges is that while heat loss potential is higher without hair as a barrier (i.e. the "nude" condition), the *potential* sweat far exceeds the physiologically possible sweat rate for humans. The plot for zero heat gain shoes that a nude scalp requires the most sweat and this requirement is inversely correlated with hair curvature.
 
-```{r plt_sweat, fig.width=12}
+```{r df_sweat}
 combo1 <- wet_influx_df2 %>% 
   select(wig, wind, wet_dry, sweat=sweat_max)
 
@@ -397,7 +583,10 @@ sweat_merge_df <- bind_rows(combo1, combo2) %>%
   mutate(sweat_type = as_factor(
     case_when(sweat_type=="wet" ~ "max",
               sweat_type=="dry" ~ "zero_gain")))
+```
 
+
+```{r plt_sweat, fig.width=12}
 plot <- ggplot(sweat_merge_df, aes(wind, sweat)) +
   geom_point(aes(color=wig, fill=wig), size = 3) +
   geom_path(aes(group=wig, color=wig))+
@@ -408,41 +597,181 @@ plot <- ggplot(sweat_merge_df, aes(wind, sweat)) +
 print(plot)
 ```
 
-The effect of wind speed appears to be significant in both cases.
+## Unstandardized lm
+```{r lm_sweat}
+sweat.lm <- lm(
+  formula = 
+    sweat ~ sweat_type + as.numeric(wind) + wig + sweat_type*as.numeric(wind) + sweat_type*wig, 
+  data = sweat_merge_df)
+```
 
-```{r plt_sweat2, fig.width=12}
 
-grouped_ggwithinstats(
-  data = dplyr::ungroup(sweat_merge_df),
-  x = wind,
-  y = sweat,
-  xlab = bquote('Wind speed'~(m/s)),
-  ylab = bquote('Difference in heat loss'~(W/m^2)),
-  grouping.var = sweat_type,
-  title.prefix = "Sweat rate",
-  type = "np",
-  outlier.tagging = TRUE,
-  outlier.label = wig,
-  outlier.coef = 1)
+```{r tbl_lm_sweat}
+summary(sweat.lm) %>% 
+  broom::tidy() %>% 
+  kbl() %>% 
+  kable_minimal()
+```
+
+
+```{r plt_lm_sweat}
+ggstatsplot::ggcoefstats(
+  x = sweat.lm,
+  sort = "ascending", # sorting the terms of the model based on estimate values
+  ggtheme = ggplot2::theme_bw(),
+  package = "ggsci",
+  palette = "default_aaas",
+  messages = F,
+  only.significant = T
+)
 
 ```
 
-Also, hair appears to be a significant contributor to the sweat requirement. 
 
-```{r plt_sweat3, fig.width=12}
+```{r lm_maxsep}
+df <- sweat_merge_df %>% 
+  filter(sweat_type == "zero_gain") %>% 
+  droplevels()
 
-grouped_ggwithinstats(
-  data = dplyr::ungroup(sweat_merge_df),
-  x = wind,
-  y = sweat,
-  xlab = bquote('Wind speed'~(m/s)),
-  ylab = bquote('Difference in heat loss'~(W/m^2)),
-  grouping.var = sweat_type,
-  title.prefix = "Sweat rate",
-  type = "np",
-  outlier.tagging = TRUE,
-  outlier.label = wig,
-  outlier.coef = 1)
+sweat.lm.zero_gain <- lm(
+  formula = 
+    sweat ~ as.numeric(wind) + wig, 
+  data = df)
+```
+
+
+```{r tbl_lm_maxsep}
+summary(sweat.lm.zero_gain) %>% 
+  broom::tidy() %>% 
+  kbl() %>% 
+  kable_minimal()
+```
+
+
+```{r lm_zero_gainsep}
+df <- sweat_merge_df %>% 
+  filter(sweat_type == "max")
+
+sweat.lm.max <- lm(
+  formula = 
+    sweat ~ as.numeric(wind) + wig, 
+  data = df)
+```
+
+
+```{r tbl_lm_zero_gainsep}
+summary(sweat.lm.max) %>% 
+  broom::tidy() %>% 
+  kbl() %>% 
+  kable_minimal()
+```
+
+
+```{r plt_lm_sweatsep}
+ggstatsplot::combine_plots(
+  ggstatsplot::ggcoefstats(
+  x = sweat.lm.zero_gain,
+  title = "zero_gain",
+  sort = "ascending", # sorting the terms of the model based on estimate values
+  ggtheme = ggplot2::theme_bw(),
+  package = "ggsci",
+  palette = "default_aaas",
+  messages = F,
+  only.significant = T
+),
+ggstatsplot::ggcoefstats(
+  x = sweat.lm.max,
+  title = "max",
+  sort = "ascending", # sorting the terms of the model based on estimate values
+  ggtheme = ggplot2::theme_bw(),
+  package = "ggsci",
+  palette = "default_aaas",
+  messages = F,
+  only.significant = T
+)
+)
+
+
+```
+
+
+## Standardized lm
+The differences between wind speed across groups appear to be statistically significant, with the "nude" condition always as an outlier.
+
+```{r lm_sweatstd}
+sweat.lm.beta <- lm.beta::lm.beta(sweat.lm)
+```
+
+
+```{r tbl_lm_sweatstd}
+summary(sweat.lm.beta) %>% 
+  broom::tidy() %>% 
+  kbl() %>% 
+  kable_minimal()
+```
+
+
+```{r plt_lm_sweatstd}
+ggstatsplot::ggcoefstats(
+  x = sweat.lm.beta,
+  sort = "ascending", # sorting the terms of the model based on estimate values
+  ggtheme = ggplot2::theme_bw(),
+  package = "ggsci",
+  palette = "default_aaas",
+  messages = F,
+  only.significant = T
+)
+
+```
+
+
+```{r lm_maxsepstd}
+sweat.lm.zero_gain.beta <- lm.beta::lm.beta(sweat.lm.zero_gain)
+```
+
+
+```{r tbl_lm_maxsepstd}
+summary(sweat.lm.zero_gain.beta)%>% 
+  broom::tidy() %>% 
+  kbl() %>% 
+  kable_minimal()
+```
+
+
+```{r lm_zero_gainsepstd}
+sweat.lm.max.beta <- lm.beta::lm.beta(sweat.lm.max)
+```
+
+
+```{r tbl_lm_zero_gainsepstd}
+summary(sweat.lm.max.beta)%>% 
+  broom::tidy() %>% 
+  kbl() %>% 
+  kable_minimal()
+```
+
+
+```{r plt_lm_sweatsepstd}
+ggstatsplot::combine_plots(
+  ggstatsplot::ggcoefstats(
+  x = sweat.lm.zero_gain.beta,
+  title = "zero_gain",
+  sort = "ascending", 
+  ggtheme = ggplot2::theme_bw(),
+  package = "ggsci",
+  palette = "default_aaas",
+  messages = F
+),
+ggstatsplot::ggcoefstats(
+  x = sweat.lm.max.beta,
+  title = "max",
+  sort = "ascending",
+  ggtheme = ggplot2::theme_bw(),
+  package = "ggsci",
+  palette = "default_aaas",
+  messages = F
+)
+)
 
 ```
 
