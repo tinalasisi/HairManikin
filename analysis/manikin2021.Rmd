@@ -247,7 +247,10 @@ ggstatsplot::ggcoefstats(
 
 ## Heat loss standardized lm
 ```{r lm_rawheatloss_std}
-raw.heatloss.lm.beta <- lm.beta::lm.beta(raw.heatloss.lm)
+raw.heatloss.lm.beta <-  lm(
+  formula = 
+    scale(w_m2_mean) ~ wet_dry + radiation + scale(as.numeric(wind)) + wig + wet_dry*scale(as.numeric(wind)) + wet_dry*wig + wet_dry*radiation + radiation*wig,
+  data = sum_manikin_df)
 ```
 
 
@@ -414,7 +417,10 @@ ggstatsplot::ggcoefstats(
 The differences between wind speed across groups appear to be statistically significant, with the "nude" condition always as an outlier.
 
 ```{r lm_drywet30std}
-heatloss.lm.beta <- lm.beta::lm.beta(heatloss.lm)
+heatloss.lm.beta <- lm(
+  formula = 
+    scale(heat_loss30) ~ wet_dry + scale(as.numeric(wind)) + wig + wet_dry*scale(as.numeric(wind)) + wet_dry*wig, 
+  data = heat_merge_df)
 ```
 
 
@@ -441,7 +447,13 @@ ggstatsplot::ggcoefstats(
 
 
 ```{r lm_dry30sepstd}
-heatloss.lm.dry.beta <- lm.beta::lm.beta(heatloss.lm.dry)
+df <- heat_merge_df %>% 
+  filter(wet_dry == "dry")
+
+heatloss.lm.dry.beta <- lm(
+  formula = 
+    scale(heat_loss30) ~ scale(as.numeric(wind)) + wig, 
+  data = df)
 ```
 
 
@@ -454,7 +466,13 @@ summary(heatloss.lm.dry.beta)%>%
 
 
 ```{r lm_wet30sepstd}
-heatloss.lm.wet.beta <- lm.beta::lm.beta(heatloss.lm.wet)
+df <- heat_merge_df %>% 
+  filter(wet_dry == "wet")
+
+heatloss.lm.wet.beta <- lm(
+  formula = 
+    scale(heat_loss30) ~ scale(as.numeric(wind)) + wig, 
+  data = df)
 ```
 
 
@@ -494,6 +512,8 @@ ggstatsplot::ggcoefstats(
 ## Effect of evaporative heat loss
 
 Looking at the difference between dry and wet heat loss, we see that the difference is stark between hair and no hair. Suggesting that unlimited evaporation renders hairlessness much more beneficial. We also see a steady increase in the difference between wet and dry heat losses with increases in wind speed due to the increasing contribution of convection to the evaporation.
+
+### Unstandardized
 
 ```{r plt_diff_wetdry}
 
@@ -538,8 +558,13 @@ ggstatsplot::ggcoefstats(
 
 ```
 
+
+### Standardized
 ```{r lm_diffwetdry_std}
-diff.wetdry.lm.beta <- lm.beta::lm.beta(diff.wetdry.lm)
+diff.wetdry.lm.beta <- lm(
+  formula = 
+    scale(diff_dry_wet )~ scale(as.numeric(wind)) + wig,
+  data = wet_influx_df2)
 ```
 
 
@@ -630,6 +655,25 @@ ggstatsplot::ggcoefstats(
 
 ```{r lm_maxsep}
 df <- sweat_merge_df %>% 
+  filter(sweat_type == "max")
+
+sweat.lm.max <- lm(
+  formula = 
+    sweat ~ as.numeric(wind) + wig, 
+  data = df)
+```
+
+
+```{r tbl_lm_maxep}
+summary(sweat.lm.max) %>% 
+  broom::tidy() %>% 
+  kbl() %>% 
+  kable_minimal()
+```
+
+
+```{r lm_zerogainsep}
+df <- sweat_merge_df %>% 
   filter(sweat_type == "zero_gain") %>% 
   droplevels()
 
@@ -640,27 +684,8 @@ sweat.lm.zero_gain <- lm(
 ```
 
 
-```{r tbl_lm_maxsep}
+```{r tbl_lm_zerogainsep}
 summary(sweat.lm.zero_gain) %>% 
-  broom::tidy() %>% 
-  kbl() %>% 
-  kable_minimal()
-```
-
-
-```{r lm_zero_gainsep}
-df <- sweat_merge_df %>% 
-  filter(sweat_type == "max")
-
-sweat.lm.max <- lm(
-  formula = 
-    sweat ~ as.numeric(wind) + wig, 
-  data = df)
-```
-
-
-```{r tbl_lm_zero_gainsep}
-summary(sweat.lm.max) %>% 
   broom::tidy() %>% 
   kbl() %>% 
   kable_minimal()
@@ -670,25 +695,25 @@ summary(sweat.lm.max) %>%
 ```{r plt_lm_sweatsep}
 ggstatsplot::combine_plots(
   ggstatsplot::ggcoefstats(
-  x = sweat.lm.zero_gain,
-  title = "zero_gain",
-  sort = "ascending", # sorting the terms of the model based on estimate values
-  ggtheme = ggplot2::theme_bw(),
-  package = "ggsci",
-  palette = "default_aaas",
-  messages = F,
-  only.significant = T
-),
-ggstatsplot::ggcoefstats(
-  x = sweat.lm.max,
-  title = "max",
-  sort = "ascending", # sorting the terms of the model based on estimate values
-  ggtheme = ggplot2::theme_bw(),
-  package = "ggsci",
-  palette = "default_aaas",
-  messages = F,
-  only.significant = T
-)
+    x = sweat.lm.max,
+    title = "max",
+    sort = "ascending", # sorting the terms of the model based on estimate values
+    ggtheme = ggplot2::theme_bw(),
+    package = "ggsci",
+    palette = "default_aaas",
+    messages = F,
+    only.significant = T
+  ),
+  ggstatsplot::ggcoefstats(
+    x = sweat.lm.zero_gain,
+    title = "zero_gain",
+    sort = "ascending", # sorting the terms of the model based on estimate values
+    ggtheme = ggplot2::theme_bw(),
+    package = "ggsci",
+    palette = "default_aaas",
+    messages = F,
+    only.significant = T
+  )
 )
 
 
@@ -699,7 +724,10 @@ ggstatsplot::ggcoefstats(
 The differences between wind speed across groups appear to be statistically significant, with the "nude" condition always as an outlier.
 
 ```{r lm_sweatstd}
-sweat.lm.beta <- lm.beta::lm.beta(sweat.lm)
+sweat.lm.beta <- lm(
+  formula = 
+    scale(sweat) ~ sweat_type + scale(as.numeric(wind)) + wig + sweat_type*scale(as.numeric(wind)) + sweat_type*wig, 
+  data = sweat_merge_df)
 ```
 
 
@@ -726,25 +754,39 @@ ggstatsplot::ggcoefstats(
 
 
 ```{r lm_maxsepstd}
-sweat.lm.zero_gain.beta <- lm.beta::lm.beta(sweat.lm.zero_gain)
+
+df <- sweat_merge_df %>% 
+  filter(sweat_type == "max")
+
+sweat.lm.max.beta <- lm(
+  formula = 
+    scale(sweat) ~ scale(as.numeric(wind)) + wig, 
+  data = df)
+
 ```
 
 
 ```{r tbl_lm_maxsepstd}
-summary(sweat.lm.zero_gain.beta)%>% 
+summary(sweat.lm.max.beta)%>% 
   broom::tidy() %>% 
   kbl() %>% 
   kable_minimal()
 ```
 
+```{r lm_zerogain_sepstd}
+df <- sweat_merge_df %>% 
+  filter(sweat_type == "zero_gain") %>% 
+  droplevels()
 
-```{r lm_zero_gainsepstd}
-sweat.lm.max.beta <- lm.beta::lm.beta(sweat.lm.max)
+sweat.lm.zero_gain.beta <- lm(
+  formula = 
+    scale(sweat) ~ scale(as.numeric(wind)) + wig, 
+  data = df)
 ```
 
 
-```{r tbl_lm_zero_gainsepstd}
-summary(sweat.lm.max.beta)%>% 
+```{r tbl_lm_zerogain_sepstd}
+summary(sweat.lm.zero_gain.beta)%>% 
   broom::tidy() %>% 
   kbl() %>% 
   kable_minimal()
@@ -754,6 +796,15 @@ summary(sweat.lm.max.beta)%>%
 ```{r plt_lm_sweatsepstd}
 ggstatsplot::combine_plots(
   ggstatsplot::ggcoefstats(
+    x = sweat.lm.max.beta,
+    title = "max",
+    sort = "ascending",
+    ggtheme = ggplot2::theme_bw(),
+    package = "ggsci",
+    palette = "default_aaas",
+    messages = F
+  ),
+  ggstatsplot::ggcoefstats(
   x = sweat.lm.zero_gain.beta,
   title = "zero_gain",
   sort = "ascending", 
@@ -761,16 +812,7 @@ ggstatsplot::combine_plots(
   package = "ggsci",
   palette = "default_aaas",
   messages = F
-),
-ggstatsplot::ggcoefstats(
-  x = sweat.lm.max.beta,
-  title = "max",
-  sort = "ascending",
-  ggtheme = ggplot2::theme_bw(),
-  package = "ggsci",
-  palette = "default_aaas",
-  messages = F
-)
+  )
 )
 
 ```
