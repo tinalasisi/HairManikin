@@ -3,6 +3,11 @@
 .RData
 .Ruserdata
 
+analysis/figure/
+
+*.pptx
+*.pdf
+*.docx
 data/*
 
 *.xls
