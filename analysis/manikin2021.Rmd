@@ -4,9 +4,10 @@ author: "Tina Lasisi"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output:
   workflowr::wflow_html:
-    toc: yes
+    toc: true
     toc_float: true
-    number_sections: yes
+    number_sections: true
+    fig_caption: true
 editor_options:
   chunk_output_type: console
 ---
@@ -162,7 +163,6 @@ print(plot)
 
 ```
 
-
 # Solar influx 
 
 We can also look specifically at the effect of the radiation by subtracting the measurements with radiation off from those with radiation on. 
@@ -215,25 +215,30 @@ print(plot)
 ```
 
 ## Heat loss unstandardized lm
+
+We created a linear model for heat loss using wet/dry, radiation, wind speed and head covering (wig type) as independent variables. Additionally, we include possible interactions between wet/dry, radiation and wig type.
+
+Below, our results show that the most significant variables are wig and radiation, with marginal significance in radiation and the interaction between radiation and wig type (also, see Figure \@ref(fig:plt_lm_rawheatloss)). 
+
 ```{r lm_rawheatloss}
 raw.heatloss.lm <- lm(
   formula = 
     w_m2_mean ~ wet_dry + radiation + as.numeric(wind) + wig + wet_dry*as.numeric(wind) + wet_dry*wig + wet_dry*radiation + radiation*wig,
   data = sum_manikin_df)
+
+summary(raw.heatloss.lm)
+```
+
+Viewed as an ANOVA, we confirm that the main significant variables in our model are radiation, wind speed and wig type, while there is a marginal significance (<0.05) for the interaction for radiation * wig type and wet/dry* wig type.
+
+```{r aov_rawheatloss}
+
+summary(aov(raw.heatloss.lm))
+
 ```
 
 
-```{r tbl_lm_rawheatloss}
-lmdf <- summary(raw.heatloss.lm) %>% 
-  broom::tidy()
-
-lmdf %>% 
-  kbl %>% 
-  kable_minimal()
-```
-
-
-```{r plt_lm_rawheatloss}
+```{r plt_lm_rawheatloss, fig.cap="Dot-and-whisker plot for regression analysis of heatloss with only significant results shown."}
 ggstatsplot::ggcoefstats(
   x = raw.heatloss.lm,
   sort = "ascending",
@@ -246,21 +251,23 @@ ggstatsplot::ggcoefstats(
 ```
 
 ## Heat loss standardized lm
+
+Below we present the results of a standardized version of the model above, which shows the same pattern of significance.
+
 ```{r lm_rawheatloss_std}
 raw.heatloss.lm.beta <-  lm(
   formula = 
     scale(w_m2_mean) ~ wet_dry + radiation + scale(as.numeric(wind)) + wig + wet_dry*scale(as.numeric(wind)) + wet_dry*wig + wet_dry*radiation + radiation*wig,
   data = sum_manikin_df)
+
+summary(raw.heatloss.lm.beta)
 ```
 
 
-```{r tbl_lm_rawheatloss_std}
-lmdf <- summary(raw.heatloss.lm.beta) %>% 
-  broom::tidy()
+Viewed as an ANOVA, we confirm the same set of significant
+```{r aov_rawheatloss_std}
+summary(aov(raw.heatloss.lm.beta))
 
-lmdf %>% 
-  kbl %>% 
-  kable_minimal()
 ```
 
 
@@ -271,7 +278,8 @@ ggstatsplot::ggcoefstats(
   ggtheme = ggplot2::theme_bw(),
   package = "Polychrome",
   palette = "dark",
-  only.significant = T
+  only.significant = T,
+  caption = "Dot-and-whisker plot for standardized regression analysis of heatloss with only significant results shown."
 )
 
 ```
