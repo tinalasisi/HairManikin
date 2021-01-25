@@ -5,6 +5,8 @@
 
 analysis/figure/
 
+output/
+
 *.pptx
 *.pdf
 *.docx
