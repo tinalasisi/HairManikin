@@ -3,10 +3,13 @@ title: "Thermocouple Summarized Data"
 author: "Tina Lasisi"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output:
-  workflowr::wflow_html:
-    toc: yes
+  bookdown::pdf_document2: default
+  bookdown::html_document2:
+    base_format: workflowr::wflow_html
+    toc: true
     toc_float: true
-    number_sections: yes
+    number_sections: false
+    fig_caption: true
 editor_options:
   chunk_output_type: console
 ---
@@ -25,8 +28,10 @@ library(fuzzyjoin)
 library(timetk)
 library(tidyquant)
 
-
 F = rprojroot::is_rstudio_project$make_fix_file()
+
+# knitting to pdf
+# rmarkdown::render(input= "analysis/thermo_sum.Rmd", output_format = "pdf_document", output_dir = "output")
 
 knitr::opts_chunk$set(echo = FALSE, include = TRUE, eval = TRUE, warning = FALSE, message = FALSE, fig.retina = 2, fig.width = 8, fig.height = 8, out.width = "100%")
 
@@ -67,17 +72,6 @@ head(thermo_df)
 
 
 ```
-
-```{r tbl_log, include=TRUE, results='asis'}
-
-kable(head(thermo_df)) %>% 
-  kable_styling(
-    bootstrap_options = c("striped", "hover", "condensed", "responsive"),
-    fixed_thead = T) %>% 
-  scroll_box(width = "600px", height = "500px")
-
-```
-
 
 ## Clean 
 Here we filter out the trials that used "regular" room conditions with the 0.3m/s setting.

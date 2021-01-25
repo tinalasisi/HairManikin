@@ -3,11 +3,12 @@ title: "Manikin data"
 author: "Tina Lasisi"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output:
+  bookdown::pdf_document2: default
   bookdown::html_document2:
     base_format: workflowr::wflow_html
     toc: true
     toc_float: true
-    number_sections: true
+    number_sections: false
     fig_caption: true
 editor_options:
   chunk_output_type: console
@@ -24,6 +25,8 @@ library(fuzzyjoin)
 library(tidyquant)
 library(ggstatsplot)
 
+# knitting to pdf
+# rmarkdown::render(input = "analysis/manikin2021.Rmd", output_format = "pdf_document", output_dir = "output")
 
 F = rprojroot::is_rstudio_project$make_fix_file()
 
@@ -36,7 +39,26 @@ knitr::opts_chunk$set(echo = FALSE, include = TRUE, eval = TRUE, warning = FALSE
 ```
 
 
-```{r df_import, include=FALSE}
+```{r functions, include=FALSE}
+
+# This chunk contains any functions we may want to use later on in the document.
+
+plot_path = F("output/")
+
+pltsave_func <- function(plot, plot_path, width, height){
+  ggsave(
+      filename = paste0(deparse(substitute(plot)), ".png"),
+      plot = plot, 
+      path = plot_path,
+      width = width,
+      height = height)
+  plot(plot)
+}
+
+```
+
+
+```{r df-import, include=FALSE}
 
 # Importing data
 
@@ -46,7 +68,7 @@ Havenith_2020_tidy <- read_csv(F("data/tidy/Havenith_2020_tidy.csv"),
         "LowCurv", "MidCurv", "HighCurv")), 
       radiation = col_factor(levels = c("off", 
             "on")),
-      wind = col_factor(levels = c("0.3", "1", "2.5")), 
+      # wind = col_factor(levels = c("0.3", "1", "2.5")), 
       tsk = col_factor(levels = c("34.0", "38.0")),
       wet_dry = col_factor(levels = c("dry", 
             "wet"))))
@@ -56,7 +78,7 @@ head(Havenith_2020_tidy)
 ```
 
 
-```{r df_summary, include=FALSE}
+```{r df-summary, include=FALSE}
 
 # means and sd
 
@@ -76,7 +98,7 @@ head(sum_manikin_df)
 ```
 
 
-```{r df_solinflux, include=FALSE}
+```{r df-solinflux, include=FALSE}
 
 # solar influx
 
@@ -92,7 +114,7 @@ corr4c_dry_influx_df <- sum_manikin_df %>%
     w_m2_4C = 
       case_when(radiation == "off" ~ 28/m2k_W_mean,
                 TRUE ~ NaN),
-    w_m2_30C = 
+    w_m230C = 
       case_when(radiation == "off" ~ 5/m2k_W_mean,
                 TRUE ~ NaN)) %>% 
   drop_na() %>% 
@@ -101,12 +123,12 @@ corr4c_dry_influx_df <- sum_manikin_df %>%
 
 dry_influx_df2 <- inner_join(dry_influx_df, corr4c_dry_influx_df) %>% 
   mutate(solar_w_m2_4C = w_m2_4C-net_w_m2,
-         solar_w_m2_30C = w_m2_30C-net_w_m2,
+         solar_w_m230C = w_m230C-net_w_m2,
          sweat_zero_gain = case_when(
-           solar_w_m2_30C < 0 ~ abs(solar_w_m2_30C/2430*3600),
+           solar_w_m230C < 0 ~ abs(solar_w_m230C/2430*3600),
            TRUE ~ 0
          )) %>% 
-  select(wig, wind, wet_dry, tsk, w_m2_4C, w_m2_30C, solar_w_m2_4C, solar_w_m2_30C, sweat_zero_gain)
+  select(wig, wind, wet_dry, tsk, w_m2_4C, w_m230C, solar_w_m2_4C, solar_w_m230C, sweat_zero_gain)
 
 
 
@@ -122,10 +144,10 @@ dry_merge <- dry_influx_df2 %>%
   select(-wet_dry, -tsk)
 
 wet_influx_df2 <- full_join(dry_merge, wet_influx_df) %>% 
-  mutate(dry_wet_30C = w_m2_30C + on,
-         diff_dry_wet = dry_wet_30C-solar_w_m2_30C,
+  mutate(dry_wet30C = w_m230C + on,
+         diff_dry_wet = dry_wet30C-solar_w_m230C,
          sweat_max = diff_dry_wet/2430*3600) %>% 
-  select(wig, wind, wet_dry, w_m2_4C, w_m2_30C, dry_wet_30C, diff_dry_wet, sweat_max)
+  select(wig, wind, wet_dry, w_m2_4C, w_m230C, dry_wet30C, diff_dry_wet, sweat_max)
 
 ```
 
@@ -138,22 +160,21 @@ The second set of temperature options was found to be necessary with the straigh
 
 In the preparation of the data, we applied a correction to bring all the measurements to the same temperature, i.e. $T_{ambient}= 4^\circ C$. 
 
-The wet measurements are based on heat exchange rather than dry heat loss. These measurements were taken with the temperature settings $T_{manikin}= 34^\circ C$ and $T_{ambient}= 34^\circ C$ or $T_{manikin}=T_{ambient}$. The measurements have been converted to heat loss for comparative purposes.
+The wet measurements are based on heat exchange rather than dry heat loss. These measurements were taken with the temperature settings $T_{manikin}= 34^\circ C$ and $T_{ambient}= 34^\circ C$ or $T_{manikin}=T_{ambient}$. The measurements have been converted to heat loss for comparative purposes (see Figure \@ref(fig:plt-drywet-scatter)).
 
-```{r plt_drywet_scatter}
+```{r plt-drywet-scatter, fig.cap="Comparison of dry heat loss and wet heat exchange for various head coverings at three wind speeds with radiation on and off."}
 
 merge1 <- bind_rows(wet_influx_df, dry_influx_df)
 
 plot <- ggplot(merge1, aes(off, on)) +
-  geom_point(aes(shape = wind, fill=wig), size = 5) +
+  geom_point(aes(shape = as_factor(wind), fill=wig), size = 5) +
   scale_shape_manual(values = c(21,22,23, 24))+
   theme_bw() +
   geom_abline(slope = 1, intercept = 0)+
   xlim(0, 500) +
   ylim(0, 500) +
-  ggtitle("Dry heat loss and wet heat exchange data")+
   theme(plot.title = element_text(hjust = 0.5), plot.caption = element_text(hjust = 0.5))+
-  labs(caption = "Comparison of dry heat loss and wet heat exchange for various head coverings\n at 3 wind speeds with radiation on/off", x = bquote('Radiation off'~(W/m^2)), y = bquote('Radiation on'~(W/m^2)))+
+  labs(x = bquote('Radiation off'~(W/m^2)), y = bquote('Radiation on'~(W/m^2)))+
   guides(fill=guide_legend(override.aes = list(shape=21))) +
   coord_fixed() +
   facet_wrap(vars(wet_dry)) +
@@ -164,82 +185,22 @@ print(plot)
 
 ```
 
-# Solar influx 
-
-We can also look specifically at the effect of the radiation by subtracting the measurements with radiation off from those with radiation on. 
-
-From the plots below, it is apparent that the experiments with a "Nude" manikin scalp show a considerably different pattern than any of the wigs. 
-
-Interestingly, in the dry experiments, the effect of solar radiation appears to cluster more by wig, while the wet experiments show a solar influx that is more patterned by wind speed.
-
-## As function of heat loss (radiation off)
-
-```{r plt_drywet_scatter2}
-
-
-plot <- ggplot(merge1, aes(off, net_w_m2)) +
-  geom_point(aes(shape = wind, fill=wig), size = 5) +
-  scale_shape_manual(values = c(21,22,23, 24))+
-  theme_bw() +
-  geom_hline(yintercept =  0) +
-  ggtitle("Solar influx")+
-  theme(plot.title = element_text(hjust = 0.5), plot.caption = element_text(hjust = 0.5))+
-  labs(caption = "This plot shows the solar influx as a function of heat loss in the radiation off state. \nThe horizontal line is at zero showing that all values are positive.", x = bquote('Radiation off'~(W/m^2)), y = bquote('Solar influx'~(W/m^2)))+
-  guides(fill=guide_legend(override.aes = list(shape=21))) +
-  theme(legend.position = "bottom", legend.box = "vertical", legend.margin = margin()) +
-  facet_wrap(vars(wet_dry)) 
-
-print(plot)
-
-
-```
-
-## As function of wind speed
-
-Below, we plot the same net heat loss as a function of wind speed. Similarly, we see that, in the dry experiments, there is a very clear effect of wig type and no hair, while the wet experiments show a much more pronounced effect of windspeed.
-
-```{r plt_influx}
-
-
-plot <- ggplot(merge1, aes(wind, net_w_m2)) +
-  geom_point(aes(color=wig, fill=wig), size = 3) +
-  ylim(0, 200) +
-  geom_path(aes(group=wig, color=wig))+
-  theme_bw() +
-  theme(plot.title = element_text(hjust = 0.5)) +
-  labs(title = "Solar influx as function of wind", x = bquote('Wind speed'~(m/s)), y=bquote('Solar influx'~(W/m^2))) +
-facet_wrap(vars(wet_dry)) +
-theme(legend.position = "bottom", legend.box = "vertical", legend.margin = margin())
-
-print(plot)
-
-```
-
-## Heat loss unstandardized lm
+## Unstandardized lm
 
 We created a linear model for heat loss using wet/dry, radiation, wind speed and head covering (wig type) as independent variables. Additionally, we include possible interactions between wet/dry, radiation and wig type.
 
-Below, our results show that the most significant variables are wig and radiation, with marginal significance in radiation and the interaction between radiation and wig type (also, see Figure \@ref(fig:plt_lm_rawheatloss)). 
+Below, our results show that the most significant variables are wig and radiation, with marginal significance in radiation and the interaction between radiation and wig type (see also Figure \@ref(fig:plt-lm-rawheatloss)). 
 
-```{r lm_rawheatloss}
+```{r lm-rawheatloss}
 raw.heatloss.lm <- lm(
   formula = 
-    w_m2_mean ~ wet_dry + radiation + as.numeric(wind) + wig + wet_dry*as.numeric(wind) + wet_dry*wig + wet_dry*radiation + radiation*wig,
+    w_m2_mean ~ wet_dry + radiation + wind + wig + wet_dry*wind + wet_dry*wig + wet_dry*radiation + radiation*wig,
   data = sum_manikin_df)
 
 summary(raw.heatloss.lm)
 ```
 
-Viewed as an ANOVA, we confirm that the main significant variables in our model are radiation, wind speed and wig type, while there is a marginal significance (<0.05) for the interaction for radiation * wig type and wet/dry* wig type.
-
-```{r aov_rawheatloss}
-
-summary(aov(raw.heatloss.lm))
-
-```
-
-
-```{r plt_lm_rawheatloss, fig.cap="Dot-and-whisker plot for regression analysis of heatloss with only significant results shown."}
+```{r plt-lm-rawheatloss, fig.cap="Dot-and-whisker plot for regression analysis of heatloss with only significant results shown."}
 ggstatsplot::ggcoefstats(
   x = raw.heatloss.lm,
   sort = "ascending",
@@ -251,40 +212,165 @@ ggstatsplot::ggcoefstats(
 
 ```
 
-## Heat loss standardized lm
+Viewed as an ANOVA, we confirm that the main significant variables in our model are radiation, wind speed and wig type, while there is a marginal significance (<0.05) for the interaction for radiation * wig type and wet/dry* wig type.
 
-Below we present the results of a standardized version of the model above, which shows the same pattern of significance.
+```{r aov-rawheatloss}
 
-```{r lm_rawheatloss_std}
+summary(aov(raw.heatloss.lm))
+
+```
+
+## Standardized lm
+
+Below we present the results of a standardized version of the model above, which shows the same pattern of significance (see Figure \@ref(fig:plt-lm-rawheatloss-std)). The most significant contributions come from radiation, wig type and wind, followed by the interaction between radiation and wig type and wet vs. dry.
+
+```{r lm-rawheatloss-std}
 raw.heatloss.lm.beta <-  lm(
   formula = 
-    scale(w_m2_mean) ~ wet_dry + radiation + scale(as.numeric(wind)) + wig + wet_dry*scale(as.numeric(wind)) + wet_dry*wig + wet_dry*radiation + radiation*wig,
+    scale(w_m2_mean) ~ wet_dry + radiation + scale(wind) + wig + wet_dry*scale(wind) + wet_dry*wig + wet_dry*radiation + radiation*wig,
   data = sum_manikin_df)
 
 summary(raw.heatloss.lm.beta)
 ```
 
 
-Viewed as an ANOVA, we confirm the same set of significant
-```{r aov_rawheatloss_std}
-summary(aov(raw.heatloss.lm.beta))
-
-```
-
-
-```{r plt_lm_rawheatloss_std}
+```{r plt-lm-rawheatloss-std, fig.cap="Dot-and-whisker plot for standardized regression analysis of heatloss with only significant results shown."}
 ggstatsplot::ggcoefstats(
   x = raw.heatloss.lm.beta,
   sort = "ascending",
   ggtheme = ggplot2::theme_bw(),
   package = "Polychrome",
   palette = "dark",
-  only.significant = T,
-  caption = "Dot-and-whisker plot for standardized regression analysis of heatloss with only significant results shown."
+  only.significant = T
 )
 
 ```
 
+Viewed as an ANOVA, we confirm the same set of significant variables.
+```{r aov-rawheatloss-std}
+summary(aov(raw.heatloss.lm.beta))
+
+```
+
+# Solar influx 
+
+We can also look specifically at the effect of the radiation by subtracting the measurements with radiation off from those with radiation on. 
+
+From the plots below, it is apparent that the experiments with a "Nude" manikin scalp show a considerably different pattern than any of the wigs. 
+
+Interestingly, in the dry experiments, the effect of solar radiation appears to cluster more by wig, while the wet experiments show a solar influx that is more patterned by wind speed (see Figure \@ref(fig:plt-drywet-scatter2)).
+
+
+```{r plt-drywet-scatter2, fig.cap="This plot shows the solar influx as a function of heat loss in the radiation off state. \nThe horizontal line is at zero showing that all values are positive."}
+
+
+plt_drywet_scatter2 <- ggplot(merge1, aes(off, net_w_m2)) +
+  geom_point(aes(shape = as_factor(wind), fill=wig), size = 5) +
+  scale_shape_manual(values = c(21,22,23, 24))+
+  theme_bw() +
+  geom_hline(yintercept =  0) +
+  labs(x = bquote('Radiation off'~(W/m^2)), y = bquote('Solar influx'~(W/m^2)))+
+  guides(fill=guide_legend(override.aes = list(shape=21))) +
+  theme(legend.position = "bottom", legend.box = "vertical", legend.margin = margin()) +
+  facet_wrap(vars(wet_dry)) 
+
+pltsave_func(plt_drywet_scatter2, plot_path, width = 12, height = 6)
+
+
+```
+
+Below, we plot the same net heat loss as a function of wind speed. Similarly, we see that, in the dry experiments, there is a very clear effect of wig type and no hair, while the wet experiments show a much more pronounced effect of windspeed (see Figure \@ref(fig:plt-influx)).
+
+```{r plt-influx, fig.cap="Solar influx as a function of wind speed"}
+
+
+plt_influx <- ggplot(merge1, aes(wind, net_w_m2)) +
+  geom_point(aes(color=wig, fill=wig), size = 3) +
+  ylim(0, 200) +
+  geom_path(aes(group=wig, color=wig))+
+  theme_bw() +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  labs(x = bquote('Wind speed'~(m/s)), y=bquote('Solar influx'~(W/m^2))) +
+facet_wrap(vars(wet_dry)) +
+theme(legend.position = "bottom", legend.box = "vertical", legend.margin = margin())
+
+pltsave_func(plt_influx, plot_path, width = 12, height = 6)
+
+```
+
+
+## Unstandardized
+We test the effect of the predictor variables with a linear model (see Figure \@ref(fig:plt-lm-influx)) and find that wig type and wet vs. dry have a significant effect on solar influx, but that wind speed does not.
+
+```{r lm-influx}
+
+influx.lm <- lm(formula = net_w_m2 ~ wind + wig + wet_dry, 
+                data = merge1)
+
+summary(influx.lm)
+
+```
+
+```{r plt-lm-influx, fig.cap="Dot-and-whisker plot of linear regression on solar influx."}
+
+plt_lm_influx <- ggstatsplot::ggcoefstats(
+  x = influx.lm,
+  sort = "ascending", # sorting the terms of the model based on estimate values
+  ggtheme = ggplot2::theme_bw(),
+  package = "ggsci",
+  palette = "default_aaas",
+  messages = F,
+  only.significant = T
+)
+
+pltsave_func(plt_lm_influx, plot_path, width = 6, height = 10)
+
+```
+
+This is seen more clearly in the ANOVA.
+
+```{r aov-influx}
+
+summary(aov(influx.lm))
+
+```
+
+
+## Standardized
+We repeat the test with a standardized linear model (see Figure \@ref(fig:plt-lm-influxstd)) and observe the same result.
+
+```{r lm-influxstd}
+
+influx.lm.beta <- lm(formula = scale(net_w_m2) ~ scale(wind) + wig + wet_dry, 
+                data = merge1)
+
+summary(influx.lm.beta)
+
+```
+
+```{r plt-lm-influxstd, fig.cap="Dot-and-whisker plot of standardized linear regression on solar influx. Only significant shown."}
+
+plt_lm_influx_beta <- ggstatsplot::ggcoefstats(
+  x = influx.lm.beta,
+  sort = "ascending", # sorting the terms of the model based on estimate values
+  ggtheme = ggplot2::theme_bw(),
+  package = "ggsci",
+  palette = "default_aaas",
+  messages = F,
+  only.significant = T
+)
+
+pltsave_func(plt_lm_influx_beta, plot_path, width = 6, height = 10)
+
+```
+
+
+Viewed as an ANOVA table we see the same pattern. 
+```{r aov-influxstd}
+
+summary(aov(influx.lm.beta))
+
+```
 
 # Heat loss at 30 C
 
@@ -292,14 +378,14 @@ Here are plots for the total heat losses (convective + radiative) recalculated f
 
 What becomes apparent now is that there is a substantial heat gain in the dry condition. 
 
-However, the wet condition assumes an "unlimited" amount of sweat (i.e. the most that can be evaporated) - but this is not physiologically realistic. 
+However, the wet condition assumes an "unlimited" amount of sweat (i.e. the most that can be evaporated) - but this is not physiologically realistic (see Figure \@ref(fig:plt-heat30C)). 
 
-```{r df_heat_30C}
+```{r df-heat30C}
 combo1 <- dry_influx_df2 %>% 
-  select(wig, wind, wet_dry, heat_loss30=solar_w_m2_30C)
+  select(wig, wind, wet_dry, heat_loss30=solar_w_m230C)
 
 combo2 <- wet_influx_df2 %>% 
-  select(wig, wind, wet_dry, heat_loss30=dry_wet_30C)
+  select(wig, wind, wet_dry, heat_loss30=dry_wet30C)
 
 heat_merge_df <- bind_rows(combo1, combo2)
   
@@ -307,13 +393,13 @@ df <- heat_merge_df
 ```
 
 
-```{r plt_heat_30C, fig.width=12}
+```{r plt-heat30C, fig.width=12, fig.cap ="Total heat losses with solar exposure \nrecalculated for ambient temperature of 30C"}
+
 plot <- ggplot(df, aes(wind, heat_loss30)) +
   geom_point(aes(color=wig, fill=wig), size = 3) +
   geom_path(aes(group=wig, color=wig))+
   theme_bw() +
-  labs(title = "Total heat losses with solar exposure \nrecalculated for ambient temperature of 30C", x = bquote('Wind speed'~(m/s)), y = bquote('Heat loss'~(W/m^2)))+
-  theme(plot.title = element_text(hjust = 0.5)) +
+  labs(x = bquote('Wind speed'~(m/s)), y = bquote('Heat loss'~(W/m^2)))+
   facet_wrap(vars(wet_dry)) +
   ylim(-200, 400)
 
@@ -323,26 +409,21 @@ print(plot)
 ```
 
 
-We created a linear model to test the significance of various factors on heat loss
-
 ## Unstandardized lm
-```{r lm_drywet30}
+We created a linear model to test the significance of various factors on heat loss (see Figure \@ref(fig:plt-lm-drywet30)).
+```{r lm-drywet30}
 heatloss.lm <- lm(
   formula = 
-    heat_loss30 ~ wet_dry + as.numeric(wind) + wig + wet_dry*as.numeric(wind) + wet_dry*wig, 
+    heat_loss30 ~ wet_dry + wind + wig + wet_dry*wind + wet_dry*wig, 
   data = heat_merge_df)
+
+summary(heatloss.lm) 
+
 ```
 
 
-```{r tbl_lm_drywet30}
-summary(heatloss.lm) %>% 
-  broom::tidy() %>% 
-  kbl() %>% 
-  kable_minimal()
-```
+```{r plt-lm-drywet30, fig.cap="Dot-and-whisker plot for unstandardized linear model of heat loss at 30C"}
 
-
-```{r plt_lm_drywet30}
 ggstatsplot::ggcoefstats(
   x = heatloss.lm,
   sort = "ascending", # sorting the terms of the model based on estimate values
@@ -355,93 +436,109 @@ ggstatsplot::ggcoefstats(
 
 ```
 
+Viewed as an ANOVA table, the results show that the most wig type, wind speed, and wet vs. dry, as well as interactions for wet vs. dry * wind speed and wet vs. dry * wig type, are all significantly impacting heat loss, with wigs having the least significant impact.
 
-```{r lm_dry30sep}
+```{r aov-drywet30}
+
+summary(aov(heatloss.lm))
+
+```
+
+### Separate wet and dry lm
+
+We repeated the linear model for wet and dry conditions separately (see Figure \@ref(fig:plt-lm-drywet30sep)).
+
+We found that the dry condition showed a more pronounced effect of wig type, but that all variables contributed positively to heat loss.
+
+```{r lm-dry30sep}
 df <- heat_merge_df %>% 
   filter(wet_dry == "dry")
 
 heatloss.lm.dry <- lm(
   formula = 
-    heat_loss30 ~ as.numeric(wind) + wig, 
+    heat_loss30 ~ wind + wig, 
   data = df)
+
+summary(heatloss.lm.dry) 
 ```
 
+While the wet condition was most affected by wind speed and saw a negative correlation between heat loss and increasingly curled hair.
 
-```{r tbl_lm_dry30sep}
-summary(heatloss.lm.dry) %>% 
-  broom::tidy() %>% 
-  kbl() %>% 
-  kable_minimal()
-```
-
-
-```{r lm_wet30sep}
+```{r lm-wet30sep}
 df <- heat_merge_df %>% 
   filter(wet_dry == "wet")
 
 heatloss.lm.wet <- lm(
   formula = 
-    heat_loss30 ~ as.numeric(wind) + wig, 
+    heat_loss30 ~ wind + wig, 
   data = df)
+
+summary(heatloss.lm.wet) 
 ```
 
 
-```{r tbl_lm_wet30sep}
-summary(heatloss.lm.wet) %>% 
-  broom::tidy() %>% 
-  kbl() %>% 
-  kable_minimal()
-```
+```{r plt-lm-drywet30sep, fig.cap="Dot-and-whisker plot of linear models for heat loss at 30C for (a) dry and (b) wet conditions"}
 
-
-```{r plt_lm_drywet30sep}
-ggstatsplot::combine_plots(
+plt_lm_drywet30sep <-  ggstatsplot::combine_plots(
+    ggstatsplot::ggcoefstats(
+    x = heatloss.lm.dry,
+    
+    sort = "ascending", # sorting the terms of the model based on estimate values
+    ggtheme = ggplot2::theme_bw(),
+    package = "ggsci",
+    palette = "default_aaas",
+    messages = F,
+    only.significant = T
+  ),
   ggstatsplot::ggcoefstats(
-  x = heatloss.lm.dry,
-  title = "Dry",
-  sort = "ascending", # sorting the terms of the model based on estimate values
-  ggtheme = ggplot2::theme_bw(),
-  package = "ggsci",
-  palette = "default_aaas",
-  messages = F,
-  only.significant = T
-),
-ggstatsplot::ggcoefstats(
-  x = heatloss.lm.wet,
-  title = "Wet",
-  sort = "ascending", # sorting the terms of the model based on estimate values
-  ggtheme = ggplot2::theme_bw(),
-  package = "ggsci",
-  palette = "default_aaas",
-  messages = F,
-  only.significant = T
-)
-)
+    x = heatloss.lm.wet,
+    
+    sort = "ascending", # sorting the terms of the model based on estimate values
+    ggtheme = ggplot2::theme_bw(),
+    package = "ggsci",
+    palette = "default_aaas",
+    messages = F,
+    only.significant = T
+  )
+  )
 
+pltsave_func(plt_lm_drywet30sep, plot_path, width = 12, height = 6)
+
+
+```
+
+We present the linear models in an ANOVA table below. The ANOVA for the dry linear model is as follows:
+
+```{r aov-dry30sep}
+
+summary(aov(heatloss.lm.dry))
+
+```
+
+
+For wet, we see: 
+```{r aov-wet30sep}
+
+summary(aov(heatloss.lm.wet))
 
 ```
 
 
 ## Standardized lm
-The differences between wind speed across groups appear to be statistically significant, with the "nude" condition always as an outlier.
+The effects of all variables and interactions are highly significant with the exception of wind which has a reduced significance (see Figure \@ref(fig:plt-lm-drywet30std)).
 
-```{r lm_drywet30std}
+```{r lm-drywet30std}
 heatloss.lm.beta <- lm(
   formula = 
-    scale(heat_loss30) ~ wet_dry + scale(as.numeric(wind)) + wig + wet_dry*scale(as.numeric(wind)) + wet_dry*wig, 
+    scale(heat_loss30) ~ wet_dry + scale(wind) + wig + wet_dry*scale(wind) + wet_dry*wig, 
   data = heat_merge_df)
+
+summary(heatloss.lm.beta)
 ```
 
 
-```{r tbl_lm_drywet30std}
-summary(heatloss.lm.beta) %>% 
-  broom::tidy() %>% 
-  kbl() %>% 
-  kable_minimal()
-```
+```{r plt-lm-drywet30std, fig.cap="Dot-and-whisker plot of linear model for heat loss at 30C"}
 
-
-```{r plt_lm_drywet30std}
 ggstatsplot::ggcoefstats(
   x = heatloss.lm.beta,
   sort = "ascending", # sorting the terms of the model based on estimate values
@@ -455,107 +552,101 @@ ggstatsplot::ggcoefstats(
 ```
 
 
-```{r lm_dry30sepstd}
+### Separate wet and dry lm
+
+We repeated the standardized linear model for wet and dry conditions separately (see Figure \@ref(fig:plt-lm-drywet30sepstd)).
+
+We found that the dry condition showed a more pronounced effect of wig type, but that all variables contributed positively to heat loss.
+
+For dry heat loss we see that both wig type and wind are highly significant.
+
+```{r lm-dry30sepstd}
 df <- heat_merge_df %>% 
   filter(wet_dry == "dry")
 
 heatloss.lm.dry.beta <- lm(
   formula = 
-    scale(heat_loss30) ~ scale(as.numeric(wind)) + wig, 
+    scale(heat_loss30) ~ scale(wind) + wig, 
   data = df)
+
+summary(heatloss.lm.dry.beta)
 ```
 
+Similarly, the effect of wig type and wind is highly significant for the wet heat loss. 
 
-```{r tbl_lm_dry30sepstd}
-summary(heatloss.lm.dry.beta)%>% 
-  broom::tidy() %>% 
-  kbl() %>% 
-  kable_minimal()
-```
-
-
-```{r lm_wet30sepstd}
+```{r lm-wet30sepstd}
 df <- heat_merge_df %>% 
   filter(wet_dry == "wet")
 
 heatloss.lm.wet.beta <- lm(
   formula = 
-    scale(heat_loss30) ~ scale(as.numeric(wind)) + wig, 
+    scale(heat_loss30) ~ scale(wind) + wig, 
   data = df)
+
+summary(heatloss.lm.wet.beta)
 ```
 
 
-```{r tbl_lm_wet30sepstd}
-summary(heatloss.lm.wet.beta)%>% 
-  broom::tidy() %>% 
-  kbl() %>% 
-  kable_minimal()
-```
+```{r plt-lm-drywet30sepstd, fig.cap="Dot-and-whisker plot of linear models for heat loss at 30C for (a) dry and (b) wet conditions"}
 
-
-```{r plt_lm_drywet30sepstd}
-ggstatsplot::combine_plots(
+plt_lm_drywet30sepstd <-  ggstatsplot::combine_plots(
+    ggstatsplot::ggcoefstats(
+    x = heatloss.lm.dry.beta,
+    sort = "ascending", 
+    ggtheme = ggplot2::theme_bw(),
+    package = "ggsci",
+    palette = "default_aaas",
+    messages = F
+  ),
   ggstatsplot::ggcoefstats(
-  x = heatloss.lm.dry.beta,
-  title = "Dry",
-  sort = "ascending", 
-  ggtheme = ggplot2::theme_bw(),
-  package = "ggsci",
-  palette = "default_aaas",
-  messages = F
-),
-ggstatsplot::ggcoefstats(
-  x = heatloss.lm.wet.beta,
-  title = "Wet",
-  sort = "ascending",
-  ggtheme = ggplot2::theme_bw(),
-  package = "ggsci",
-  palette = "default_aaas",
-  messages = F
-)
-)
+    x = heatloss.lm.wet.beta,
+    sort = "ascending",
+    ggtheme = ggplot2::theme_bw(),
+    package = "ggsci",
+    palette = "default_aaas",
+    messages = F
+  ),
+  labels = c("a", "b")
+  )
+
+
+pltsave_func(plt_lm_drywet30sepstd, plot_path, width = 12, height = 6)
+
 
 ```
 
 
 ## Effect of evaporative heat loss
 
-Looking at the difference between dry and wet heat loss, we see that the difference is stark between hair and no hair. Suggesting that unlimited evaporation renders hairlessness much more beneficial. We also see a steady increase in the difference between wet and dry heat losses with increases in wind speed due to the increasing contribution of convection to the evaporation.
+Looking at the difference between dry and wet heat loss, we see that the difference is stark between hair and no hair. Suggesting that unlimited evaporation renders hairlessness much more beneficial. We also see a steady increase in the difference between wet and dry heat losses with increases in wind speed due to the increasing contribution of convection to the evaporation (see Figure \@ref(fig:plt-diff-wetdry)).
 
-### Unstandardized
 
-```{r plt_diff_wetdry}
+```{r plt-diff-wetdry, fig.cap="Difference in heat loss between wet and dry conditions across wind speeds"}
 
-plot <- ggplot(wet_influx_df2, aes(wind, diff_dry_wet)) +
+plt_diff_wetdry <- ggplot(wet_influx_df2, aes(wind, diff_dry_wet)) +
   geom_point(aes(color=wig, fill=wig), size = 3) +
   geom_path(aes(group=wig, color=wig))+
   theme_bw() +
-  theme(plot.title = element_text(hjust = 0.5))
+  labs(x = bquote('Wind speed'~(m/s)), y=bquote('Difference in heatloss wet vs. dry'~(W/m^2))) 
 
-print(plot)
-
+pltsave_func(plt_diff_wetdry, plot_path, width = 6, height = 7)
 
 ```
 
-```{r lm_diffwetdry}
+### Unstandardized
+We created a linear model for the difference in heat loss between wet and dry conditions using wind speed and wig type as independent variables (see Figure \@ref(fig:plt-lm-diffwetdry)) and found both wind speed and wigs to be highly significant in their impact on the difference in heat loss between wet and dry conditions. 
+
+```{r lm-diffwetdry}
 diff.wetdry.lm <- lm(
   formula = 
-    diff_dry_wet ~ as.numeric(wind) + wig,
+    diff_dry_wet ~ wind + wig,
   data = wet_influx_df2)
+
+summary(diff.wetdry.lm)
 ```
 
 
-```{r tbl_lm_diffwetdry}
-lmdf <- summary(diff.wetdry.lm) %>% 
-  broom::tidy()
-
-lmdf %>% 
-  kbl %>% 
-  kable_minimal()
-```
-
-
-```{r plt_lm_diffwetdry}
+```{r plt-lm-diffwetdry, fig.cap="Dot-and-whisker plot of linear model for difference in heat loss between wet and dry conditions. Only significant values shown."}
 ggstatsplot::ggcoefstats(
   x = diff.wetdry.lm,
   sort = "ascending",
@@ -569,25 +660,21 @@ ggstatsplot::ggcoefstats(
 
 
 ### Standardized
-```{r lm_diffwetdry_std}
+
+We repeated the test with a standardized linear model (see Figure \@ref(fig:plt-lm-diffwetdry-std)).
+
+```{r lm-diffwetdry-std}
 diff.wetdry.lm.beta <- lm(
   formula = 
-    scale(diff_dry_wet )~ scale(as.numeric(wind)) + wig,
+    scale(diff_dry_wet )~ scale(wind) + wig,
   data = wet_influx_df2)
+
+lmdf <- summary(diff.wetdry.lm.beta) 
 ```
 
 
-```{r tbl_lm_diffwetdry_std}
-lmdf <- summary(diff.wetdry.lm.beta) %>% 
-  broom::tidy()
+```{r plt-lm-diffwetdry-std, fig.cap="Dot-and-whisker plot of standardized linear model for difference in heat loss between wet and dry conditions. Only significant values shown."}
 
-lmdf %>% 
-  kbl %>% 
-  kable_minimal()
-```
-
-
-```{r plt_lm_diffwetdry_std}
 ggstatsplot::ggcoefstats(
   x = diff.wetdry.lm.beta,
   sort = "ascending",
@@ -603,9 +690,9 @@ ggstatsplot::ggcoefstats(
 
 Another way to approach the comparison is to calculte the sweat rate. Here, we plot the sweat rate potential (left) and the sweat rate required to cancel out heat gain at $T_{ambient} = 30^\circ C$.
 
-What emerges is that while heat loss potential is higher without hair as a barrier (i.e. the "nude" condition), the *potential* sweat far exceeds the physiologically possible sweat rate for humans. The plot for zero heat gain shoes that a nude scalp requires the most sweat and this requirement is inversely correlated with hair curvature.
+What emerges is that while heat loss potential is higher without hair as a barrier (i.e. the "nude" condition), the *potential* sweat far exceeds the physiologically possible sweat rate for humans. The plot for zero heat gain shoes that a nude scalp requires the most sweat and this requirement is inversely correlated with hair curvature (see Figure \@ref(fig:plt-sweat)).
 
-```{r df_sweat}
+```{r df-sweat}
 combo1 <- wet_influx_df2 %>% 
   select(wig, wind, wet_dry, sweat=sweat_max)
 
@@ -620,35 +707,36 @@ sweat_merge_df <- bind_rows(combo1, combo2) %>%
 ```
 
 
-```{r plt_sweat, fig.width=12}
-plot <- ggplot(sweat_merge_df, aes(wind, sweat)) +
+```{r plt-sweat, fig.cap="The quantity of sweat that can be maximally evaporated (left) and that is required for zero heat gain (right) with various head coverings under three wind speeds" ,  fig.width=12}
+
+plt_sweat_max_zero <- ggplot(sweat_merge_df, aes(wind, sweat)) +
   geom_point(aes(color=wig, fill=wig), size = 3) +
   geom_path(aes(group=wig, color=wig))+
   theme_bw() +
-  theme(plot.title = element_text(hjust = 0.5))+
+  labs(x = bquote('Wind speed'~(m/s)),
+       y=bquote('Sweat'~(g/m^2/h))) +
   facet_wrap(vars(sweat_type))
 
-print(plot)
+pltsave_func(plt_sweat_max_zero, plot_path, width = 12, height = 8)
 ```
+
 
 ## Unstandardized lm
-```{r lm_sweat}
+
+In a linear model we see that all variables and interactions significantly affect quantity of sweat (see Figure \@ref(fig:plt-lm-sweat)).
+
+```{r lm-sweat}
 sweat.lm <- lm(
   formula = 
-    sweat ~ sweat_type + as.numeric(wind) + wig + sweat_type*as.numeric(wind) + sweat_type*wig, 
+    sweat ~ sweat_type + wind + wig + sweat_type*wind + sweat_type*wig, 
   data = sweat_merge_df)
+
+summary(sweat.lm) 
 ```
 
 
-```{r tbl_lm_sweat}
-summary(sweat.lm) %>% 
-  broom::tidy() %>% 
-  kbl() %>% 
-  kable_minimal()
-```
+```{r plt-lm-sweat, fig.cap="Dot-and-whisker plot of linear model for quantity of sweat with wind, wig and sweat type as independent predictors. Only significant values shown"}
 
-
-```{r plt_lm_sweat}
 ggstatsplot::ggcoefstats(
   x = sweat.lm,
   sort = "ascending", # sorting the terms of the model based on estimate values
@@ -661,51 +749,64 @@ ggstatsplot::ggcoefstats(
 
 ```
 
+```{r aov-lm-sweat}
 
-```{r lm_maxsep}
+summary(aov(sweat.lm))
+```
+
+### Separate max and zero gain
+
+We repeat the tests with maximum sweat potential and zero heat gain separately (see Figure \@ref(fig:plt-lm-sweatsep).
+
+Maximum sweat potential shows a strongly significant effect from wig type and wind speed. 
+
+```{r lm-maxsep}
+
 df <- sweat_merge_df %>% 
   filter(sweat_type == "max")
 
 sweat.lm.max <- lm(
   formula = 
-    sweat ~ as.numeric(wind) + wig, 
+    sweat ~ wind + wig, 
   data = df)
+
+summary(sweat.lm.max) 
 ```
 
+This is confirmed with an ANOVA.
+```{r aov-lm-sweat-max}
 
-```{r tbl_lm_maxep}
-summary(sweat.lm.max) %>% 
-  broom::tidy() %>% 
-  kbl() %>% 
-  kable_minimal()
+summary(aov(sweat.lm.max))
 ```
 
+Sweat quantity for zero heat gain also shows highly significant effects for wind and wig type.  However, the main difference appears to be in the directionality of the effect of wind.
 
-```{r lm_zerogainsep}
+```{r lm-zerogainsep}
 df <- sweat_merge_df %>% 
   filter(sweat_type == "zero_gain") %>% 
   droplevels()
 
 sweat.lm.zero_gain <- lm(
   formula = 
-    sweat ~ as.numeric(wind) + wig, 
+    sweat ~ wind + wig, 
   data = df)
+
+summary(sweat.lm.zero_gain)
 ```
 
 
-```{r tbl_lm_zerogainsep}
-summary(sweat.lm.zero_gain) %>% 
-  broom::tidy() %>% 
-  kbl() %>% 
-  kable_minimal()
+This is also confirmed with an ANOVA.
+```{r aov-lm-sweat-zerogain}
+
+summary(aov(sweat.lm.zero_gain))
 ```
 
 
-```{r plt_lm_sweatsep}
-ggstatsplot::combine_plots(
+```{r plt-lm-sweatsep, fig.cap="Dot-and-whisker plots for linear regression of (a) maximum sweat potential and (b) sweat required for zero heat gain"}
+
+plt_lm_sweat_sep <- ggstatsplot::combine_plots(
   ggstatsplot::ggcoefstats(
     x = sweat.lm.max,
-    title = "max",
     sort = "ascending", # sorting the terms of the model based on estimate values
     ggtheme = ggplot2::theme_bw(),
     package = "ggsci",
@@ -715,40 +816,35 @@ ggstatsplot::combine_plots(
   ),
   ggstatsplot::ggcoefstats(
     x = sweat.lm.zero_gain,
-    title = "zero_gain",
     sort = "ascending", # sorting the terms of the model based on estimate values
     ggtheme = ggplot2::theme_bw(),
     package = "ggsci",
     palette = "default_aaas",
     messages = F,
     only.significant = T
-  )
+  ),
+  labels = c("a", "b")
 )
 
+pltsave_func(plt_lm_sweat_sep, plot_path, width = 12, height = 8)
 
 ```
 
 
 ## Standardized lm
-The differences between wind speed across groups appear to be statistically significant, with the "nude" condition always as an outlier.
+With a standardized version of the regression above, the same patterns remain (see Figure \@ref(fig:plt-lm-sweatstd)).
 
-```{r lm_sweatstd}
+```{r lm-sweatstd}
 sweat.lm.beta <- lm(
   formula = 
-    scale(sweat) ~ sweat_type + scale(as.numeric(wind)) + wig + sweat_type*scale(as.numeric(wind)) + sweat_type*wig, 
+    scale(sweat) ~ sweat_type + scale(wind) + wig + sweat_type*scale(wind) + sweat_type*wig, 
   data = sweat_merge_df)
+
+summary(sweat.lm.beta)
 ```
 
 
-```{r tbl_lm_sweatstd}
-summary(sweat.lm.beta) %>% 
-  broom::tidy() %>% 
-  kbl() %>% 
-  kable_minimal()
-```
-
-
-```{r plt_lm_sweatstd}
+```{r plt-lm-sweatstd}
 ggstatsplot::ggcoefstats(
   x = sweat.lm.beta,
   sort = "ascending", # sorting the terms of the model based on estimate values
@@ -761,52 +857,67 @@ ggstatsplot::ggcoefstats(
 
 ```
 
+Viewed as an ANOVA, we can confirm the significant effect of all the variables and interactions.
 
-```{r lm_maxsepstd}
+```{r aov-lm-sweatstd}
+
+summary(aov(sweat.lm.beta))
+```
+
+
+### Separate max and zero gain
+We repeat the standardized linear model with maximum sweat potential and zero heat gain separated (see Figure \@ref(fig:plt-lm-sweatsepstd).
+
+Again, we see that all variables strongly affect maximum sweat potential. 
+
+```{r lm-maxsepstd}
 
 df <- sweat_merge_df %>% 
   filter(sweat_type == "max")
 
 sweat.lm.max.beta <- lm(
   formula = 
-    scale(sweat) ~ scale(as.numeric(wind)) + wig, 
+    scale(sweat) ~ scale(wind) + wig, 
   data = df)
 
+summary(sweat.lm.max.beta)
+```
+
+This is confirmed with an ANOVA.
+
+```{r aov-lm-sweat-maxstd}
+
+summary(aov(sweat.lm.max.beta))
 ```
 
 
-```{r tbl_lm_maxsepstd}
-summary(sweat.lm.max.beta)%>% 
-  broom::tidy() %>% 
-  kbl() %>% 
-  kable_minimal()
-```
-
-```{r lm_zerogain_sepstd}
+Similarly, in the zero heat gain model, wind and wig type both affect the quantity of sweat, but the effect of wind is reversed (decreases the quantity of sweat required).
+```{r lm-zerogain_sepstd}
 df <- sweat_merge_df %>% 
   filter(sweat_type == "zero_gain") %>% 
   droplevels()
 
 sweat.lm.zero_gain.beta <- lm(
   formula = 
-    scale(sweat) ~ scale(as.numeric(wind)) + wig, 
+    scale(sweat) ~ scale(wind) + wig, 
   data = df)
+
+summary(sweat.lm.zero_gain.beta)
+```
+
+We confirm this with an ANOVA.
+
+```{r aov-lm-sweat-zerogainstd}
+
+summary(aov(sweat.lm.max.beta))
 ```
 
 
-```{r tbl_lm_zerogain_sepstd}
-summary(sweat.lm.zero_gain.beta)%>% 
-  broom::tidy() %>% 
-  kbl() %>% 
-  kable_minimal()
-```
+```{r plt-lm-sweatsepstd, fig.cap="Dot-and-whisker plots for standardized linear regression of (a) maximum sweat potential and (b) sweat required for zero heat gain"}
 
-
-```{r plt_lm_sweatsepstd}
-ggstatsplot::combine_plots(
+plt_lm_sweatsepstd <- ggstatsplot::combine_plots(
   ggstatsplot::ggcoefstats(
     x = sweat.lm.max.beta,
-    title = "max",
     sort = "ascending",
     ggtheme = ggplot2::theme_bw(),
     package = "ggsci",
@@ -815,14 +926,16 @@ ggstatsplot::combine_plots(
   ),
   ggstatsplot::ggcoefstats(
   x = sweat.lm.zero_gain.beta,
-  title = "zero_gain",
   sort = "ascending", 
   ggtheme = ggplot2::theme_bw(),
   package = "ggsci",
   palette = "default_aaas",
   messages = F
-  )
+  ),
+  labels = c("a", "b")
 )
+
+pltsave_func(plt_lm_sweatsepstd, plot_path, width = 12, height = 8)
 
 ```
 
