@@ -3,7 +3,11 @@ title: "Thermocouple Summarized Data"
 author: "Tina Lasisi"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output:
-  bookdown::pdf_document2: default
+  pdf_document:
+    keep_tex: true
+  bookdown::pdf_document2: 
+    toc: true
+    keep_tex: true
   bookdown::html_document2:
     base_format: workflowr::wflow_html
     toc: true
@@ -31,7 +35,7 @@ library(tidyquant)
 F = rprojroot::is_rstudio_project$make_fix_file()
 
 # knitting to pdf
-# rmarkdown::render(input= "analysis/thermo_sum.Rmd", output_format = "pdf_document", output_dir = "output")
+# rmarkdown::render(input = "analysis/thermo_sum.Rmd", output_format = "pdf_document", output_dir = "docs", clean = FALSE)
 
 knitr::opts_chunk$set(echo = FALSE, include = TRUE, eval = TRUE, warning = FALSE, message = FALSE, fig.retina = 2, fig.width = 8, fig.height = 8, out.width = "100%")
 
@@ -76,7 +80,7 @@ head(thermo_df)
 ## Clean 
 Here we filter out the trials that used "regular" room conditions with the 0.3m/s setting.
 
-```{r include=FALSE}
+```{r df-filter-data, include=FALSE}
 
 merge_df <- as_tbl_time(thermo_df, DateTime) %>%
   pivot_wider(names_from = thermo_id, values_from = temp) %>% 
@@ -86,7 +90,7 @@ merge_df <- as_tbl_time(thermo_df, DateTime) %>%
 
 Then we check for any issues with the data.
 
-```{r}
+```{r df-na}
 # check if dataframe contains any N/A
 merge_df %>% 
   select_if(function(x) any(is.na(x))) %>% 
@@ -97,7 +101,7 @@ head(extra_NA)
 
 It appears that thermocouple 1 contains missing data across the trials, so we will remove it. 
 
-```{r include=FALSE}
+```{r df-clean-trim, echo=FALSE}
 
 trim_thermo_df <- merge_df %>% 
   select(-ch1) %>% 
@@ -134,7 +138,7 @@ Below we visualize the cleaned and trimmed data.
 
 ## Raw
 
-```{r echo=FALSE}
+```{r plt-raw-temp, echo=FALSE}
 df <- trim_thermo_df_long
   
 wiglist <- unique(levels(df$wig))
@@ -168,7 +172,7 @@ for (Wig in wiglist){
 
 
 
-```{r include=FALSE}
+```{r df-missing, include=FALSE}
 
 mins_thermo_df_long <- trim_thermo_df_long %>% 
   group_by(wig, radiation, wind, trial, thermo_id, RoomConditions) %>% 
@@ -188,7 +192,9 @@ head(extra_NA)
 
 ### Radiaton on vs. radiation off
 
-```{r}
+Here we plot the temperatures registered by the different thermocouples across trials, with the temperature for radiation *off* on the x-axis and radiation *on* on the y-axis.
+
+```{r plt-temp}
 
 scatter_func <- function(df, windspeed){
   df2 <- df %>% 
@@ -226,21 +232,51 @@ for (windspeed in windlist){
 df_wide <- df %>% 
   pivot_wider(names_from = thermo_id, values_from = c(off, on, solar_influx))
 
-write_csv(df, file = F("data/tidy/summary_thermo_data_long.csv"))
-write_csv(df_wide, file = F("data/tidy/summary_thermo_data_wide.csv"))
+# write_csv(df, file = F("data/tidy/summary_thermo_data_long.csv"))
+# write_csv(df_wide, file = F("data/tidy/summary_thermo_data_wide.csv"))
+
+```
+
+### Linear model temperature
+
+We create a linear model to predict temperature using radiation, wind speed, wig type, thermocouple ID, as well as the interactions between thermocouple ID and wig and thermocouple ID and radiation.
+
+```{r lm-temp}
+
+temp.lm <- lm(formula = temp ~ radiation + as.numeric(wind) + wig + thermo_id + thermo_id*wig + thermo_id*radiation, 
+                data = mins_thermo_df_long)
+
+summary(temp.lm)
+
+```
+
+The results show that thermocouple no. 5 has the strongest effect in its interaction with radiation and the straight (low curvature) wig. Thermocouple 4 also has a significant negative effect on temperature when combined with any of the wigs. On its own, the negative effect of thermocouple 5 is also significant.
+
+```{r plt-lm-temp, fig.cap="Dot-and-whisker plot of linear regression on temperature. Only significant results shown."}
+
+plt_lm_temp_thermo <- ggstatsplot::ggcoefstats(
+  x = temp.lm,
+  sort = "ascending", # sorting the terms of the model based on estimate values
+  ggtheme = ggplot2::theme_bw(),
+  package = "Polychrome",
+  palette = "dark",
+  messages = F,
+  only.significant = T
+)
+
+pltsave_func(plt_lm_temp_thermo, plot_path, width = 6, height = 12)
 
 ```
 
 ### Solar Influx
 
-```{r}
+Here we visualize the solar influx $T_{solar\ influx}=T_{radiation\ on} - T_{radiation\ off}$.
+
+```{r plt-influx-thermo, fig.cap="Scatter plot of solar influx for thermocouple readings across experimental conditions."}
 
 library(ggbeeswarm)
 
-scatter_func_sol <- function(df){
-  df2 <- df 
-  
-  plot <- ggplot(df2, 
+plt_scatter_influx_combo <- ggplot(df, 
                  aes(
                    color = wig,
                    fill = wig,
@@ -254,20 +290,51 @@ scatter_func_sol <- function(df){
     geom_hline(yintercept = 0) +
     theme_bw() +
     guides(fill=guide_legend(override.aes = list(shape=21)))
-  
-  print(plot)
-}
 
-scatter_func_sol(df)
+pltsave_func(plot =  plt_scatter_influx_combo, plot_path, width = 7, height = 7)
 
+
+```
+
+
+### Linear model solar influx
+
+A linear model of solar influx with wind speed, wig type, thermocouple ID and the interaction between thermocouple ID and wig type is presented below. 
+
+```{r lm-influx}
+
+influx.lm <- lm(formula = solar_influx ~ as.numeric(wind) + wig + thermo_id + thermo_id*wig,
+                data = df)
+
+summary(influx.lm)
+
+```
+
+A plot of the regression coefficients shows that thermocouple 5 has the strongest effect when it interacts with the straight (low curvature) wig followed by its effect on its own.
+
+```{r plt-lm-influx, fig.cap="Dot-and-whisker plot of linear regression on solar influx. Only significant results shown."}
+
+plt_lm_influx_thermo <- ggstatsplot::ggcoefstats(
+  x = influx.lm,
+  sort = "ascending", # sorting the terms of the model based on estimate values
+  ggtheme = ggplot2::theme_bw(),
+  package = "ggsci",
+  palette = "category20_d3",
+  messages = F,
+  only.significant = T
+)
+
+pltsave_func(plt_lm_influx_thermo, plot_path, width = 6, height = 10)
 
 ```
 
 ## Thermocouples separate plots
 
+Below we repeat the plots above but with the thermocouples plotted separately.
+
 ### Radiaton on vs. radiation off
 
-```{r}
+```{r plt-temp-sep}
 scatter_func2 <- function(df, windspeed){
   df2 <- df %>% 
     dplyr::filter(wind == windspeed)
@@ -301,7 +368,7 @@ for (windspeed in windlist){
 
 ### Solar Influx
 
-```{r}
+```{r plt-influx-sep}
 
 scatter_func_sol2 <- function(df){
   df2 <- df 
