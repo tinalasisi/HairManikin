@@ -11,10 +11,11 @@
 
 <meta name="author" content="Tina Lasisi" />
 
-<meta name="date" content="2021-01-29" />
+<meta name="date" content="2021-02-04" />
 
 <title>Manikin data</title>
 
+<script src="site_libs/header-attrs-2.6/header-attrs.js"></script>
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -37,6 +38,8 @@ div.section {
   padding-top: 12px;
 }
 </style>
+
+
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -410,7 +413,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Manikin data</h1>
 <h4 class="author">Tina Lasisi</h4>
-<h4 class="date">January 29, 2021</h4>
+<h4 class="date">February 04, 2021</h4>
 
 </div>
 
@@ -439,7 +442,7 @@ Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></sp
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2021-01-29
+<strong>Last updated:</strong> 2021-02-04
 </p>
 <p>
 <strong>Checks:</strong>
@@ -567,20 +570,20 @@ makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiHairManikintree1ab1753b10b64bc356791b77cde53b2a99633e70targetblank1ab1753a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiHairManikintreef80cdef37d0175087e8dfeec94ce1395c3012c50targetblankf80cdefa">
 <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-<strong>Repository version:</strong> <a href="https://github.com/tinalasisi/HairManikin/tree/1ab1753b10b64bc356791b77cde53b2a99633e70" target="_blank">1ab1753</a>
+<strong>Repository version:</strong> <a href="https://github.com/tinalasisi/HairManikin/tree/f80cdef37d0175087e8dfeec94ce1395c3012c50" target="_blank">f80cdef</a>
 </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiHairManikintree1ab1753b10b64bc356791b77cde53b2a99633e70targetblank1ab1753a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomtinalasisiHairManikintreef80cdef37d0175087e8dfeec94ce1395c3012c50targetblankf80cdefa" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and
 connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/tinalasisi/HairManikin/tree/1ab1753b10b64bc356791b77cde53b2a99633e70" target="_blank">1ab1753</a>.
+The results in this page were generated with repository version <a href="https://github.com/tinalasisi/HairManikin/tree/f80cdef37d0175087e8dfeec94ce1395c3012c50" target="_blank">f80cdef</a>.
 See the <em>Past versions</em> tab to see a history of the changes made to the
 R Markdown and HTML files.
 </p>
@@ -598,7 +601,6 @@ Ignored files:
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
     Ignored:    analysis/manikin2021.pptx
-    Ignored:    analysis/output/
     Ignored:    data/raw/Havenith_2021_Manikin_Dry_Wet_Summary/
     Ignored:    data/raw/ManikinData_March2018/Processed/
     Ignored:    data/raw/ManikinData_Oct2018/Round1/ConvertedFiles/
@@ -607,8 +609,14 @@ Ignored files:
     Ignored:    data/raw/ManikinData_Oct2018/ThermoLog/extracted/
     Ignored:    data/tidy/archive/
 
+Untracked files:
+    Untracked:  manikin2021.md
+
 Unstaged changes:
+    Modified:   analysis/experimental_log.Rmd
     Deleted:    analysis/manikin2021.log
+    Modified:   analysis/thermo_sum.Rmd
+    Modified:   analysis/thermocouple_qc.Rmd
 
 </code></pre>
 <p>
@@ -653,6 +661,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/tinalasisi/HairManikin/blob/f80cdef37d0175087e8dfeec94ce1395c3012c50/analysis/manikin2021.Rmd" target="_blank">f80cdef</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-02-04
+</td>
+<td>
+update manikin results
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/tinalasisi/HairManikin/71b114c27dd282bbbad2c400eaf30e743358fb06/docs/manikin2021.html" target="_blank">71b114c</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-01-29
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -915,16 +957,143 @@ update all
 </div>
 </div>
 </div>
-<div id="heat-loss-raw" class="section level1">
-<h1>Heat loss (raw)</h1>
+<div id="heat-loss-4c" class="section level1">
+<h1>Heat loss (4C)</h1>
 <p>The dry measurements were taken at two different temperatures - one with <span class="math inline">\(T_{manikin}= 34^\circ C\)</span> and <span class="math inline">\(T_{ambient}= 8^\circ C\)</span>, and another with <span class="math inline">\(T_{manikin}= 38^\circ C\)</span> and <span class="math inline">\(T_{ambient}= 4^\circ C\)</span>.</p>
 <p>The second set of temperature options was found to be necessary with the straight (low curvature) wig in the <span class="math inline">\(0.3\; m/s\)</span> wind speed setting with the radiation on because the manikin would overheat to the point where no heat loss could be measured. We then made sure to conduct all the <span class="math inline">\(0.3\; m/s\)</span> wind speed experiments with this second option.</p>
 <p>In the preparation of the data, we applied a correction to bring all the measurements to the same temperature, i.e. <span class="math inline">\(T_{ambient}= 4^\circ C\)</span>.</p>
-<p>The wet measurements are based on heat exchange rather than dry heat loss. These measurements were taken with the temperature settings <span class="math inline">\(T_{manikin}= 34^\circ C\)</span> and <span class="math inline">\(T_{ambient}= 34^\circ C\)</span> or <span class="math inline">\(T_{manikin}=T_{ambient}\)</span>. The measurements have been converted to heat loss for comparative purposes (see Figure <a href="#fig:plt-drywet-scatter">1</a>).</p>
-<div class="figure" style="text-align: center"><span id="fig:plt-drywet-scatter"></span>
-<img src="figure/manikin2021.Rmd/plt-drywet-scatter-1.png" alt="Comparison of dry heat loss and wet heat exchange for various head coverings at three wind speeds with radiation on and off." width="100%" />
+<p>The wet measurements are based on heat exchange rather than dry heat loss. These measurements were taken with the temperature settings <span class="math inline">\(T_{manikin}= 34^\circ C\)</span> and <span class="math inline">\(T_{ambient}= 34^\circ C\)</span> or <span class="math inline">\(T_{manikin}=T_{ambient}\)</span>. The measurements have been converted to heat loss for comparative purposes (see Figure <a href="#fig:plt-drywet-scatter4C">1</a>).</p>
+<div class="figure" style="text-align: center"><span id="fig:plt-drywet-scatter4C"></span>
+<img src="figure/manikin2021.Rmd/plt-drywet-scatter4C-1.png" alt="Comparison of dry heat loss and wet heat loss (dry + evaporative) for various head coverings at three wind speeds with radiation on and off at 4C." width="100%" />
 <p class="caption">
-Figure 1: Comparison of dry heat loss and wet heat exchange for various head coverings at three wind speeds with radiation on and off.
+Figure 1: Comparison of dry heat loss and wet heat loss (dry + evaporative) for various head coverings at three wind speeds with radiation on and off at 4C.
+</p>
+</div>
+<div id="linear-model" class="section level2">
+<h2>Linear model</h2>
+<p>We created a linear model for heat loss using wet/dry, radiation, wind speed and head covering (wig type) as independent variables. Additionally, we include possible interactions between wet/dry, radiation and wig type.</p>
+<p>Below, our results show that the most significant variables are wig and radiation, with marginal significance in radiation and the interaction between radiation and wig type (see also Figure <a href="#fig:plt-lm-heatloss4C">2</a>).</p>
+<pre><code>
+Call:
+lm(formula = heatloss4c ~ wet_dry + radiation + wind + wig + 
+    wet_dry * wind + wet_dry * wig + wet_dry * radiation + radiation * 
+    wig, data = df_4c_influx_long)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-85.683 -26.449   4.191  16.538 113.977 
+
+Coefficients:
+                        Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)              231.985     26.064   8.901 2.75e-10 ***
+wet_drywet               222.015     33.410   6.645 1.46e-07 ***
+radiationon             -122.100     28.430  -4.295 0.000145 ***
+wind                      66.402      9.796   6.778 9.95e-08 ***
+wigLowCurv              -200.820     31.143  -6.448 2.59e-07 ***
+wigMidCurv              -199.010     31.143  -6.390 3.07e-07 ***
+wigHighCurv             -179.780     31.143  -5.773 1.88e-06 ***
+wet_drywet:wind           43.734     13.854   3.157 0.003399 ** 
+wet_drywet:wigLowCurv   -174.364     35.961  -4.849 2.88e-05 ***
+wet_drywet:wigMidCurv   -195.597     35.961  -5.439 5.05e-06 ***
+wet_drywet:wigHighCurv  -217.417     35.961  -6.046 8.43e-07 ***
+wet_drywet:radiationon    41.506     25.428   1.632 0.112133    
+radiationon:wigLowCurv    58.664     35.961   1.631 0.112332    
+radiationon:wigMidCurv    72.647     35.961   2.020 0.051545 .  
+radiationon:wigHighCurv   80.733     35.961   2.245 0.031588 *  
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Residual standard error: 44.04 on 33 degrees of freedom
+Multiple R-squared:  0.9542,    Adjusted R-squared:  0.9347 
+F-statistic: 49.09 on 14 and 33 DF,  p-value: &lt; 2.2e-16</code></pre>
+<div class="figure" style="text-align: center"><span id="fig:plt-lm-heatloss4C"></span>
+<img src="figure/manikin2021.Rmd/plt-lm-heatloss4C-1.png" alt="Dot-and-whisker plot for regression analysis of heatloss with only significant results shown." width="100%" />
+<p class="caption">
+Figure 2: Dot-and-whisker plot for regression analysis of heatloss with only significant results shown.
+</p>
+</div>
+<p>Viewed as an ANOVA, we confirm that the main significant variables in our model are radiation, wind speed and wig type, while there is a marginal significance (&lt;0.05) for the interaction for radiation * wig type and wet/dry* wig type.</p>
+<pre><code>                  Df Sum Sq Mean Sq F value   Pr(&gt;F)    
+wet_dry            1 274771  274771 141.649 1.74e-13 ***
+radiation          1  28037   28037  14.453 0.000588 ***
+wind               1 314980  314980 162.378 2.71e-14 ***
+wig                3 589784  196595 101.348  &lt; 2e-16 ***
+wet_dry:wind       1  19330   19330   9.965 0.003399 ** 
+wet_dry:wig        3  89034   29678  15.299 2.07e-06 ***
+wet_dry:radiation  1   5168    5168   2.664 0.112133    
+radiation:wig      3  11989    3996   2.060 0.124503    
+Residuals         33  64013    1940                     
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+</div>
+</div>
+<div id="solar-influx-4c" class="section level1">
+<h1>Solar influx (4C)</h1>
+<p>We can also look specifically at the effect of the radiation by subtracting the measurements with radiation off from those with radiation on.</p>
+<p>From the plots below, it is apparent that the experiments with a “Nude” manikin scalp show a considerably different pattern than any of the wigs.</p>
+<p>Interestingly, in the dry experiments, the effect of solar radiation appears to cluster more by wig, while the wet experiments show a solar influx that is more patterned by wind speed (see Figure <a href="#fig:plt-drywet-scatter2-4C">3</a>).</p>
+<div class="figure" style="text-align: center"><span id="fig:plt-drywet-scatter2-4C"></span>
+<img src="figure/manikin2021.Rmd/plt-drywet-scatter2-4C-1.png" alt="This plot shows the solar influx as a function of heat loss in the radiation off state. 
+The horizontal line is at zero showing that all values are positive." width="100%" />
+<p class="caption">
+Figure 3: This plot shows the solar influx as a function of heat loss in the radiation off state.
+The horizontal line is at zero showing that all values are positive.
+</p>
+</div>
+<p>Below, we plot the same net heat loss as a function of wind speed. Similarly, we see that, in the dry experiments, there is a very clear effect of wig type and no hair, while the wet experiments show a much more pronounced effect of windspeed (see Figure <a href="#fig:plt-influx4C">4</a>).</p>
+<div class="figure" style="text-align: center"><span id="fig:plt-influx4C"></span>
+<img src="figure/manikin2021.Rmd/plt-influx4C-1.png" alt="Solar influx as a function of wind speed" width="100%" />
+<p class="caption">
+Figure 4: Solar influx as a function of wind speed
+</p>
+</div>
+<div id="linear-model-1" class="section level2">
+<h2>Linear model</h2>
+<p>We test the effect of the predictor variables with a linear model (see Figure <a href="#fig:plt-lm-influx4C">5</a>) and find that wig type and wet vs. dry have a significant effect on solar influx, but that wind speed does not.</p>
+<pre><code>
+Call:
+lm(formula = net_w_m2_4C ~ wind + wig + wet_dry, data = df_4c_influx_wide)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-55.958 -18.162   0.361  17.313  49.925 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  134.278     17.290   7.766 3.73e-07 ***
+wind          -9.615      7.170  -1.341 0.196600    
+wigLowCurv   -58.664     18.611  -3.152 0.005512 ** 
+wigMidCurv   -72.647     18.611  -3.904 0.001041 ** 
+wigHighCurv  -80.733     18.611  -4.338 0.000396 ***
+wet_drywet   -41.506     13.160  -3.154 0.005490 ** 
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Residual standard error: 32.23 on 18 degrees of freedom
+Multiple R-squared:  0.6592,    Adjusted R-squared:  0.5646 
+F-statistic: 6.964 on 5 and 18 DF,  p-value: 0.000883</code></pre>
+<div class="figure" style="text-align: center"><span id="fig:plt-lm-influx4C"></span>
+<img src="figure/manikin2021.Rmd/plt-lm-influx4C-1.png" alt="Dot-and-whisker plot of linear regression on solar influx." width="100%" />
+<p class="caption">
+Figure 5: Dot-and-whisker plot of linear regression on solar influx.
+</p>
+</div>
+<p>This is seen more clearly in the ANOVA.</p>
+<pre><code>            Df Sum Sq Mean Sq F value  Pr(&gt;F)   
+wind         1   1868    1868   1.798 0.19660   
+wig          3  23977    7992   7.692 0.00163 **
+wet_dry      1  10336   10336   9.948 0.00549 **
+Residuals   18  18703    1039                   
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+</div>
+</div>
+<div id="heat-loss-30c" class="section level1">
+<h1>Heat loss (30C)</h1>
+<div class="figure" style="text-align: center"><span id="fig:plt-drywet-scatter"></span>
+<img src="figure/manikin2021.Rmd/plt-drywet-scatter-1.png" alt="Comparison of dry heat loss and wet heat loss (dry + evaporative) for various head coverings at three wind speeds with radiation on and off at 30C." width="100%" />
+<p class="caption">
+Figure 6: Comparison of dry heat loss and wet heat loss (dry + evaporative) for various head coverings at three wind speeds with radiation on and off at 30C.
 </p>
 </div>
 <p>
@@ -964,203 +1133,90 @@ tinalasisi
 </table>
 </div>
 </div>
-<div id="linear-model" class="section level2">
+<div id="linear-model-2" class="section level2">
 <h2>Linear model</h2>
 <p>We created a linear model for heat loss using wet/dry, radiation, wind speed and head covering (wig type) as independent variables. Additionally, we include possible interactions between wet/dry, radiation and wig type.</p>
-<p>Below, our results show that the most significant variables are wig and radiation, with marginal significance in radiation and the interaction between radiation and wig type (see also Figure <a href="#fig:plt-lm-rawheatloss">2</a>).</p>
+<p>Below, our results show that the most significant variables are wig and radiation, with marginal significance in radiation and the interaction between radiation and wig type (see also Figure <a href="#fig:plt-lm-rawheatloss30C">7</a>).</p>
 <pre><code>
 Call:
-lm(formula = w_m2_mean ~ wet_dry + radiation + wind + wig + wet_dry * 
-    wind + wet_dry * wig + wet_dry * radiation + radiation * 
-    wig, data = sum_manikin_df)
+lm(formula = heatloss30C ~ wet_dry + radiation + wind + wig + 
+    wet_dry * wind + wet_dry * wig + wet_dry * radiation + radiation * 
+    wig, data = df_30C_influx_long)
 
 Residuals:
-     Min       1Q   Median       3Q      Max 
--103.824  -11.375   -2.341   13.895   71.781 
+    Min      1Q  Median      3Q     Max 
+-62.340 -10.624  -1.509  11.063  58.101 
 
 Coefficients:
                         Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)              262.294     21.225  12.358 6.29e-14 ***
-wet_drywet               -66.969     27.207  -2.461  0.01923 *  
-radiationon             -122.100     23.151  -5.274 8.22e-06 ***
-wind                      41.930      7.977   5.256 8.67e-06 ***
-wigLowCurv              -202.288     25.361  -7.976 3.36e-09 ***
-wigMidCurv              -200.685     25.361  -7.913 4.00e-09 ***
-wigHighCurv             -180.128     25.361  -7.103 3.92e-08 ***
-wet_drywet:wind            4.870     11.282   0.432  0.66878    
-wet_drywet:wigLowCurv     53.681     29.285   1.833  0.07583 .  
-wet_drywet:wigMidCurv     34.903     29.285   1.192  0.24182    
-wet_drywet:wigHighCurv    -1.639     29.285  -0.056  0.95571    
-wet_drywet:radiationon    41.506     20.707   2.004  0.05329 .  
-radiationon:wigLowCurv    58.664     29.285   2.003  0.05342 .  
-radiationon:wigMidCurv    72.647     29.285   2.481  0.01838 *  
-radiationon:wigHighCurv   80.733     29.285   2.757  0.00943 ** 
+(Intercept)               19.502     15.092   1.292 0.205265    
+wet_drywet               222.015     19.346  11.476 4.62e-13 ***
+radiationon             -122.100     16.462  -7.417 1.60e-08 ***
+wind                      14.376      5.672   2.534 0.016190 *  
+wigLowCurv               -14.703     18.033  -0.815 0.420724    
+wigMidCurv               -11.046     18.033  -0.613 0.544368    
+wigHighCurv               -2.820     18.033  -0.156 0.876707    
+wet_drywet:wind           43.734      8.022   5.452 4.86e-06 ***
+wet_drywet:wigLowCurv   -174.364     20.823  -8.374 1.13e-09 ***
+wet_drywet:wigMidCurv   -195.597     20.823  -9.393 7.58e-11 ***
+wet_drywet:wigHighCurv  -217.417     20.823 -10.441 5.43e-12 ***
+wet_drywet:radiationon    41.506     14.724   2.819 0.008085 ** 
+radiationon:wigLowCurv    58.664     20.823   2.817 0.008118 ** 
+radiationon:wigMidCurv    72.647     20.823   3.489 0.001398 ** 
+radiationon:wigHighCurv   80.733     20.823   3.877 0.000476 ***
 ---
 Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 
-Residual standard error: 35.87 on 33 degrees of freedom
-  (3 observations deleted due to missingness)
-Multiple R-squared:  0.8841,    Adjusted R-squared:  0.835 
-F-statistic: 17.99 on 14 and 33 DF,  p-value: 1.558e-11</code></pre>
-<div class="figure" style="text-align: center"><span id="fig:plt-lm-rawheatloss"></span>
-<img src="figure/manikin2021.Rmd/plt-lm-rawheatloss-1.png" alt="Dot-and-whisker plot for regression analysis of heatloss with only significant results shown." width="100%" />
+Residual standard error: 25.5 on 33 degrees of freedom
+Multiple R-squared:  0.961, Adjusted R-squared:  0.9444 
+F-statistic: 58.01 on 14 and 33 DF,  p-value: &lt; 2.2e-16</code></pre>
+<div class="figure" style="text-align: center"><span id="fig:plt-lm-rawheatloss30C"></span>
+<img src="figure/manikin2021.Rmd/plt-lm-rawheatloss30C-1.png" alt="Dot-and-whisker plot for regression analysis of heatloss with only significant results shown." width="100%" />
 <p class="caption">
-Figure 2: Dot-and-whisker plot for regression analysis of heatloss with only significant results shown.
+Figure 7: Dot-and-whisker plot for regression analysis of heatloss with only significant results shown.
 </p>
-</div>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt-lm-rawheatloss-1">
-Past versions of plt-lm-rawheatloss-1.png
-</button>
-</p>
-<div id="fig-plt-lm-rawheatloss-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/HairManikin/blob/14b002ddbc9dc9d028adac35fb30388981efbd51/docs/figure/manikin2021.Rmd/plt-lm-rawheatloss-1.png" target="_blank">14b002d</a>
-</td>
-<td>
-tinalasisi
-</td>
-<td>
-2021-01-24
-</td>
-</tr>
-</tbody>
-</table>
-</div>
 </div>
 <p>Viewed as an ANOVA, we confirm that the main significant variables in our model are radiation, wind speed and wig type, while there is a marginal significance (&lt;0.05) for the interaction for radiation * wig type and wet/dry* wig type.</p>
 <pre><code>                  Df Sum Sq Mean Sq F value   Pr(&gt;F)    
-wet_dry            1   4024    4024   3.128   0.0862 .  
-radiation          1  28037   28037  21.795 4.88e-05 ***
-wind               1  79571   79571  61.856 4.57e-09 ***
-wig                3 188299   62766  48.793 3.15e-12 ***
-wet_dry:wind       1    240     240   0.186   0.6688    
-wet_dry:wig        3   6638    2213   1.720   0.1819    
-wet_dry:radiation  1   5168    5168   4.018   0.0533 .  
-radiation:wig      3  11989    3996   3.107   0.0397 *  
-Residuals         33  42450    1286                     
+wet_dry            1 274771  274771 422.464  &lt; 2e-16 ***
+radiation          1  28037   28037  43.107 1.84e-07 ***
+wind               1  53104   53104  81.647 1.92e-10 ***
+wig                3  46773   15591  23.971 2.02e-08 ***
+wet_dry:wind       1  19330   19330  29.721 4.86e-06 ***
+wet_dry:wig        3  89034   29678  45.630 7.67e-12 ***
+wet_dry:radiation  1   5168    5168   7.946  0.00808 ** 
+radiation:wig      3  11989    3996   6.144  0.00194 ** 
+Residuals         33  21463     650                     
 ---
-Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-3 observations deleted due to missingness</code></pre>
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 </div>
 </div>
-<div id="solar-influx-raw" class="section level1">
-<h1>Solar influx (raw)</h1>
+<div id="solar-influx-30c" class="section level1">
+<h1>Solar influx (30C)</h1>
 <p>We can also look specifically at the effect of the radiation by subtracting the measurements with radiation off from those with radiation on.</p>
 <p>From the plots below, it is apparent that the experiments with a “Nude” manikin scalp show a considerably different pattern than any of the wigs.</p>
-<p>Interestingly, in the dry experiments, the effect of solar radiation appears to cluster more by wig, while the wet experiments show a solar influx that is more patterned by wind speed (see Figure <a href="#fig:plt-drywet-scatter2">3</a>).</p>
-<div class="figure" style="text-align: center"><span id="fig:plt-drywet-scatter2"></span>
-<img src="figure/manikin2021.Rmd/plt-drywet-scatter2-1.png" alt="This plot shows the solar influx as a function of heat loss in the radiation off state. 
+<p>Interestingly, in the dry experiments, the effect of solar radiation appears to cluster more by wig, while the wet experiments show a solar influx that is more patterned by wind speed (see Figure <a href="#fig:plt-drywet-scatter-zeroline-30C">8</a>).</p>
+<div class="figure" style="text-align: center"><span id="fig:plt-drywet-scatter-zeroline-30C"></span>
+<img src="figure/manikin2021.Rmd/plt-drywet-scatter-zeroline-30C-1.png" alt="This plot shows the solar influx as a function of heat loss in the radiation off state. 
 The horizontal line is at zero showing that all values are positive." width="100%" />
 <p class="caption">
-Figure 3: This plot shows the solar influx as a function of heat loss in the radiation off state.
+Figure 8: This plot shows the solar influx as a function of heat loss in the radiation off state.
 The horizontal line is at zero showing that all values are positive.
 </p>
 </div>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt-drywet-scatter2-1">
-Past versions of plt-drywet-scatter2-1.png
-</button>
-</p>
-<div id="fig-plt-drywet-scatter2-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/HairManikin/blob/14b002ddbc9dc9d028adac35fb30388981efbd51/docs/figure/manikin2021.Rmd/plt-drywet-scatter2-1.png" target="_blank">14b002d</a>
-</td>
-<td>
-tinalasisi
-</td>
-<td>
-2021-01-24
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p>Below, we plot the same net heat loss as a function of wind speed. Similarly, we see that, in the dry experiments, there is a very clear effect of wig type and no hair, while the wet experiments show a much more pronounced effect of windspeed (see Figure <a href="#fig:plt-influx">4</a>).</p>
-<div class="figure" style="text-align: center"><span id="fig:plt-influx"></span>
-<img src="figure/manikin2021.Rmd/plt-influx-1.png" alt="Solar influx as a function of wind speed" width="100%" />
+<p>Below, we plot the same net heat loss as a function of wind speed. Similarly, we see that, in the dry experiments, there is a very clear effect of wig type and no hair, while the wet experiments show a much more pronounced effect of windspeed (see Figure <a href="#fig:plt-influx30C">9</a>).</p>
+<div class="figure" style="text-align: center"><span id="fig:plt-influx30C"></span>
+<img src="figure/manikin2021.Rmd/plt-influx30C-1.png" alt="Solar influx as a function of wind speed" width="100%" />
 <p class="caption">
-Figure 4: Solar influx as a function of wind speed
+Figure 9: Solar influx as a function of wind speed
 </p>
 </div>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt-influx-1">
-Past versions of plt-influx-1.png
-</button>
-</p>
-<div id="fig-plt-influx-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/HairManikin/blob/14b002ddbc9dc9d028adac35fb30388981efbd51/docs/figure/manikin2021.Rmd/plt-influx-1.png" target="_blank">14b002d</a>
-</td>
-<td>
-tinalasisi
-</td>
-<td>
-2021-01-24
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<div id="linear-model-1" class="section level2">
+<div id="linear-model-3" class="section level2">
 <h2>Linear model</h2>
-<p>We test the effect of the predictor variables with a linear model (see Figure <a href="#fig:plt-lm-influx">5</a>) and find that wig type and wet vs. dry have a significant effect on solar influx, but that wind speed does not.</p>
+<p>We test the effect of the predictor variables with a linear model (see Figure <a href="#fig:plt-lm-influx30C">10</a>) and find that wig type and wet vs. dry have a significant effect on solar influx, but that wind speed does not.</p>
 <pre><code>
 Call:
-lm(formula = net_w_m2 ~ wind + wig + wet_dry, data = merge1)
+lm(formula = net_w_m2_30C ~ wind + wig + wet_dry, data = df_30C_influx_wide)
 
 Residuals:
     Min      1Q  Median      3Q     Max 
@@ -1180,48 +1236,11 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
 Residual standard error: 32.23 on 18 degrees of freedom
 Multiple R-squared:  0.6592,    Adjusted R-squared:  0.5646 
 F-statistic: 6.964 on 5 and 18 DF,  p-value: 0.000883</code></pre>
-<div class="figure" style="text-align: center"><span id="fig:plt-lm-influx"></span>
-<img src="figure/manikin2021.Rmd/plt-lm-influx-1.png" alt="Dot-and-whisker plot of linear regression on solar influx." width="100%" />
+<div class="figure" style="text-align: center"><span id="fig:plt-lm-influx30C"></span>
+<img src="figure/manikin2021.Rmd/plt-lm-influx30C-1.png" alt="Dot-and-whisker plot of linear regression on solar influx." width="100%" />
 <p class="caption">
-Figure 5: Dot-and-whisker plot of linear regression on solar influx.
+Figure 10: Dot-and-whisker plot of linear regression on solar influx.
 </p>
-</div>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt-lm-influx-1">
-Past versions of plt-lm-influx-1.png
-</button>
-</p>
-<div id="fig-plt-lm-influx-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/HairManikin/blob/14b002ddbc9dc9d028adac35fb30388981efbd51/docs/figure/manikin2021.Rmd/plt-lm-influx-1.png" target="_blank">14b002d</a>
-</td>
-<td>
-tinalasisi
-</td>
-<td>
-2021-01-24
-</td>
-</tr>
-</tbody>
-</table>
-</div>
 </div>
 <p>This is seen more clearly in the ANOVA.</p>
 <pre><code>            Df Sum Sq Mean Sq F value  Pr(&gt;F)   
@@ -1233,16 +1252,15 @@ Residuals   18  18703    1039
 Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 </div>
 </div>
-<div id="heat-loss-at-30-c-with-solar-exposure" class="section level1">
-<h1>Heat loss at 30 C with solar exposure</h1>
-<p>Here are plots for the total heat losses (convective + radiative) recalculated for an ambient temperature of <span class="math inline">\(30^\circ C\)</span>.</p>
-<p>What becomes apparent now is that there is a substantial heat gain in the dry condition.</p>
-<p>However, the wet condition assumes an “unlimited” amount of sweat (i.e. the most that can be evaporated) - but this is not physiologically realistic (see Figure <a href="#fig:plt-heat30C">6</a>).</p>
+<div id="effect-of-radiation-and-evaporation-30c" class="section level1">
+<h1>Effect of radiation and evaporation (30C)</h1>
+<p>Here are plots for the total heat losses recalculated for an ambient temperature of <span class="math inline">\(30^\circ C\)</span>.</p>
+<p>What becomes apparent now is that there is a substantial heat gain in the dry condition once solar radiation is added (bottom left). In both wet conditions and without the effect of radiation, the absence of hair clearly associates with higher heat loss see Figure <a href="#fig:plt-heat30C">11</a>).</p>
 <div class="figure" style="text-align: center"><span id="fig:plt-heat30C"></span>
 <img src="figure/manikin2021.Rmd/plt-heat30C-1.png" alt="Total heat losses with solar exposure 
 recalculated for ambient temperature of 30C" width="100%" />
 <p class="caption">
-Figure 6: Total heat losses with solar exposure
+Figure 11: Total heat losses with solar exposure
 recalculated for ambient temperature of 30C
 </p>
 </div>
@@ -1283,143 +1301,70 @@ tinalasisi
 </table>
 </div>
 </div>
-<div id="linear-model-2" class="section level2">
+<div id="linear-model-4" class="section level2">
 <h2>Linear model</h2>
-<div id="combined-wet-and-dry-lm" class="section level3">
-<h3>Combined wet and dry lm</h3>
-<p>We created a linear model to test the significance of various factors on heat loss (see Figure <a href="#fig:plt-lm-drywet30">7</a>).</p>
+<div id="separate-wet-and-dry-lm" class="section level3">
+<h3>Separate wet and dry lm</h3>
+<p>We repeated the linear model for wet and dry conditions separately (see Figure <a href="#fig:plt-lm-drywet30sep">12</a>).</p>
+<p>We found a striking difference between the effects seen in the dry and wet conditions. The dry condition showed that radiation had the single strongest negative effect on heat loss, while the interaction between solar radiation and high curvature wig showed the highest positive effect on heat loss. All terms were found to be significant.</p>
+<p>Conversely, for the wet conditions, none of the interactions between wig and solar radiation were significant with wind providing the single positive significant effect on heat loss and the wigs reducing heat loss with increased curvature.</p>
 <pre><code>
 Call:
-lm(formula = heat_loss30 ~ wet_dry + wind + wig + wet_dry * wind + 
-    wet_dry * wig, data = heat_merge_df)
+lm(formula = heatloss30C ~ wind + wig + radiation + radiation * 
+    wig, data = df)
 
 Residuals:
     Min      1Q  Median      3Q     Max 
--61.521  -5.013   1.919   7.465  37.042 
+-8.9391 -5.6930  0.1225  3.7185 16.5050 
 
 Coefficients:
-                       Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)            -129.288     15.972  -8.095 1.19e-06 ***
-wet_drywet              304.722     22.587  13.491 2.05e-09 ***
-wind                     17.443      7.162   2.436 0.028836 *  
-wigLowCurv               69.718     18.590   3.750 0.002152 ** 
-wigMidCurv               91.416     18.590   4.917 0.000227 ***
-wigHighCurv             113.564     18.590   6.109 2.70e-05 ***
-wet_drywet:wind          47.215     10.128   4.662 0.000367 ***
-wet_drywet:wigLowCurv  -225.878     26.291  -8.592 5.91e-07 ***
-wet_drywet:wigMidCurv  -255.228     26.291  -9.708 1.35e-07 ***
-wet_drywet:wigHighCurv -288.717     26.291 -10.982 2.89e-08 ***
+                        Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)               42.308      4.964   8.523 3.92e-07 ***
+wind                      14.376      1.719   8.365 4.95e-07 ***
+wigLowCurv               -40.460      6.309  -6.413 1.17e-05 ***
+wigMidCurv               -40.862      6.309  -6.476 1.05e-05 ***
+wigHighCurv              -38.470      6.309  -6.097 2.04e-05 ***
+radiationon             -167.711      6.309 -26.582 4.95e-14 ***
+wigLowCurv:radiationon   110.178      8.923  12.348 2.92e-09 ***
+wigMidCurv:radiationon   132.278      8.923  14.825 2.29e-10 ***
+wigHighCurv:radiationon  152.033      8.923  17.039 3.17e-11 ***
 ---
 Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 
-Residual standard error: 22.77 on 14 degrees of freedom
-Multiple R-squared:  0.9769,    Adjusted R-squared:  0.962 
-F-statistic: 65.71 on 9 and 14 DF,  p-value: 6.686e-10</code></pre>
-<div class="figure" style="text-align: center"><span id="fig:plt-lm-drywet30"></span>
-<img src="figure/manikin2021.Rmd/plt-lm-drywet30-1.png" alt="Dot-and-whisker plot for unstandardized linear model of heat loss at 30C" width="100%" />
-<p class="caption">
-Figure 7: Dot-and-whisker plot for unstandardized linear model of heat loss at 30C
-</p>
-</div>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt-lm-drywet30-1">
-Past versions of plt-lm-drywet30-1.png
-</button>
-</p>
-<div id="fig-plt-lm-drywet30-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/HairManikin/blob/14b002ddbc9dc9d028adac35fb30388981efbd51/docs/figure/manikin2021.Rmd/plt-lm-drywet30-1.png" target="_blank">14b002d</a>
-</td>
-<td>
-tinalasisi
-</td>
-<td>
-2021-01-24
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p>Viewed as an ANOVA table, the results show that the most wig type, wind speed, and wet vs. dry, as well as interactions for wet vs. dry * wind speed and wet vs. dry * wig type, are all significantly impacting heat loss, with wigs having the least significant impact.</p>
-<pre><code>             Df Sum Sq Mean Sq F value   Pr(&gt;F)    
-wet_dry       1 177653  177653 342.696 3.06e-11 ***
-wind          1  34062   34062  65.707 1.17e-06 ***
-wig           3   6539    2180   4.205 0.025690 *  
-wet_dry:wind  1  11265   11265  21.731 0.000367 ***
-wet_dry:wig   3  77044   25681  49.540 1.06e-07 ***
-Residuals    14   7258     518                     
----
-Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
-</div>
-<div id="separate-wet-and-dry-lm" class="section level3">
-<h3>Separate wet and dry lm</h3>
-<p>We repeated the linear model for wet and dry conditions separately (see Figure <a href="#fig:plt-lm-drywet30sep">8</a>).</p>
-<p>We found that the dry condition showed a more pronounced effect of wig type, but that all variables contributed positively to heat loss.</p>
-<pre><code>
-Call:
-lm(formula = heat_loss30 ~ wind + wig, data = df)
-
-Residuals:
-   Min     1Q Median     3Q    Max 
--8.121 -4.657  0.346  3.047 12.723 
-
-Coefficients:
-            Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept) -129.288      5.215 -24.792 4.43e-08 ***
-wind          17.443      2.338   7.459 0.000142 ***
-wigLowCurv    69.718      6.070  11.486 8.53e-06 ***
-wigMidCurv    91.416      6.070  15.061 1.37e-06 ***
-wigHighCurv  113.564      6.070  18.710 3.09e-07 ***
----
-Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-
-Residual standard error: 7.434 on 7 degrees of freedom
-Multiple R-squared:  0.9847,    Adjusted R-squared:  0.9759 
-F-statistic: 112.3 on 4 and 7 DF,  p-value: 1.99e-06</code></pre>
+Residual standard error: 7.727 on 15 degrees of freedom
+Multiple R-squared:  0.9848,    Adjusted R-squared:  0.9767 
+F-statistic: 121.8 on 8 and 15 DF,  p-value: 3.084e-12</code></pre>
 <p>While the wet condition was most affected by wind speed and saw a negative correlation between heat loss and increasingly curled hair.</p>
 <pre><code>
 Call:
-lm(formula = heat_loss30 ~ wind + wig, data = df)
+lm(formula = heatloss30C ~ wind + wig + radiation + radiation * 
+    wig, data = df)
 
 Residuals:
     Min      1Q  Median      3Q     Max 
--61.521 -12.213   5.818  11.518  37.042 
+-67.851  -7.214   5.306   9.583  35.295 
 
 Coefficients:
-            Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)  175.434     21.977   7.983 9.24e-05 ***
-wind          64.658      9.855   6.561 0.000316 ***
-wigLowCurv  -156.160     25.580  -6.105 0.000489 ***
-wigMidCurv  -163.812     25.580  -6.404 0.000366 ***
-wigHighCurv -175.153     25.580  -6.847 0.000243 ***
+                        Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)              218.712     17.905  12.215 3.39e-09 ***
+wind                      58.110      6.199   9.374 1.16e-07 ***
+wigLowCurv              -163.310     22.757  -7.176 3.20e-06 ***
+wigMidCurv              -176.828     22.757  -7.770 1.23e-06 ***
+wigHighCurv             -184.586     22.757  -8.111 7.26e-07 ***
+radiationon              -34.983     22.757  -1.537    0.145    
+wigLowCurv:radiationon     7.150     32.184   0.222    0.827    
+wigMidCurv:radiationon    13.017     32.184   0.404    0.692    
+wigHighCurv:radiationon    9.433     32.184   0.293    0.773    
 ---
 Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 
-Residual standard error: 31.33 on 7 degrees of freedom
-Multiple R-squared:  0.9381,    Adjusted R-squared:  0.9027 
-F-statistic: 26.51 on 4 and 7 DF,  p-value: 0.0002531</code></pre>
+Residual standard error: 27.87 on 15 degrees of freedom
+Multiple R-squared:  0.946, Adjusted R-squared:  0.9172 
+F-statistic: 32.86 on 8 and 15 DF,  p-value: 3.792e-08</code></pre>
 <div class="figure" style="text-align: center"><span id="fig:plt-lm-drywet30sep"></span>
 <img src="figure/manikin2021.Rmd/plt-lm-drywet30sep-1.png" alt="Dot-and-whisker plot of linear models for heat loss at 30C for (a) dry and (b) wet conditions" width="100%" />
 <p class="caption">
-Figure 8: Dot-and-whisker plot of linear models for heat loss at 30C for (a) dry and (b) wet conditions
+Figure 12: Dot-and-whisker plot of linear models for heat loss at 30C for (a) dry and (b) wet conditions
 </p>
 </div>
 <p>
@@ -1446,6 +1391,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/tinalasisi/HairManikin/blob/71b114c27dd282bbbad2c400eaf30e743358fb06/docs/figure/manikin2021.Rmd/plt-lm-drywet30sep-1.png" target="_blank">71b114c</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-01-29
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/tinalasisi/HairManikin/blob/14b002ddbc9dc9d028adac35fb30388981efbd51/docs/figure/manikin2021.Rmd/plt-lm-drywet30sep-1.png" target="_blank">14b002d</a>
 </td>
 <td>
@@ -1460,145 +1416,34 @@ tinalasisi
 </div>
 </div>
 <p>We present the linear models in an ANOVA table below. The ANOVA for the dry linear model is as follows:</p>
-<pre><code>            Df Sum Sq Mean Sq F value   Pr(&gt;F)    
-wind         1   3075    3075   55.64 0.000142 ***
-wig          3  21748    7249  131.18 1.63e-06 ***
-Residuals    7    387      55                     
+<pre><code>              Df Sum Sq Mean Sq F value   Pr(&gt;F)    
+wind           1   4178    4178   69.97 4.95e-07 ***
+wig            3   4578    1526   25.56 3.81e-06 ***
+radiation      1  28640   28640  479.64 8.44e-13 ***
+wig:radiation  3  20768    6923  115.94 1.34e-10 ***
+Residuals     15    896      60                     
 ---
 Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <p>For wet, we see:</p>
-<pre><code>            Df Sum Sq Mean Sq F value   Pr(&gt;F)    
-wind         1  42253   42253   43.05 0.000316 ***
-wig          3  61835   20612   21.00 0.000707 ***
-Residuals    7   6871     982                     
+<pre><code>              Df Sum Sq Mean Sq F value   Pr(&gt;F)    
+wind           1  68256   68256  87.865 1.16e-07 ***
+wig            3 131229   43743  56.309 2.14e-08 ***
+radiation      1   4565    4565   5.876   0.0284 *  
+wig:radiation  3    136      45   0.058   0.9808    
+Residuals     15  11653     777                     
 ---
 Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 </div>
 </div>
 </div>
-<div id="effect-of-evaporative-heat-loss" class="section level1">
-<h1>Effect of evaporative heat loss</h1>
-<p>Looking at the difference between dry and wet heat loss, we see that the difference is stark between hair and no hair. Suggesting that unlimited evaporation renders hairlessness much more beneficial. We also see a steady increase in the difference between wet and dry heat losses with increases in wind speed due to the increasing contribution of convection to the evaporation (see Figure <a href="#fig:plt-diff-wetdry">9</a>).</p>
-<div class="figure" style="text-align: center"><span id="fig:plt-diff-wetdry"></span>
-<img src="figure/manikin2021.Rmd/plt-diff-wetdry-1.png" alt="Difference in heat loss between wet and dry conditions across wind speeds" width="100%" />
-<p class="caption">
-Figure 9: Difference in heat loss between wet and dry conditions across wind speeds
-</p>
-</div>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt-diff-wetdry-1">
-Past versions of plt-diff-wetdry-1.png
-</button>
-</p>
-<div id="fig-plt-diff-wetdry-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/HairManikin/blob/14b002ddbc9dc9d028adac35fb30388981efbd51/docs/figure/manikin2021.Rmd/plt-diff-wetdry-1.png" target="_blank">14b002d</a>
-</td>
-<td>
-tinalasisi
-</td>
-<td>
-2021-01-24
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<div id="linear-model-3" class="section level2">
-<h2>Linear model</h2>
-<p>We created a linear model for the difference in heat loss between wet and dry conditions using wind speed and wig type as independent variables (see Figure <a href="#fig:plt-lm-diffwetdry">10</a>) and found both wind speed and wigs to be highly significant in their impact on the difference in heat loss between wet and dry conditions.</p>
-<pre><code>
-Call:
-lm(formula = diff_dry_wet ~ wind + wig, data = wet_influx_df2)
-
-Residuals:
-    Min      1Q  Median      3Q     Max 
--56.920  -8.547   3.244   9.374  45.163 
-
-Coefficients:
-            Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)  304.722     21.026  14.493 1.78e-06 ***
-wind          47.215      9.428   5.008  0.00155 ** 
-wigLowCurv  -225.878     24.473  -9.230 3.62e-05 ***
-wigMidCurv  -255.228     24.473 -10.429 1.62e-05 ***
-wigHighCurv -288.717     24.473 -11.797 7.13e-06 ***
----
-Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-
-Residual standard error: 29.97 on 7 degrees of freedom
-Multiple R-squared:  0.9656,    Adjusted R-squared:  0.946 
-F-statistic: 49.15 on 4 and 7 DF,  p-value: 3.301e-05</code></pre>
-<div class="figure" style="text-align: center"><span id="fig:plt-lm-diffwetdry"></span>
-<img src="figure/manikin2021.Rmd/plt-lm-diffwetdry-1.png" alt="Dot-and-whisker plot of linear model for difference in heat loss between wet and dry conditions. Only significant values shown." width="100%" />
-<p class="caption">
-Figure 10: Dot-and-whisker plot of linear model for difference in heat loss between wet and dry conditions. Only significant values shown.
-</p>
-</div>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plt-lm-diffwetdry-1">
-Past versions of plt-lm-diffwetdry-1.png
-</button>
-</p>
-<div id="fig-plt-lm-diffwetdry-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/tinalasisi/HairManikin/blob/14b002ddbc9dc9d028adac35fb30388981efbd51/docs/figure/manikin2021.Rmd/plt-lm-diffwetdry-1.png" target="_blank">14b002d</a>
-</td>
-<td>
-tinalasisi
-</td>
-<td>
-2021-01-24
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-</div>
-<div id="sweat-requirement" class="section level1">
-<h1>Sweat requirement</h1>
-<p>Another way to approach the comparison is to calculte the sweat rate. Here, we plot the sweat rate potential (left) and the sweat rate required to cancel out heat gain at <span class="math inline">\(T_{ambient} = 30^\circ C\)</span>.</p>
-<p>What emerges is that while heat loss potential is higher without hair as a barrier (i.e. the “nude” condition), the <em>potential</em> sweat far exceeds the physiologically possible sweat rate for humans. The plot for zero heat gain shoes that a nude scalp requires the most sweat and this requirement is inversely correlated with hair curvature (see Figure <a href="#fig:plt-sweat">11</a>).</p>
+<div id="inferred-effect-of-heat-loss-through-sweating-at-30c" class="section level1">
+<h1>Inferred effect of heat loss through sweating at 30C</h1>
+<p>Here, we plot the sweat rate potential (left) and the sweat rate required to cancel out heat gain at <span class="math inline">\(T_{ambient} = 30^\circ C\)</span>.</p>
+<p>What emerges is that while heat loss potential is higher without hair as a barrier (i.e. the “nude” condition), the <em>potential</em> sweat far exceeds the physiologically possible sweat rate for humans. The plot for zero heat gain shoes that a nude scalp requires the most sweat and this requirement is inversely correlated with hair curvature (see Figure <a href="#fig:plt-sweat">13</a>).</p>
 <div class="figure" style="text-align: center"><span id="fig:plt-sweat"></span>
 <img src="figure/manikin2021.Rmd/plt-sweat-1.png" alt="The quantity of sweat that can be maximally evaporated (left) and that is required for zero heat gain (right) with various head coverings under three wind speeds" width="100%" />
 <p class="caption">
-Figure 11: The quantity of sweat that can be maximally evaporated (left) and that is required for zero heat gain (right) with various head coverings under three wind speeds
+Figure 13: The quantity of sweat that can be maximally evaporated (left) and that is required for zero heat gain (right) with various head coverings under three wind speeds
 </p>
 </div>
 <p>
@@ -1638,11 +1483,11 @@ tinalasisi
 </table>
 </div>
 </div>
-<div id="linear-model-4" class="section level2">
+<div id="linear-model-5" class="section level2">
 <h2>Linear model</h2>
-<div id="combined-wet-and-dry-lm-1" class="section level3">
+<div id="combined-wet-and-dry-lm" class="section level3">
 <h3>Combined wet and dry lm</h3>
-<p>In a linear model we see that all variables and interactions significantly affect quantity of sweat (see Figure <a href="#fig:plt-lm-sweat">12</a>).</p>
+<p>In a linear model we see that all variables and interactions significantly affect quantity of sweat (see Figure <a href="#fig:plt-lm-sweat">14</a>).</p>
 <pre><code>
 Call:
 lm(formula = sweat ~ sweat_type + wind + wig + sweat_type * wind + 
@@ -1673,7 +1518,7 @@ F-statistic: 65.57 on 9 and 14 DF,  p-value: 6.781e-10</code></pre>
 <div class="figure" style="text-align: center"><span id="fig:plt-lm-sweat"></span>
 <img src="figure/manikin2021.Rmd/plt-lm-sweat-1.png" alt="Dot-and-whisker plot of linear model for quantity of sweat with wind, wig and sweat type as independent predictors. Only significant values shown" width="100%" />
 <p class="caption">
-Figure 12: Dot-and-whisker plot of linear model for quantity of sweat with wind, wig and sweat type as independent predictors. Only significant values shown
+Figure 14: Dot-and-whisker plot of linear model for quantity of sweat with wind, wig and sweat type as independent predictors. Only significant values shown
 </p>
 </div>
 <p>
@@ -1698,6 +1543,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/tinalasisi/HairManikin/blob/71b114c27dd282bbbad2c400eaf30e743358fb06/docs/figure/manikin2021.Rmd/plt-lm-sweat-1.png" target="_blank">71b114c</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-01-29
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/tinalasisi/HairManikin/blob/14b002ddbc9dc9d028adac35fb30388981efbd51/docs/figure/manikin2021.Rmd/plt-lm-sweat-1.png" target="_blank">14b002d</a>
@@ -1725,7 +1581,7 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
 </div>
 <div id="separate-max-and-zero-gain" class="section level3">
 <h3>Separate max and zero gain</h3>
-<p>We repeat the tests with maximum sweat potential and zero heat gain separately (see Figure <a href="#fig:plt-lm-sweatsep">13</a>.</p>
+<p>We repeat the tests with maximum sweat potential and zero heat gain separately (see Figure <a href="#fig:plt-lm-sweatsep">15</a>.</p>
 <p>Maximum sweat potential shows a strongly significant effect from wig type and wind speed.</p>
 <pre><code>
 Call:
@@ -1787,7 +1643,7 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
 <div class="figure" style="text-align: center"><span id="fig:plt-lm-sweatsep"></span>
 <img src="figure/manikin2021.Rmd/plt-lm-sweatsep-1.png" alt="Dot-and-whisker plots for linear regression of (a) maximum sweat potential and (b) sweat required for zero heat gain" width="100%" />
 <p class="caption">
-Figure 13: Dot-and-whisker plots for linear regression of (a) maximum sweat potential and (b) sweat required for zero heat gain
+Figure 15: Dot-and-whisker plots for linear regression of (a) maximum sweat potential and (b) sweat required for zero heat gain
 </p>
 </div>
 <p>
@@ -1812,6 +1668,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/tinalasisi/HairManikin/blob/71b114c27dd282bbbad2c400eaf30e743358fb06/docs/figure/manikin2021.Rmd/plt-lm-sweatsep-1.png" target="_blank">71b114c</a>
+</td>
+<td>
+tinalasisi
+</td>
+<td>
+2021-01-29
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/tinalasisi/HairManikin/blob/14b002ddbc9dc9d028adac35fb30388981efbd51/docs/figure/manikin2021.Rmd/plt-lm-sweatsep-1.png" target="_blank">14b002d</a>
@@ -1856,19 +1723,19 @@ other attached packages:
  [7] zoo_1.8-8                  lubridate_1.7.9.2         
  [9] fuzzyjoin_0.1.6            janitor_2.1.0             
 [11] fs_1.5.0                   kableExtra_1.3.1          
-[13] knitr_1.30                 forcats_0.5.0             
+[13] knitr_1.31                 forcats_0.5.1             
 [15] stringr_1.4.0              dplyr_1.0.3               
 [17] purrr_0.3.4                readr_1.4.0               
-[19] tidyr_1.1.2                tibble_3.0.5              
+[19] tidyr_1.1.2                tibble_3.0.6              
 [21] ggplot2_3.3.3              tidyverse_1.3.0           
 
 loaded via a namespace (and not attached):
   [1] utf8_1.1.4                tidyselect_1.1.0         
   [3] lme4_1.1-26               grid_3.6.3               
   [5] gmp_0.6-2                 munsell_0.5.0            
-  [7] codetools_0.2-16          effectsize_0.4.3         
+  [7] codetools_0.2-18          effectsize_0.4.3         
   [9] statmod_1.4.35            miniUI_0.1.1.1           
- [11] withr_2.4.0               Brobdingnag_1.2-6        
+ [11] withr_2.4.1               Brobdingnag_1.2-6        
  [13] metaBMA_0.6.6             colorspace_2.0-0         
  [15] highr_0.8                 rstudioapi_0.13          
  [17] stats4_3.6.3              ipmisc_5.0.2             
@@ -1880,66 +1747,67 @@ loaded via a namespace (and not attached):
  [29] generics_0.1.0            metafor_2.4-0            
  [31] afex_0.28-1               xfun_0.20                
  [33] BWStest_0.2.2             R6_2.5.0                 
- [35] BayesFactor_0.9.12-4.2    reshape_0.8.8            
- [37] logspline_2.1.16          assertthat_0.2.1         
- [39] promises_1.1.1            scales_1.1.1             
- [41] ggExtra_0.9               gtable_0.3.0             
- [43] multcompView_0.1-8        processx_3.4.5           
- [45] workflowr_1.6.2           rlang_0.4.10             
- [47] MatrixModels_0.4-1        zeallot_0.1.0            
- [49] PMCMRplus_1.9.0           splines_3.6.3            
- [51] prismatic_1.0.0           broom_0.7.3              
- [53] inline_0.3.17             yaml_2.2.1               
- [55] reshape2_1.4.4            abind_1.4-5              
- [57] modelr_0.1.8              backports_1.2.1          
- [59] httpuv_1.5.5              tools_3.6.3              
- [61] bookdown_0.21             ellipsis_0.3.1           
- [63] WRS2_1.1-0                Rcpp_1.0.6               
- [65] plyr_1.8.6                ps_1.5.0                 
- [67] prettyunits_1.1.1         pbapply_1.4-3            
- [69] cowplot_1.1.1             correlation_0.5.0        
- [71] LaplacesDemon_16.1.4      haven_2.3.1              
- [73] ggrepel_0.9.1             magrittr_2.0.1           
- [75] data.table_1.13.6         openxlsx_4.2.3           
- [77] lmerTest_3.1-3            reprex_0.3.0             
- [79] mvtnorm_1.1-1             whisker_0.4              
- [81] matrixStats_0.57.0        hms_1.0.0                
- [83] mime_0.9                  evaluate_0.14            
- [85] xtable_1.8-4              rio_0.5.16               
- [87] pairwiseComparisons_3.1.2 readxl_1.3.1             
- [89] gridExtra_2.3             rstantools_2.1.1         
- [91] bdsmatrix_1.3-4           compiler_3.6.3           
- [93] V8_3.4.0                  crayon_1.3.4             
- [95] minqa_1.2.4               StanHeaders_2.21.0-7     
- [97] htmltools_0.5.1           mc2d_0.1-18              
- [99] later_1.1.0.1             RcppParallel_5.0.2       
-[101] DBI_1.1.1                 SuppDists_1.1-9.5        
-[103] kSamples_1.2-9            dbplyr_2.0.0             
-[105] MASS_7.3-51.5             boot_1.3-24              
-[107] Matrix_1.2-18             car_3.0-10               
-[109] cli_2.2.0                 quadprog_1.5-8           
-[111] parallel_3.6.3            insight_0.12.0           
-[113] metaplus_0.7-11           pkgconfig_2.0.3          
-[115] statsExpressions_0.7.0    numDeriv_2016.8-1.1      
-[117] foreign_0.8-75            xml2_1.3.2               
-[119] paletteer_1.3.0           ggcorrplot_0.1.3         
-[121] webshot_0.5.2             rvest_0.3.6              
-[123] snakecase_0.11.0          callr_3.5.1              
-[125] digest_0.6.27             parameters_0.11.0        
-[127] fastGHQuad_1.0            rmarkdown_2.6            
-[129] cellranger_1.1.0          curl_4.3                 
-[131] shiny_1.5.0               gtools_3.8.2             
-[133] nloptr_1.2.2.2            lifecycle_0.2.0          
-[135] nlme_3.1-144              jsonlite_1.7.2           
-[137] carData_3.0-4             viridisLite_0.3.0        
-[139] fansi_0.4.2               pillar_1.4.7             
-[141] lattice_0.20-38           loo_2.4.1                
-[143] fastmap_1.0.1             httr_1.4.2               
-[145] pkgbuild_1.2.0            glue_1.4.2               
-[147] bayestestR_0.8.0          zip_2.1.1                
-[149] stringi_1.5.3             performance_0.6.1        
-[151] rematch2_2.1.2            Quandl_2.10.0            
-[153] memoise_1.1.0             Rmpfr_0.8-1              </code></pre>
+ [35] BayesFactor_0.9.12-4.2    cachem_1.0.1             
+ [37] reshape_0.8.8             logspline_2.1.16         
+ [39] assertthat_0.2.1          promises_1.1.1           
+ [41] scales_1.1.1              ggExtra_0.9              
+ [43] gtable_0.3.0              multcompView_0.1-8       
+ [45] processx_3.4.5            workflowr_1.6.2          
+ [47] rlang_0.4.10              MatrixModels_0.4-1       
+ [49] zeallot_0.1.0             PMCMRplus_1.9.0          
+ [51] splines_3.6.3             prismatic_1.0.0          
+ [53] broom_0.7.4               inline_0.3.17            
+ [55] yaml_2.2.1                reshape2_1.4.4           
+ [57] abind_1.4-5               modelr_0.1.8             
+ [59] backports_1.2.1           httpuv_1.5.5             
+ [61] tools_3.6.3               bookdown_0.21            
+ [63] ellipsis_0.3.1            WRS2_1.1-0               
+ [65] Rcpp_1.0.6                plyr_1.8.6               
+ [67] ps_1.5.0                  prettyunits_1.1.1        
+ [69] pbapply_1.4-3             cowplot_1.1.1            
+ [71] correlation_0.5.0         LaplacesDemon_16.1.4     
+ [73] haven_2.3.1               ggrepel_0.9.1            
+ [75] magrittr_2.0.1            data.table_1.13.6        
+ [77] openxlsx_4.2.3            lmerTest_3.1-3           
+ [79] reprex_1.0.0              mvtnorm_1.1-1            
+ [81] whisker_0.4               matrixStats_0.58.0       
+ [83] hms_1.0.0                 mime_0.9                 
+ [85] evaluate_0.14             xtable_1.8-4             
+ [87] rio_0.5.16                pairwiseComparisons_3.1.2
+ [89] readxl_1.3.1              gridExtra_2.3            
+ [91] rstantools_2.1.1          bdsmatrix_1.3-4          
+ [93] compiler_3.6.3            V8_3.4.0                 
+ [95] crayon_1.4.0              minqa_1.2.4              
+ [97] StanHeaders_2.21.0-7      htmltools_0.5.1.1        
+ [99] mc2d_0.1-18               later_1.1.0.1            
+[101] RcppParallel_5.0.2        DBI_1.1.1                
+[103] SuppDists_1.1-9.5         kSamples_1.2-9           
+[105] dbplyr_2.0.0              MASS_7.3-53              
+[107] boot_1.3-26               Matrix_1.3-2             
+[109] car_3.0-10                cli_2.3.0                
+[111] quadprog_1.5-8            parallel_3.6.3           
+[113] insight_0.12.0            metaplus_0.7-11          
+[115] pkgconfig_2.0.3           statsExpressions_0.7.0   
+[117] numDeriv_2016.8-1.1       foreign_0.8-75           
+[119] xml2_1.3.2                paletteer_1.3.0          
+[121] ggcorrplot_0.1.3          webshot_0.5.2            
+[123] rvest_0.3.6               snakecase_0.11.0         
+[125] callr_3.5.1               digest_0.6.27            
+[127] parameters_0.11.0         fastGHQuad_1.0           
+[129] rmarkdown_2.6             cellranger_1.1.0         
+[131] curl_4.3                  shiny_1.6.0              
+[133] gtools_3.8.2              nloptr_1.2.2.2           
+[135] lifecycle_0.2.0           nlme_3.1-151             
+[137] jsonlite_1.7.2            carData_3.0-4            
+[139] fansi_0.4.2               viridisLite_0.3.0        
+[141] pillar_1.4.7              lattice_0.20-41          
+[143] loo_2.4.1                 fastmap_1.1.0            
+[145] httr_1.4.2                pkgbuild_1.2.0           
+[147] glue_1.4.2                bayestestR_0.8.2         
+[149] zip_2.1.1                 stringi_1.5.3            
+[151] performance_0.6.1         rematch2_2.1.2           
+[153] Quandl_2.10.0             memoise_2.0.0            
+[155] Rmpfr_0.8-1              </code></pre>
 </div>
 </div>
 </div>
@@ -1957,6 +1825,8 @@ footer is added to webpages before the MathJax javascript. -->
     "HTML-CSS": { availableFonts: ["TeX"] }
   });
 </script>
+
+
 
 
 </div>
